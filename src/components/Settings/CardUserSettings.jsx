@@ -6,9 +6,9 @@ function CardUserSettings() {
   const [teamName, setTeamName] = useState('');
   const [teamLogo, setTeamLogo] = useState('');
 
-  const submitUser = () => { };
-  const submitTeam = () => { };
-  const submitLogo = () => { };
+  const submitUser = () => setUsername('');
+  const submitTeam = () => setTeamName('');
+  const submitLogo = () => setTeamLogo('');
 
   const options = [
     {
@@ -36,7 +36,7 @@ function CardUserSettings() {
       {options.map(({
         name, state, setState, click
       }) => (
-        <>
+        <form>
           {name}
           <Input
             variant='outlined'
@@ -49,11 +49,11 @@ function CardUserSettings() {
             color='primary'
             type='submit'
             onClick={click}
-            disabled=''
+            disabled={!state}
           >
             add
           </Button>
-        </>
+        </form>
       ))}
     </Typography>
   );
