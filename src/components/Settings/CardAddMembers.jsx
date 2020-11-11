@@ -23,10 +23,15 @@ function CardAddMembers({
 
   return (
     <Typography>
-      <p className='addMembers_membersNumber'>
-        {`Up to  ${myLeague?.settings?.numberOfTeams} players, `}
-        {`Members: ${users.length}`}
+      <p>
+        {`Up to
+        ${myLeague?.settings?.numberOfTeams} players`}
       </p>
+      <p>
+        {`Members:
+        ${users.length}`}
+      </p>
+      <p>even numbers only</p>
       <form className='addMembers_form'>
         <Input
           variant='outlined'
@@ -39,7 +44,7 @@ function CardAddMembers({
           color='primary'
           type='submit'
           onClick={addMembers}
-          disabled={!input}
+          disabled={!input || myLeague?.settings?.numberOfTeams === users.length}
         >
           add
         </Button>
@@ -73,7 +78,7 @@ function CardAddMembers({
               color='primary'
               type='submit'
               onClick={addMembersToLeague}
-              disabled={users.length % 2 || myLeague?.settings?.numberOfTeams === users.length}
+              disabled={users.length % 2}
             >
               Add Members to League
             </Button>

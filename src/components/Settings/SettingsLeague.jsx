@@ -44,8 +44,9 @@ const inputsForm = [
   }
 ];
 
-function SettingsLeague({ myLeague }) {
+function SettingsLeague({ myLeague, setMyLeague }) {
   SettingsLeague.propTypes = {
+    setMyLeague: PropTypes.func.isRequired,
     myLeague: PropTypes.shape({
       league_name: PropTypes.string,
       bank_balance: PropTypes.string,
@@ -54,40 +55,17 @@ function SettingsLeague({ myLeague }) {
     }).isRequired
   };
 
-  const [leagueForm, setLeagueForm] = useState({});
   const [leagueUsers, setLeagueUsers] = useState([]);
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     axios.get(`/league/league/${myLeague.id}`)
       .then((response) => setLeagueUsers(response.data));
   }, [myLeague.id]);
 
-  const handleChange = (e) => setLeagueForm({ ...leagueForm, [e.target.name]: e.target.value });
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    axios.put('/league',
-      {
-        id_league: myLeague?.id,
-        id_owner: myLeague?.id_owner,
-        league_name: myLeague?.league_name,
-        settings: leagueForm
-      });
-
-    setLeagueForm({});
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 2000);
-  };
-
   const Component = () => (
     <CardSettingsL
-      handleChange={handleChange}
-      handleFormSubmit={handleFormSubmit}
-      submitted={submitted}
+      setMyLeague={setMyLeague}
       myLeague={myLeague}
-      leagueForm={leagueForm}
       inputsForm={inputsForm}
     />
   );
