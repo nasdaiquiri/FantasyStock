@@ -4,14 +4,14 @@ import propTypes from 'prop-types';
 
 function CardSettingsL({
   handleChange,
-  handleSubmit,
+  handleFormSubmit,
   submitted,
   myLeague,
   inputsForm
 }) {
   CardSettingsL.propTypes = {
     handleChange: propTypes.func.isRequired,
-    handleSubmit: propTypes.func.isRequired,
+    handleFormSubmit: propTypes.func.isRequired,
     submitted: propTypes.string.isRequired,
     myLeague: propTypes.string.isRequired,
     inputsForm: propTypes.string.isRequired
@@ -23,7 +23,7 @@ function CardSettingsL({
         {`League Name: ${myLeague?.league_name}`}
       </h3>
       <div>
-        <form className='settingsLeague_form' onSubmit={handleSubmit}>
+        <form className='settingsLeague_form' onSubmit={handleFormSubmit}>
           {submitted && <div className='success-message'>Success! Your settings have been updated</div>}
           {inputsForm?.map(({
             description, type, name

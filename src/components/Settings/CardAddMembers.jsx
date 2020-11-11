@@ -7,7 +7,8 @@ function CardAddMembers({
   addMembersToLeague,
   submitted,
   users,
-  input
+  input,
+  myLeague
 }) {
   CardAddMembers.propTypes = {
     handleChange: propTypes.func.isRequired,
@@ -16,13 +17,15 @@ function CardAddMembers({
     addMembersToLeague: propTypes.func.isRequired,
     submitted: propTypes.string.isRequired,
     users: propTypes.string.isRequired,
-    input: propTypes.string.isRequired
+    input: propTypes.string.isRequired,
+    myLeague: propTypes.string.isRequired
   };
 
   return (
     <Typography>
       <p className='addMembers_membersNumber'>
-        {`members: ${users.length}`}
+        {`Up to  ${myLeague?.settings?.numberOfTeams} players, `}
+        {`Members: ${users.length}`}
       </p>
       <form className='addMembers_form'>
         <Input
@@ -70,6 +73,7 @@ function CardAddMembers({
               color='primary'
               type='submit'
               onClick={addMembersToLeague}
+              disabled={users.length % 2 || myLeague?.settings?.numberOfTeams === users.length}
             >
               Add Members to League
             </Button>
