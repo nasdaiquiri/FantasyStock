@@ -129,7 +129,7 @@ leagueRouter.put('/', (req, res) => {
   League.update({ league_name, settings: newSettings, id_owner },
     {
       where: {
-        id_league
+        id: id_league
       }
     })
     .catch((err) => {
