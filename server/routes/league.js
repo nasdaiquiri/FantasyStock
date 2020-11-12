@@ -8,7 +8,7 @@ const {
   League_user,
   User
 } = require('../db/index');
-
+const { matchupGenerator } = require('./helpers');
 // add user to League UserIDs is an array
 // todo: fix header error (post still works)
 leagueRouter.post('/addUser', (req, res) => {
@@ -106,11 +106,24 @@ leagueRouter.post('/', (req, res) => {
 });
 
 // TODO: settings lock after week 1 starts
-leagueRouter.put('/', (req, res) => {
+leagueRouter.put('/', async (req, res) => {
   const {
     id_league, league_name, id_owner, settings
   } = req.body;
-
+  // get the userIDs
+  const usersData = await League_user.findAll({
+    where: {
+      id_league
+    }
+  })
+    .then((users) => users)
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+  const userIDs = [];
+  usersData.map((userData) => userIDs.push(userData.dataValues.id_user));
+  const newSchedule = matchupGenerator(userIDs, settings.numberMatches);
   const newSettings = {
     date_end: settings.endDate || null, // date / it follows
     lengthMatch: settings.lengthMatches || null, // integer (number of days) (defaulting to 7)
@@ -120,11 +133,7 @@ leagueRouter.put('/', (req, res) => {
     // Integer / default 10,000,00 (remember extra )
     date_start: settings.startDate || null, // date /defaults: next monday '''''' calculate
     startingBank: settings.startingBank || null, // Integer / default 10,000,00 (remember extra )
-    schedule: {
-      // TODO: schedule generator
-      currentWeek: null,
-      weeklyMatchups: null
-    }
+    schedule: newSchedule
   };
   League.update({ league_name, settings: newSettings, id_owner },
     {
@@ -132,13 +141,12 @@ leagueRouter.put('/', (req, res) => {
         id: id_league
       }
     })
+    .then((updated) => res.send(updated))
     .catch((err) => {
       console.warn(err);
       res.status(500).send(err);
     });
-  res.send(newSettings);
 });
-
 // TODO: Indiviual user joins a league
 
 // Add an array of users to a league (deletes any users
