@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TableCell,
   TableRow,
@@ -102,33 +101,36 @@ function WaiversList({
         <TableCell align='right'>{row.sharesRemaining}</TableCell>
       </TableRow>
       <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'>{waiver.company_name}</DialogTitle>
+        <DialogTitle id='form-dialog-title'>
+          {waiver.company_name}
+          (
+          {row.ticker}
+          )
+        </DialogTitle>
         <DialogContent>
-          <strong>Bank Balance: </strong>
-          $
-          {
+          <div>
+            <h1>Bank Balance:</h1>
+            $
+            {
             calcBankBalance.toFixed(2)
           }
-          <DialogContentText>
-            <br />
-            {row.ticker}
-          </DialogContentText>
+          </div>
           <div className='waiversList_dialogBox'>
-            <p className='waiversList_dialogBox'>
-              Shares Available:
+            <div className='waiversList_dialogBox'>
+              <h1>Shares Available:</h1>
               {' '}
               {row.sharesRemaining - sharesInput}
-            </p>
-            <p className='waiversList_dialogBox'>
-              <strong>Price per Share: </strong>
+            </div>
+            <div className='waiversList_dialogBox'>
+              <h1>Price per Share: </h1>
               $
               {(0.01 * row.current_price_per_share).toFixed(2)}
-            </p>
-            <p>
-              <strong>Total: </strong>
+            </div>
+            <div>
+              <h1>Total:</h1>
               $
               {((0.01 * row.current_price_per_share) * sharesInput).toFixed(2)}
-            </p>
+            </div>
           </div>
           <TextField
             autoFocus
