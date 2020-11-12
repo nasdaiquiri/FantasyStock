@@ -23,6 +23,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const settings = useSelector(selectSettings);
   const [leagueUsers, setLeagueUsers] = useState([]);
   const [leagueForm, setLeagueForm] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     setLeagueForm({ ...settings });
@@ -44,11 +45,15 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       })
       .then((response) => dispatch(setSettings(response.data)))
       .catch((err) => console.warn(err));
+
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 1000);
   };
 
   useEffect(() => {
     axios.get(`/league/league/${myLeague.id}`)
-      .then((response) => setLeagueUsers(response.data));
+      .then((response) => setLeagueUsers(response.data))
+      .catch((err) => console.warn(err));
   }, [myLeague.id]);
 
   const inputsForm = [
@@ -107,6 +112,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       inputsForm={inputsForm}
       handleChange={handleChange}
       leagueForm={leagueForm}
+      submitted={submitted}
     />
   );
 
