@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setUser } from '../../features/userSlice.js';
+import { setUsersInLeague } from '../../features/ownerLeagueSlice.js';
+import { selectLeague } from '../../features/leagueSlice.js';
 
 const useStyles = makeStyles({
   root: {
@@ -17,6 +19,7 @@ function CardUserSettings() {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
+  const league = useSelector(selectLeague);
 
   const [username, setUsername] = useState('');
   const [teamName, setTeamName] = useState('');
@@ -25,7 +28,9 @@ function CardUserSettings() {
   const submitUser = () => {
     axios.put(`/user/user/${user?.id}`, { username })
       .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))));
+        .then((response) => dispatch(setUser(response.data))))
+      .then(() => axios.get(`/league/league/${league}`)
+        .then((response) => dispatch(setUsersInLeague(response.data))));
     setUsername('');
   };
   const submitTeam = () => setTeamName('');

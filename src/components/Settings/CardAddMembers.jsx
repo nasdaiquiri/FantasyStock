@@ -92,7 +92,7 @@ function CardAddMembers({
               onClick={addMembersToLeague}
               disabled={users.length % 2}
             >
-              Add Members to League
+              Update Members in League
             </Button>
           </div>
         )

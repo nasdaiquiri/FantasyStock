@@ -6,7 +6,8 @@ import AddMembers from './AddMembers.jsx';
 import '../../css/SettingsLeague.css';
 import CardSettingsL from './CardSettingsL.jsx';
 import AccordionComp from '../AccordionComp.jsx';
-import { selectSettings, setSettings } from '../../features/ownerLeagueSlice.js';
+import { selectSettings, setSettings, setUsersInLeague } from '../../features/ownerLeagueSlice.js';
+import { selectLeague } from '../../features/leagueSlice.js';
 
 function SettingsLeague({ myLeague, setMyLeague }) {
   SettingsLeague.propTypes = {
@@ -21,7 +22,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
 
   const dispatch = useDispatch();
   const settings = useSelector(selectSettings);
-  const [leagueUsers, setLeagueUsers] = useState([]);
+  const league = useSelector(selectLeague);
   const [leagueForm, setLeagueForm] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -43,7 +44,8 @@ function SettingsLeague({ myLeague, setMyLeague }) {
         league_name: myLeague?.league_name,
         settings: leagueForm
       })
-      .then((response) => dispatch(setSettings(response.data)))
+      .then(() => axios.get(`/league/settings/${league}`)
+        .then((response) => dispatch(setSettings(response.data))))
       .catch((err) => console.warn(err));
 
     setSubmitted(true);
@@ -52,9 +54,9 @@ function SettingsLeague({ myLeague, setMyLeague }) {
 
   useEffect(() => {
     axios.get(`/league/league/${myLeague.id}`)
-      .then((response) => setLeagueUsers(response.data))
+      .then((response) => dispatch(setUsersInLeague(response.data)))
       .catch((err) => console.warn(err));
-  }, [myLeague.id]);
+  }, [myLeague.id, dispatch]);
 
   const inputsForm = [
     {
@@ -121,9 +123,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       <AccordionComp Component={Component} title='League Settings' />
       <div className='settingsLeague_addMembers'>
         <AddMembers
-          leagueUsers={leagueUsers}
           myLeague={myLeague}
-          setLeagueUsers={setLeagueUsers}
         />
       </div>
     </div>
