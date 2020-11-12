@@ -2,6 +2,9 @@ import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import '../../css/CardUserSettings.css';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, setUser } from '../../features/userSlice.js';
 
 const useStyles = makeStyles({
   root: {
@@ -11,12 +14,20 @@ const useStyles = makeStyles({
 
 function CardUserSettings() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
 
   const [username, setUsername] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamLogo, setTeamLogo] = useState('');
 
-  const submitUser = () => setUsername('');
+  const submitUser = () => {
+    axios.put(`/user/user/${user?.id}`, { username })
+      .then(() => axios.post('/user', { id: user?.id })
+        .then((response) => dispatch(setUser(response.data))));
+    setUsername('');
+  };
   const submitTeam = () => setTeamName('');
   const submitLogo = () => setTeamLogo('');
 
