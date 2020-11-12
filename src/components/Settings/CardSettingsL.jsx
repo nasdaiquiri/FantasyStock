@@ -1,66 +1,58 @@
-import { Button, Input, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import {
+  Button, TextField, Typography
+} from '@material-ui/core';
+import React from 'react';
 import propTypes from 'prop-types';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectLeague } from '../../features/leagueSlice.js';
-import { selectUser } from '../../features/userSlice.js';
+import '../../css/CardSettingsL.css';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  root: {
+    paddingLeft: '50px'
+  }
+});
 
 function CardSettingsL({
-  setMyLeague,
   myLeague,
-  inputsForm
+  inputsForm,
+  handleFormSubmit,
+  handleChange
 }) {
   CardSettingsL.propTypes = {
     myLeague: propTypes.string.isRequired,
     inputsForm: propTypes.string.isRequired,
-    setMyLeague: propTypes.func.isRequired
+    handleFormSubmit: propTypes.func.isRequired,
+    handleChange: propTypes.func.isRequired
   };
 
-  const league = useSelector(selectLeague);
-  const user = useSelector(selectUser);
-
-  const [leagueForm, setLeagueForm] = useState({});
-
-  const handleChange = (e) => setLeagueForm({ ...leagueForm, [e.target.name]: e.target.value });
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-
-    axios.put('/league',
-      {
-        id_league: myLeague?.id,
-        id_owner: myLeague?.id_owner,
-        league_name: myLeague?.league_name,
-        settings: leagueForm
-      })
-      .then(() => axios.get(`/league/${league}/${user?.id}`))
-      .then((response) => setMyLeague(response.data));
-  };
+  const classes = useStyles();
 
   return (
-    <Typography>
+    <Typography align='center' className={classes.root}>
       <h3 className='settingsLeague_leagueName'>
         {`League Name: ${myLeague?.league_name}`}
       </h3>
       <form
+        noValidate
+        autoComplete='off'
         className='settingsLeague_form'
         onSubmit={handleFormSubmit}
       >
         {inputsForm?.map(({
-          description, type, name
+          description, type, name, value
         }) => (
-          <div
-            className='settingsLeague_settingBox'
-          >
+          <>
             <p>{description}</p>
-            <Input
-              key={name}
-              type={type}
-              name={name}
-              onChange={handleChange}
-            />
-          </div>
+            <div key={value}>
+              <TextField
+                id='outlined-basic'
+                variant='outlined'
+                onChange={handleChange}
+                type={type}
+                name={name}
+              />
+            </div>
+          </>
         ))}
         <Button
           className='settingsLeague_formButton'

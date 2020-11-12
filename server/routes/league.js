@@ -8,7 +8,29 @@ const {
   League_user,
   User
 } = require('../db/index');
+<<<<<<< HEAD
 const { matchupGenerator } = require('./helpers');
+=======
+
+// get settings by league Id
+leagueRouter.get('/settings/:leagueID', (req, res) => {
+  const { leagueID } = req.params;
+
+  League.findOne(
+    {
+      where: {
+        id: leagueID
+      }
+    }
+  )
+    .then((leagueInfo) => res.send(leagueInfo.dataValues.settings))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
+
+>>>>>>> c501b19862ef2533372f6bc6a7471d66275c6017
 // add user to League UserIDs is an array
 // todo: fix header error (post still works)
 leagueRouter.post('/addUser', (req, res) => {
