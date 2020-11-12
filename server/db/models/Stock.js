@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     company_name: {
       type: DataTypes.STRING,
-      unique: true
+      unique: false
     },
     current_price_per_share: {
       type: DataTypes.INTEGER

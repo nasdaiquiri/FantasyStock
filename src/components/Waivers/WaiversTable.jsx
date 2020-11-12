@@ -201,6 +201,7 @@ function WaiversTable({
                   />
                 ))}
             </TableBody>
+
           </Table>
         </TableContainer>
         <TablePagination

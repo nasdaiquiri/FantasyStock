@@ -154,23 +154,22 @@ stockRouter.get('/waivers/:leagueID', (req, res) => {
         .concat(Object.values(stockInfoX)), []);
 
     const mapUpdate = await Promise.all(arrayStock.map(async (stock) => {
-      if (stock.quote && !stock.quote.companyName) {
+      if (stock.quote) {
         await Stock.update({
-          current_price_per_share: Math.round(stock.quote.latestPrice * 100)
-          // company_name: stock.quote.companyName
+          current_price_per_share: Math.round(stock.quote.latestPrice * 100),
+          company_name: stock.quote.companyName
         },
         {
           where: {
-            ticker: stock.quote.symbol
-            // company_name: {
-            //   [Op.eq]: null
-            // }
+            ticker: stock.quote.symbol,
+            company_name: {
+              [Op.eq]: null
+            }
           }
         }).then((data) => data)
           .catch((err) => console.warn(err));
       }
     }));
-    console.log(mapUpdate);
 
     const findStocksAgain = new Promise((resolve) => {
       Stock.findAll({
@@ -208,6 +207,7 @@ stockRouter.get('/waivers/:leagueID', (req, res) => {
           res.status(500).send(err);
         });
     });
+    await mapUpdate.length;
     await findStocksAgain;
   };
   updateWaivers();

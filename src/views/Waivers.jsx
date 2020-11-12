@@ -3,6 +3,7 @@ import { TextField } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import WaiversTable from '../components/Waivers/WaiversTable.jsx';
+import LoadSpinner from '../components/Waivers/LoadSpinner.jsx';
 import '../css/Waivers.css';
 import { selectWaivers, setWaivers } from '../features/waiversSlice.js';
 import { selectUser } from '../features/userSlice.js';
@@ -13,14 +14,13 @@ function Waivers() {
   const rows = useSelector(selectWaivers);
   const [search, setSearch] = useState('');
   const [bankBalance, setBankBalance] = useState();
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const league = useSelector(selectLeague);
 
   useEffect(() => {
-    axios.get(`/stock/waivers/${league}`).then((response) => {
-      dispatch(setWaivers(response.data));
-    });
+    axios.get(`/stock/waivers/${league}`).then((response) => dispatch(setWaivers(response.data))).then(() => setLoading(false));
   }, [dispatch, league, user.leagueInfo]);
 
   useEffect(() => {
@@ -31,8 +31,8 @@ function Waivers() {
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
+  console.log(loading);
   return (
-
     <div className='waivers'>
       <div className='waivers_bank-balance'>
         <h2>Bank Balance</h2>
@@ -41,6 +41,7 @@ function Waivers() {
           {(bankBalance * 0.01).toFixed(2)}
         </h3>
       </div>
+
       <div className='waivers_search'>
         <TextField
           style={{ backgroundColor: 'white' }}
@@ -53,13 +54,15 @@ function Waivers() {
           size='small'
         />
       </div>
-      <WaiversTable
-        rows={rows}
-        search={search}
-        user={user}
-        bankBalance={bankBalance}
-        setBankBalance={setBankBalance}
-      />
+      {(loading) ? <LoadSpinner /> : (
+        <WaiversTable
+          rows={rows}
+          search={search}
+          user={user}
+          bankBalance={bankBalance}
+          setBankBalance={setBankBalance}
+        />
+      )}
     </div>
   );
 }
