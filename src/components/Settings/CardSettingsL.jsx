@@ -4,6 +4,13 @@ import {
 import React from 'react';
 import propTypes from 'prop-types';
 import '../../css/CardSettingsL.css';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  root: {
+    paddingLeft: '50px'
+  }
+});
 
 function CardSettingsL({
   myLeague,
@@ -18,8 +25,10 @@ function CardSettingsL({
     handleChange: propTypes.func.isRequired
   };
 
+  const classes = useStyles();
+
   return (
-    <Typography align='center' style={{ paddingLeft: '50px' }}>
+    <Typography align='center' className={classes.root}>
       <h3 className='settingsLeague_leagueName'>
         {`League Name: ${myLeague?.league_name}`}
       </h3>

@@ -2,7 +2,14 @@ import { Button, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import propTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import { selectSettings } from '../../features/ownerLeagueSlice.js';
+
+const useStyles = makeStyles({
+  root: {
+    paddingLeft: '20px'
+  }
+});
 
 function CardAddMembers({
   handleChange, addMembers, deleteSelection,
@@ -21,10 +28,11 @@ function CardAddMembers({
     input: propTypes.string.isRequired
   };
 
+  const classes = useStyles();
   const settings = useSelector(selectSettings);
 
   return (
-    <Typography align='center' style={{ paddingLeft: '20px' }}>
+    <Typography align='center' className={classes.root}>
       <p>
         {`Up to
         ${settings?.numberOfTeams} players`}

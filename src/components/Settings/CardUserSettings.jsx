@@ -1,8 +1,17 @@
 import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import '../../css/CardUserSettings.css';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  root: {
+    paddingLeft: '10px'
+  }
+});
 
 function CardUserSettings() {
+  const classes = useStyles();
+
   const [username, setUsername] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamLogo, setTeamLogo] = useState('');
@@ -35,7 +44,7 @@ function CardUserSettings() {
   return (
     <Typography
       align='center'
-      style={{ paddingRight: '20px' }}
+      className={classes.root}
     >
       {options.map(({
         name, state, setState, click
