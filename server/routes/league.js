@@ -11,23 +11,19 @@ const {
 
 // add user to League UserIDs is an array
 // todo: fix header error (post still works)
-leagueRouter.post('/addUser', async (req, res) => {
-  const { userIDs, leagueID } = req.body;
-  await userIDs.map((userID) => {
-    League_user.create({
-      id_league: leagueID,
-      id_user: userID,
-      bank_balance: 1000000,
-      net_worth: 0,
-      record: '0-0'
-    })
-      .catch((err) => {
-        console.warn(err);
-        res.status(500).send(err);
-      });
-    return 'success';
-  });
-  res.send('created');
+leagueRouter.post('/addUser', (req, res) => {
+  const { userID, leagueID } = req.body;
+  League_user.create({
+    id_league: leagueID,
+    id_user: userID,
+    bank_balance: 1000000,
+    net_worth: 0,
+    record: '0-0'
+  }).then((data) => res.status(200).send(data))
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+  return 'success';
 });
 
 // find all users in the league by league id
@@ -74,12 +70,12 @@ leagueRouter.get('/', (req, res) => {
 
 // create a league route
 leagueRouter.post('/', (req, res) => {
-  const { league_name, id_owner } = req.body;
+  const { league_name, id_owner, numberOfTeams } = req.body;
   const settings = {
     date_end: null, // date / it follows
     lengthMatch: null, // integer (number of days) (defaulting to 7)
     numberOfMatches: null, // integer
-    numberOfTeams: null, // integer
+    numberOfTeams, // integer
     numberOfTeamsPlayoffs: null, // Integer / default 10,000,00 (remember extra )
     date_start: null, // date /defaults: next monday '''''' calculate
     startingBank: null, // Integer / default 10,000,00 (remember extra )
@@ -114,6 +110,7 @@ leagueRouter.put('/', (req, res) => {
   const {
     id_league, league_name, id_owner, settings
   } = req.body;
+
   const newSettings = {
     date_end: settings.endDate || null, // date / it follows
     lengthMatch: settings.lengthMatches || null, // integer (number of days) (defaulting to 7)
@@ -132,7 +129,7 @@ leagueRouter.put('/', (req, res) => {
   League.update({ league_name, settings: newSettings, id_owner },
     {
       where: {
-        id_league
+        id: id_league
       }
     })
     .catch((err) => {
