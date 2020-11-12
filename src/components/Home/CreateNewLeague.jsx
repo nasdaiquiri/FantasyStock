@@ -39,10 +39,13 @@ const useStyles = makeStyles({
   }
 });
 
+const formControlValues = ['4', '6', '8', '10', '12', '14'];
+
 function CreateNewLeague() {
   const user = useSelector(selectUser);
   const [inputLeague, SetInputLeague] = useState('');
   const [open, setOpen] = useState(false);
+  const [numberOfTeams, setNumberOfTeams] = useState('');
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -50,7 +53,8 @@ function CreateNewLeague() {
   const onSubmit = () => {
     axios.post('/league', {
       league_name: inputLeague,
-      id_owner: user?.id
+      id_owner: user?.id,
+      numberOfTeams: Number(numberOfTeams)
     }).then((leagueInfo) => {
       dispatch(setLeague(leagueInfo?.data.id));
       dispatch(setLeagueOwner(leagueInfo?.data.id_owner));
@@ -59,16 +63,11 @@ function CreateNewLeague() {
         .then((response) => dispatch(setUser(response.data))));
   };
 
-  const handleLeagueTitle = (e) => {
-    SetInputLeague(e.target.value);
-  };
+  const handleLeagueTitle = (e) => SetInputLeague(e.target.value);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
 
   return (
     <div>
@@ -93,42 +92,15 @@ function CreateNewLeague() {
           <FormControl component='fieldset'>
             <FormLabel component='legend'>Number of Teams</FormLabel>
             <RadioGroup row aria-label='position' name='position' defaultValue='top'>
-              <FormControlLabel
-                value='4'
-                control={<Radio color='primary' />}
-                label='4'
-                labelPlacement='top'
-              />
-              <FormControlLabel
-                value='6'
-                control={<Radio color='primary' />}
-                label='6'
-                labelPlacement='top'
-              />
-              <FormControlLabel
-                value='8'
-                control={<Radio color='primary' />}
-                label='8'
-                labelPlacement='top'
-              />
-              <FormControlLabel
-                value='10'
-                control={<Radio color='primary' />}
-                label='10'
-                labelPlacement='top'
-              />
-              <FormControlLabel
-                value='12'
-                control={<Radio color='primary' />}
-                label='12'
-                labelPlacement='top'
-              />
-              <FormControlLabel
-                value='14'
-                control={<Radio color='primary' />}
-                label='14'
-                labelPlacement='top'
-              />
+              {formControlValues.map((formControlValue) => (
+                <FormControlLabel
+                  value={formControlValue}
+                  control={<Radio color='primary' />}
+                  label={formControlValue}
+                  labelPlacement='top'
+                  onChange={((e) => setNumberOfTeams((e.target.value)))}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </DialogContent>

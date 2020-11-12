@@ -70,12 +70,12 @@ leagueRouter.get('/', (req, res) => {
 
 // create a league route
 leagueRouter.post('/', (req, res) => {
-  const { league_name, id_owner } = req.body;
+  const { league_name, id_owner, numberOfTeams } = req.body;
   const settings = {
     date_end: null, // date / it follows
     lengthMatch: null, // integer (number of days) (defaulting to 7)
     numberOfMatches: null, // integer
-    numberOfTeams: null, // integer
+    numberOfTeams, // integer
     numberOfTeamsPlayoffs: null, // Integer / default 10,000,00 (remember extra )
     date_start: null, // date /defaults: next monday '''''' calculate
     startingBank: null, // Integer / default 10,000,00 (remember extra )
@@ -110,6 +110,7 @@ leagueRouter.put('/', (req, res) => {
   const {
     id_league, league_name, id_owner, settings
   } = req.body;
+
   const newSettings = {
     date_end: settings.endDate || null, // date / it follows
     lengthMatch: settings.lengthMatches || null, // integer (number of days) (defaulting to 7)
@@ -128,7 +129,7 @@ leagueRouter.put('/', (req, res) => {
   League.update({ league_name, settings: newSettings, id_owner },
     {
       where: {
-        id_league
+        id: id_league
       }
     })
     .catch((err) => {

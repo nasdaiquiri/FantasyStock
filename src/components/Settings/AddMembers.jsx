@@ -7,8 +7,9 @@ import '../../css/AddMembers.css';
 import AccordionComp from '../AccordionComp.jsx';
 import CardAddMembers from './CardAddMembers.jsx';
 
-function AddMembers({ leagueUsers }) {
+function AddMembers({ leagueUsers, myLeague }) {
   AddMembers.propTypes = {
+    myLeague: propTypes.shape.isRequired,
     leagueUsers: propTypes.arrayOf(propTypes.shape({
       color: propTypes.string.isRequired,
       fontSize: propTypes.number.isRequired
@@ -56,6 +57,7 @@ function AddMembers({ leagueUsers }) {
       submitted={submitted}
       users={users}
       input={input}
+      myLeague={myLeague}
     />
   );
 

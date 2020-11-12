@@ -26,7 +26,7 @@ function Settings() {
 
     <div className='settings_league'>
       {user.id === leagueOwner
-        && <SettingsLeague myLeague={myLeague} />}
+        && <SettingsLeague myLeague={myLeague} setMyLeague={setMyLeague} />}
       <div className='settings_userSettings'>
         <UserSettings />
       </div>

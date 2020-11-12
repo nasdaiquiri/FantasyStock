@@ -7,7 +7,8 @@ function CardAddMembers({
   addMembersToLeague,
   submitted,
   users,
-  input
+  input,
+  myLeague
 }) {
   CardAddMembers.propTypes = {
     handleChange: propTypes.func.isRequired,
@@ -16,14 +17,21 @@ function CardAddMembers({
     addMembersToLeague: propTypes.func.isRequired,
     submitted: propTypes.string.isRequired,
     users: propTypes.string.isRequired,
-    input: propTypes.string.isRequired
+    input: propTypes.string.isRequired,
+    myLeague: propTypes.string.isRequired
   };
 
   return (
     <Typography>
-      <p className='addMembers_membersNumber'>
-        {`members: ${users.length}`}
+      <p>
+        {`Up to
+        ${myLeague?.settings?.numberOfTeams} players`}
       </p>
+      <p>
+        {`Members:
+        ${users.length}`}
+      </p>
+      <p>even numbers only</p>
       <form className='addMembers_form'>
         <Input
           variant='outlined'
@@ -36,7 +44,7 @@ function CardAddMembers({
           color='primary'
           type='submit'
           onClick={addMembers}
-          disabled={!input}
+          disabled={!input || myLeague?.settings?.numberOfTeams === users.length}
         >
           add
         </Button>
@@ -70,6 +78,7 @@ function CardAddMembers({
               color='primary'
               type='submit'
               onClick={addMembersToLeague}
+              disabled={users.length % 2}
             >
               Add Members to League
             </Button>

@@ -44,40 +44,28 @@ const inputsForm = [
   }
 ];
 
-function SettingsLeague({ myLeague }) {
+function SettingsLeague({ myLeague, setMyLeague }) {
   SettingsLeague.propTypes = {
+    setMyLeague: PropTypes.func.isRequired,
     myLeague: PropTypes.shape({
       league_name: PropTypes.string,
       bank_balance: PropTypes.string,
-      id: PropTypes.string
+      id: PropTypes.string,
+      id_owner: PropTypes.number
     }).isRequired
   };
 
-  const [leagueForm, setLeagueForm] = useState({});
   const [leagueUsers, setLeagueUsers] = useState([]);
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     axios.get(`/league/league/${myLeague.id}`)
       .then((response) => setLeagueUsers(response.data));
   }, [myLeague.id]);
 
-  const handleChange = (e) => setLeagueForm({ ...leagueForm, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 2000);
-    setLeagueForm({});
-  };
-
   const Component = () => (
     <CardSettingsL
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-      submitted={submitted}
+      setMyLeague={setMyLeague}
       myLeague={myLeague}
-      leagueForm={leagueForm}
       inputsForm={inputsForm}
     />
   );
@@ -86,7 +74,7 @@ function SettingsLeague({ myLeague }) {
     <div className='settingsLeague'>
       <AccordionComp Component={Component} title='League Settings' />
       <div className='settingsLeague_addMembers'>
-        <AddMembers leagueUsers={leagueUsers} setLeagueUsers={setLeagueUsers} />
+        <AddMembers leagueUsers={leagueUsers} myLeague={myLeague} setLeagueUsers={setLeagueUsers} />
       </div>
     </div>
   );
