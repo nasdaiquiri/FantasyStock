@@ -55,6 +55,7 @@ function YourStocks() {
         <div className='YourStocks_card'>
           <CardStats bankBalance={bankBalance} rows={rows} />
         </div>
+        <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
         <BasicTable
           rows={rows}
           user={user}
