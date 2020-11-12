@@ -16,13 +16,15 @@ function CardSettingsL({
   myLeague,
   inputsForm,
   handleFormSubmit,
-  handleChange
+  handleChange,
+  submitted
 }) {
   CardSettingsL.propTypes = {
     myLeague: propTypes.string.isRequired,
     inputsForm: propTypes.string.isRequired,
     handleFormSubmit: propTypes.func.isRequired,
-    handleChange: propTypes.func.isRequired
+    handleChange: propTypes.func.isRequired,
+    submitted: propTypes.string.isRequired
   };
 
   const classes = useStyles();
@@ -63,6 +65,7 @@ function CardSettingsL({
           Submit
         </Button>
       </form>
+      {submitted && <p className='addMembers_saved'>Saved</p>}
     </Typography>
   );
 }
