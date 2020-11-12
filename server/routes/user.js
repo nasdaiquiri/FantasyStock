@@ -26,6 +26,26 @@ userRouter.get('/user/:userID', (req, res) => {
     .catch((err) => console.error(err));
 });
 
+userRouter.put('/user/:userID', (req, res) => {
+  const { userID } = req.params;
+  const { username } = req.body;
+  User.update({
+    username
+  },
+  {
+    where: {
+      id: userID
+    }
+  })
+    .then((newUsername) => {
+      res.status(201).send(newUsername);
+    })
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+});
+
 // get all users
 userRouter.get('/', (req, res) => {
   User.findAll()
