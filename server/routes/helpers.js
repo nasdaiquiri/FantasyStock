@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 const axios = require('axios');
-const { CLIEngine } = require('eslint');
 require('dotenv').config();
 
 const {
@@ -76,13 +76,13 @@ const updateStocks = async () => {
 
 // Adapted Fisher-Yates Shuffler
 function shuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
-  return array
+  return array;
 }
 const arraySlider = (array) => {
   const newArray = array.slice(1);
