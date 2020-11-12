@@ -38,7 +38,7 @@ function Waivers() {
         <h2>Bank Balance</h2>
         <h3 className='waivers_bank-amount'>
           $
-          {bankBalance * 0.01}
+          {(bankBalance * 0.01).toFixed(2)}
         </h3>
       </div>
       <div className='waivers_search'>
