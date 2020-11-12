@@ -31,7 +31,6 @@ function Waivers() {
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
-  console.log(loading);
   return (
     <div className='waivers'>
       <div className='waivers_bank-balance'>
