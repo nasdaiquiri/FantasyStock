@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { selectUser } from '../features/userSlice.js';
 import { selectLeague, selectLeagueOwner } from '../features/leagueSlice.js';
 import SettingsLeague from '../components/Settings/SettingsLeague.jsx';
 import '../css/Settings.css';
 import UserSettings from '../components/Settings/UserSettings.jsx';
+import { setOwnerLeague, setSettings } from '../features/ownerLeagueSlice.js';
 
 function Settings() {
+  const dispatch = useDispatch();
+
   const [myLeague, setMyLeague] = useState({});
   const league = useSelector(selectLeague);
   const leagueOwner = useSelector(selectLeagueOwner);
@@ -16,19 +19,28 @@ function Settings() {
   useEffect(() => {
     async function fetchLeague() {
       const response = await axios.get(`/league/${league}/${user?.id}`);
+      dispatch(setOwnerLeague(response.data));
       setMyLeague(response.data);
       return response;
     }
     fetchLeague();
-  }, [league, user]);
+  }, [league, user, dispatch]);
+
+  useEffect(() => {
+    async function fetchLeague() {
+      const response = await axios.get(`/league/settings/${league}`);
+      dispatch(setSettings(response.data));
+      return response;
+    }
+    fetchLeague();
+  }, [league, dispatch]);
 
   return (
-
     <div className='settings_league'>
-      {user.id === leagueOwner
-        && <SettingsLeague myLeague={myLeague} setMyLeague={setMyLeague} />}
+      <UserSettings />
       <div className='settings_userSettings'>
-        <UserSettings />
+        {user?.id === leagueOwner
+          && <SettingsLeague myLeague={myLeague} setMyLeague={setMyLeague} />}
       </div>
     </div>
 

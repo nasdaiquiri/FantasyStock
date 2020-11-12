@@ -1,5 +1,6 @@
-import { Button, Input, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
+import '../../css/CardUserSettings.css';
 
 function CardUserSettings() {
   const [username, setUsername] = useState('');
@@ -32,13 +33,16 @@ function CardUserSettings() {
   ];
 
   return (
-    <Typography>
+    <Typography
+      align='center'
+      style={{ paddingRight: '20px' }}
+    >
       {options.map(({
         name, state, setState, click
       }) => (
-        <form>
-          {name}
-          <Input
+        <form className='cardUserSettings_form'>
+          {`${name}:  `}
+          <TextField
             variant='outlined'
             type='text'
             value={state}
