@@ -1,8 +1,11 @@
-import { Button, TextField, Typography } from '@material-ui/core';
+import {
+  Button, IconButton, TextField, Typography
+} from '@material-ui/core';
 import React from 'react';
 import propTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { selectSettings } from '../../features/ownerLeagueSlice.js';
 
 const useStyles = makeStyles({
@@ -67,15 +70,14 @@ function CardAddMembers({
               {user.username}
               <p className='addMember_fullName'>{user.full_name}</p>
             </li>
-            <Button
+            <IconButton
               className='addMembers_deleteButton'
               variant='contained'
-              color='secondary'
               type='button'
               onClick={() => deleteSelection(user.id)}
             >
-              delete
-            </Button>
+              <DeleteIcon />
+            </IconButton>
           </div>
         ))}
       </ol>
