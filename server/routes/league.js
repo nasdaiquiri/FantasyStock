@@ -9,6 +9,24 @@ const {
   User
 } = require('../db/index');
 
+// get settings by league Id
+leagueRouter.get('/settings/:leagueID', (req, res) => {
+  const { leagueID } = req.params;
+
+  League.findOne(
+    {
+      where: {
+        id: leagueID
+      }
+    }
+  )
+    .then((leagueInfo) => res.send(leagueInfo.dataValues.settings))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
+
 // add user to League UserIDs is an array
 // todo: fix header error (post still works)
 leagueRouter.post('/addUser', (req, res) => {
