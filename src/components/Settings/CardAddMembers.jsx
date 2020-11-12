@@ -1,14 +1,22 @@
-import { Button, Input, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import propTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import { selectSettings } from '../../features/ownerLeagueSlice.js';
+
+const useStyles = makeStyles({
+  root: {
+    paddingLeft: '20px'
+  }
+});
 
 function CardAddMembers({
   handleChange, addMembers, deleteSelection,
   addMembersToLeague,
   submitted,
   users,
-  input,
-  myLeague
+  input
 }) {
   CardAddMembers.propTypes = {
     handleChange: propTypes.func.isRequired,
@@ -17,15 +25,17 @@ function CardAddMembers({
     addMembersToLeague: propTypes.func.isRequired,
     submitted: propTypes.string.isRequired,
     users: propTypes.string.isRequired,
-    input: propTypes.string.isRequired,
-    myLeague: propTypes.string.isRequired
+    input: propTypes.string.isRequired
   };
 
+  const classes = useStyles();
+  const settings = useSelector(selectSettings);
+
   return (
-    <Typography>
+    <Typography align='center' className={classes.root}>
       <p>
         {`Up to
-        ${myLeague?.settings?.numberOfTeams} players`}
+        ${settings?.numberOfTeams} players`}
       </p>
       <p>
         {`Members:
@@ -33,7 +43,7 @@ function CardAddMembers({
       </p>
       <p>even numbers only</p>
       <form className='addMembers_form'>
-        <Input
+        <TextField
           variant='outlined'
           type='text'
           value={input}
@@ -44,7 +54,7 @@ function CardAddMembers({
           color='primary'
           type='submit'
           onClick={addMembers}
-          disabled={!input || myLeague?.settings?.numberOfTeams === users.length}
+          disabled={!input || settings?.numberOfTeams === users.length}
         >
           add
         </Button>
@@ -60,7 +70,7 @@ function CardAddMembers({
             <Button
               className='addMembers_deleteButton'
               variant='contained'
-              color='primary'
+              color='secondary'
               type='button'
               onClick={() => deleteSelection(user.id)}
             >
