@@ -84,64 +84,6 @@ matchupRouter.get('/:leagueID', async (req, res) => {
 
 // put league route required
 // put for users added to league
-// const schedule = {
-//   currentWeek: 'integer',
-//   weeklyMatchups: {
-//     week1 : {
-//       teams: {
-//         [{Home: {
-//           teamID: 1,
-//           teamName: 'grab this from database on build schedule on league submit',
-//           score: 'integer'
-//         },
-//         Away: {
-//           teamId: 3,
-//           teamName: 'name',
-//           score: 'integer'
-//         }},
-//         {Home: {
-//           teamID: 2,
-//           teamName: 'grab this from database on build schedule on league submit',
-//           score: 'integer'
-//         },
-//         Away: {
-//           teamId: 4,
-//           teamName: 'name',
-//           score: 'integer'
-//         }},
-//       ]
-//       }
-//     },
-//     week2: {
-//       teams: {
-//         Home: {
-//           teamID: 1,
-//           teamName: 'grab this from database on build schedule on league submit',
-//           score: 'integer'
-//         },
-//         Away: {
-//           teamId: 3,
-//           teamName: 'name',
-//           score: 'integer'
-//         }
-//       }
-//     },
-//     last3: {
-//       teams: {
-//         Home: {
-//           teamID: 1,
-//           teamName: 'grab this from database on build schedule on league submit',
-//           score: 'integer'
-//         },
-//         Away: {
-//           teamId: 3,
-//           teamName: 'name',
-//           score: 'integer'
-//         }
-//       }
-//     } // last week
-//   }
-// }
 // //where do i do schedule?
 // // on league post? Shuffle team number
 // // apply to standard

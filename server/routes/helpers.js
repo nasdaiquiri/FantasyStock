@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 const axios = require('axios');
 require('dotenv').config();
 
@@ -74,18 +75,15 @@ const updateStocks = async () => {
 };
 
 // Adapted Fisher-Yates Shuffler
-const shuffle = (array) => {
-  const m = array.length;
-  let t;
-  let i;
-  while (m) {
-    i = Math.floor(Math.random() * m - 1);
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
   return array;
-};
+}
 const arraySlider = (array) => {
   const newArray = array.slice(1);
   newArray.push(array[0]);
@@ -101,10 +99,10 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
     weeklyMatchups: {}
   };
   // TODO: Home vs away fairness & noparam reassign
-  for (let i = 1; i <= numOfWeeks; i + 1) {
+  for (let i = 1; i <= numOfWeeks; i++) {
     const week = `week${i}`;
     const weeklyGames = [];
-    for (let k = 1; k <= gamesPerWeek; k + 1) {
+    for (let k = 1; k <= gamesPerWeek; k++) {
       const gameTemplate = {
         Home: {
           teamID: firstHalfOfIDs[k - 1],
@@ -115,6 +113,7 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
           score: 0
         }
       };
+      // infinite loop on 5/3
       weeklyGames.push(gameTemplate);
     }
     firstHalfOfIDs = arraySlider(firstHalfOfIDs);
@@ -124,10 +123,11 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
 };
 // TODO: numPlayoffs
 const matchupGenerator = (userIDs, numWeeks) => {
-  const randomOrderUserIDs = shuffle(userIDs);
+  const randomOrderUserIDs = shuffleArray(userIDs);
   const schedule = matchScheduler(numWeeks, randomOrderUserIDs);
   return schedule;
 };
+
 module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
