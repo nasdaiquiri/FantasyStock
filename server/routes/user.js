@@ -6,14 +6,62 @@ const { Router } = require('express');
 const { Op } = require('sequelize');
 
 const {
-  // Stock,
-  // Portfolio,
   League_user,
   User
 } = require('../db/index');
 
 const userRouter = Router();
 
+userRouter.put('/updateUsername', (req, res) => {
+  const { userID, newUsername } = req.body;
+  User.update({
+    username: newUsername
+  },
+  {
+    where: {
+      id: userID
+    }
+  })
+    .then((response) => res.send(response))
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+});
+userRouter.put('/updateUserTeamLogo', (req, res) => {
+  const { userID, leagueID, teamLogo } = req.body;
+  League_user.update({
+    team_logo: teamLogo
+  },
+  {
+    where: {
+      id_user: userID,
+      id_league: leagueID
+    }
+  })
+    .then((response) => res.send(response))
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+});
+userRouter.put('/updateUserTeamName', (req, res) => {
+  const { userID, leagueID, teamName } = req.body;
+  League_user.update({
+    team_name: teamName
+  },
+  {
+    where: {
+      id_user: userID,
+      id_league: leagueID
+    }
+  })
+    .then((response) => res.send(response))
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+});
 // get a user by user id
 userRouter.get('/user/:userID', (req, res) => {
   const { userID } = req.params;
