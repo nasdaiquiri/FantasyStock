@@ -6,3 +6,12 @@
 .schedule_title {
   padding-bottom: 20px;
 }
+
+.schedule_vs {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

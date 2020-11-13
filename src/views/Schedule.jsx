@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Avatar } from '@material-ui/core';
 import { selectLeague } from '../features/leagueSlice.js';
-import {
-  selectWeeks, setSchedule, setWeeks
-} from '../features/scheduleSlice.js';
+import { setSchedule } from '../features/scheduleSlice.js';
 import '../css/Schedule.css';
 
 function Schedule() {
   const dispatch = useDispatch();
 
   const league = useSelector(selectLeague);
-  const weeks = useSelector(selectWeeks);
+  const [weeks, setWeeks] = useState([]);
 
   useEffect(() => {
     axios.get(`/matchup/${league}`).then(({ data }) => {
       dispatch(setSchedule({ data }));
-      dispatch(setWeeks(Object.keys(
+      setWeeks(Object.keys(
         data?.weeklyMatchups
       ).reduce(
         (acc, curr) => [...acc, { week: curr, games: data?.weeklyMatchups[curr] }], []
-      )));
-    });
+      ));
+    })
+      .catch((err) => console.warn(err));
   }, [league, dispatch]);
 
   return (
@@ -45,18 +45,31 @@ function Schedule() {
                 <p>{week}</p>
                 {
                   games.map(({ Away, Home }) => (
-                    <>
-                      <p>{`Home: ${Home.teamID}`}</p>
-                      <p>
-                        TEAM_NAME:
-                        {Away.user.id_user}
-                      </p>
-                      <p>{`Away: ${Away.teamID}`}</p>
-                      <p>
-                        TEAM_NAME:
-                        {Home.user.id_user}
-                      </p>
-                    </>
+                    <div className='schedule_vs'>
+                      <div>
+                        <h3>Home</h3>
+                        <p>
+                          TEAM_NAME:
+                          {Away.user.team_name}
+                        </p>
+                        <p>
+                          TEAM_LOGO:
+                          <Avatar src={`${Away.user.team_logo}`} sizes='small' alt='team logo' />
+                        </p>
+                      </div>
+                      <div>
+                        <h3>Away</h3>
+                        <p>
+                          TEAM_NAME:
+                          {Home.user.team_name}
+                        </p>
+                        <p>
+                          TEAM_LOGO:
+                          <Avatar src={`${Home.user.team_logo}`} sizes='medium' alt='team logo' />
+                        </p>
+                      </div>
+
+                    </div>
                   ))
                 }
               </>
