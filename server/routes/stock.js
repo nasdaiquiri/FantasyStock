@@ -161,10 +161,7 @@ stockRouter.get('/waivers/:leagueID', (req, res) => {
         },
         {
           where: {
-            ticker: stock.quote.symbol,
-            company_name: {
-              [Op.eq]: null
-            }
+            ticker: stock.quote.symbol
           }
         }).then((data) => data)
           .catch((err) => console.warn(err));

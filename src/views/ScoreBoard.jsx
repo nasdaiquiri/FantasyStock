@@ -8,7 +8,7 @@ import { selectLeague } from '../features/leagueSlice.js';
 
 function ScoreBoard() {
   const [matches, setMatches] = useState([]);
-  const [week, setWeek] = useState(1);
+  const [week, setWeek] = useState(null);
   const [matchPortfolio, setMatchPortfolio] = useState([]);
   const [toggle, setToggle] = useState(false);
   const league = useSelector(selectLeague);
@@ -17,7 +17,11 @@ function ScoreBoard() {
     axios({
       method: 'GET',
       url: `/matchup/${league}`
-    }).then((response) => setMatches(response.data.weeklyMatchups));
+    }).then((response) => {
+      setWeek(response.data.currentWeek);
+      console.log(response.data);
+      setMatches(response.data.weeklyMatchups);
+    });
   }, [league]);
 
   const getMatchups = (homeId, awayId) => {
