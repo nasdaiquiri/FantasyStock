@@ -93,7 +93,7 @@ leagueRouter.post('/', (req, res) => {
   const settings = {
     date_end: null, // date / it follows
     lengthMatch: null, // integer (number of days) (defaulting to 7)
-    numberOfMatches: null, // integer
+    numberOfMatches: 8, // integer
     numberOfTeams, // integer
     numberOfTeamsPlayoffs: null, // Integer / default 10,000,00 (remember extra )
     date_start: null, // date /defaults: next monday '''''' calculate
@@ -146,7 +146,7 @@ leagueRouter.put('/', async (req, res) => {
   const newSettings = {
     date_end: settings.endDate || null, // date / it follows
     lengthMatch: settings.lengthMatches || null, // integer (number of days) (defaulting to 7)
-    numberOfMatches: settings.numberMatches || null, // integer
+    numberOfMatches: settings.numberMatches || 8, // integer
     numberOfTeams: settings.numberTeams || null, // integer
     numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || null,
     // Integer / default 10,000,00 (remember extra )
@@ -170,6 +170,7 @@ leagueRouter.put('/', async (req, res) => {
 
 // Add an array of users to a league (deletes any users
 // already in league that are not included in the sent array)
+// TODO: add matchupgenerator in the put for /users and only update then (both)
 leagueRouter.put('/users', (req, res) => {
   const { userIDs, leagueID } = req.body;
   League_user.findAll({

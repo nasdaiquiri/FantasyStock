@@ -1,94 +1,66 @@
 /* eslint-disable camelcase */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-param-reassign */
 const { Router } = require('express');
-// const { array } = require('prop-types');
 
 const matchupRouter = Router();
 
 const {
   League,
-  League_user,
-  // User,
-  Stock,
-  Stock_user
+  League_user
 } = require('../db/index');
 
 matchupRouter.get('/:leagueID', async (req, res) => {
-  // TODO: calculate the scores, update the settings,
-  // and send the updated settings with new scores in it
   const { leagueID } = req.params;
-  const stockInfo = {};
-  const currentMatchups = await League.findByPk(
-    leagueID
-  )
-    .then((league) => {
-      const weekNumber = `week${league.dataValues.settings.schedule.currentWeek}`;
-      const currentMatchupsValues = {
-        ...league.dataValues.settings.schedule.weeklyMatchups[weekNumber]
-      };
-      return currentMatchupsValues;
-    })
-    .catch((err) => {
-      console.warn(err);
-      res.status(500).send(err);
-    });
-  const users = await League_user.findAll({
+  let users = await League_user.findAll({
     where: {
       id_league: leagueID
     }
-  }).then(((leagueUsers) => [...leagueUsers]))
+  })
+    .then((data) => data)
     .catch((err) => {
-      console.warn(err);
+      console.error(err);
       res.status(500).send(err);
     });
-  users.map(async (user) => {
-    const userID = user.dataValues.id_user;
-    const tempo = {};
-    tempo.userID = await Stock_user.findAll({
+  users = users.map((user) => user.dataValues);
+  const schedule1 = await League.findOne(
+    {
       where: {
-        id_user: userID, id_league: leagueID
-      }
-    })
-      .then(async (joinObjects) => {
-        joinObjects.map(async (indStock) => {
-          const stockID = indStock.dataValues.id_stock;
-          const tempHolder = await Stock.findByPk(stockID);
-          stockInfo[indStock.dataValues.id_user] = await tempHolder.dataValues;
-        });
-      })
-      .catch((err) => {
-        console.warn(err);
-        res.status(500).send(err);
-      });
-    for (const match in currentMatchups) {
-      const awayID = currentMatchups[match].away.teamID;
-      const homeID = currentMatchups[match].home.teamID;
-      if (userID === awayID) {
-        currentMatchups[match].away.teamInfo = user.dataValues;
-        currentMatchups[match].away.stocks = stockInfo.userID;
-      } else if (userID === homeID) {
-        currentMatchups[match].home.teamInfo = user.dataValues;
-        currentMatchups[match].home.stocks = stockInfo.userID;
+        id: leagueID
       }
     }
-  });
-  const arrayMatchups = Object.values(currentMatchups);
-  setTimeout(() => {
-    res.send(arrayMatchups);
-  }, 100);
-  // res.send(currentMatchups)
+  )
+    .then((leagueInfo) => {
+      const schedule = leagueInfo.dataValues.settings.schedule;
+      const arrayMatchups = Object.values(schedule.weeklyMatchups);
+      arrayMatchups.map((week) => {
+        const thing = week.map((side) => {
+          const arraySides = Object.values(side);
+          arraySides.map((indSide) => {
+            const id = indSide.teamID;
+            users.map((user) => {
+              if (user.id_user === id) {
+                indSide.user = user;
+              }
+              return user;
+            });
+            return indSide;
+          });
+          return side;
+        });
+        return thing;
+      });
+      res.send(schedule);
+      return schedule;
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+  return schedule1;
 });
-
-// TODO: matchup getter for other weeks (history)
-
-// put league route required
-// put for users added to league
-// //where do i do schedule?
-// // on league post? Shuffle team number
-// // apply to standard
-// // can build shuffler later
-// // what is the format of the schedule aspect?
 
 module.exports = {
   matchupRouter
