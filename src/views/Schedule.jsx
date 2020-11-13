@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Avatar } from '@material-ui/core';
 import { selectLeague } from '../features/leagueSlice.js';
 import { setSchedule } from '../features/scheduleSlice.js';
 import '../css/Schedule.css';
+import AccordionTwo from '../components/AccordionTwo.jsx';
 
 function Schedule() {
   const dispatch = useDispatch();
@@ -41,38 +41,9 @@ function Schedule() {
           <h3 className='schedule_title'>Schedule</h3>
           {
             weeks?.map(({ week, games }) => (
-              <>
-                <p>{week}</p>
-                {
-                  games.map(({ Away, Home }) => (
-                    <div className='schedule_vs'>
-                      <div>
-                        <h3>Home</h3>
-                        <p>
-                          TEAM_NAME:
-                          {Away.user.team_name}
-                        </p>
-                        <p>
-                          TEAM_LOGO:
-                          <Avatar src={`${Away.user.team_logo}`} sizes='small' alt='team logo' />
-                        </p>
-                      </div>
-                      <div>
-                        <h3>Away</h3>
-                        <p>
-                          TEAM_NAME:
-                          {Home.user.team_name}
-                        </p>
-                        <p>
-                          TEAM_LOGO:
-                          <Avatar src={`${Home.user.team_logo}`} sizes='medium' alt='team logo' />
-                        </p>
-                      </div>
-
-                    </div>
-                  ))
-                }
-              </>
+              <div className='schedule_week'>
+                <AccordionTwo title={week} games={games} />
+              </div>
             ))
           }
         </div>
