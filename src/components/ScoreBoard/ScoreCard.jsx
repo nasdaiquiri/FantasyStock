@@ -28,26 +28,32 @@ function ScoreCard({
   awayRecord,
   awayTeamId,
   awayName,
+  awayBalance,
   homeRecord,
   homeTeamId,
   homeName,
   homeScore,
-  getMatchups
+  homeBalance,
+  getMatchups,
+  startingBalance
 }) {
   ScoreCard.propTypes = {
     awayScore: PropTypes.number.isRequired,
     awayRecord: PropTypes.string.isRequired,
     awayTeamId: PropTypes.number.isRequired,
     awayName: PropTypes.string.isRequired,
+    awayBalance: PropTypes.number.isRequired,
     homeScore: PropTypes.number.isRequired,
     homeRecord: PropTypes.string.isRequired,
     homeTeamId: PropTypes.number.isRequired,
     homeName: PropTypes.string.isRequired,
-    getMatchups: PropTypes.func.isRequired
+    homeBalance: PropTypes.number.isRequired,
+    getMatchups: PropTypes.func.isRequired,
+    startingBalance: PropTypes.number.isRequired
   };
   const classes = useStyles();
-
-  console.log('(50) HOMEID', homeTeamId, 'AWAYID', awayTeamId)
+  const balancePercentage = (balance, leagueBalance) => (
+    ((balance * 0.01) - leagueBalance) / leagueBalance);
   return (
     <Card
       className={classes.root}
@@ -56,7 +62,11 @@ function ScoreCard({
     >
       <CardContent>
         <Typography className={classes.score} variant='body2' component='p'>
-          {awayScore}
+          {(awayBalance * 0.01).toFixed(2)}
+          (
+          {balancePercentage(awayBalance, startingBalance).toFixed(2)}
+          %
+          )
         </Typography>
         <Typography variant='h5' component='h2'>
           {awayName}
@@ -65,7 +75,11 @@ function ScoreCard({
           {awayRecord}
         </Typography>
         <Typography className={classes.score} variant='body2' component='p'>
-          {homeScore}
+          {(homeBalance * 0.01).toFixed(2)}
+          (
+          {balancePercentage(homeBalance, startingBalance).toFixed(2)}
+          %
+          )
         </Typography>
         <Typography variant='h5' component='h2'>
           {homeName}
