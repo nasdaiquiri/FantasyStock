@@ -30,11 +30,25 @@ function CardUserSettings() {
       .then(() => axios.post('/user', { id: user?.id })
         .then((response) => dispatch(setUser(response.data))))
       .then(() => axios.get(`/league/league/${league}`)
-        .then((response) => dispatch(setUsersInLeague(response.data))));
+        .then((response) => dispatch(setUsersInLeague(response.data))))
+      .catch((err) => console.warm(err));
     setUsername('');
   };
-  const submitTeam = () => setTeamName('');
-  const submitLogo = () => setTeamLogo('');
+  const submitTeam = () => {
+    axios.put('/user/updateUserTeamName', { userID: user.id, leagueID: league, teamName })
+      .then(() => axios.post('/user', { id: user?.id })
+        .then((response) => dispatch(setUser(response.data))))
+      .catch((err) => console.warn(err));
+    setTeamName('');
+  };
+
+  const submitLogo = () => {
+    axios.put('/user/updateUserTeamLogo', { userID: user.id, leagueID: league, teamLogo })
+      .then(() => axios.post('/user', { id: user?.id })
+        .then((response) => dispatch(setUser(response.data))))
+      .catch((err) => console.warn(err));
+    setTeamLogo('');
+  };
 
   const options = [
     {
@@ -58,33 +72,60 @@ function CardUserSettings() {
   ];
 
   return (
-    <Typography
-      align='center'
-      className={classes.root}
-    >
-      {options.map(({
-        name, state, setState, click
-      }) => (
-        <form className='cardUserSettings_form'>
-          {`${name}:  `}
-          <TextField
-            variant='outlined'
-            type='text'
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          />
-          <Button
-            variant='contained'
-            color='primary'
-            type='submit'
-            onClick={click}
-            disabled={!state}
-          >
-            add
-          </Button>
-        </form>
-      ))}
-    </Typography>
+    league !== null
+      ? (
+        <Typography
+          align='center'
+          className={classes.root}
+        >
+          {options.map(({
+            name, state, setState, click
+          }) => (
+            <form className='cardUserSettings_form'>
+              {`${name}:  `}
+              <TextField
+                variant='outlined'
+                type='text'
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+              />
+              <Button
+                variant='contained'
+                color='primary'
+                type='submit'
+                onClick={click}
+                disabled={!state}
+              >
+                add
+              </Button>
+            </form>
+          ))}
+        </Typography>
+      ) : (
+        <Typography
+          align='center'
+          className={classes.root}
+        >
+          <form className='cardUserSettings_form'>
+            {'Username:  '}
+            <TextField
+              variant='outlined'
+              type='text'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Button
+              variant='contained'
+              color='primary'
+              type='submit'
+              onClick={submitUser}
+              disabled={!username}
+            >
+              add
+            </Button>
+          </form>
+        </Typography>
+      )
   );
 }
 
