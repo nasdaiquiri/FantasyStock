@@ -8,6 +8,7 @@ import { selectLeague } from '../features/leagueSlice.js';
 
 function ScoreBoard() {
   const [matches, setMatches] = useState([]);
+  const [week, setWeek] = useState(1);
   const [matchPortfolio, setMatchPortfolio] = useState([]);
   const [toggle, setToggle] = useState(false);
   const league = useSelector(selectLeague);
@@ -15,19 +16,18 @@ function ScoreBoard() {
   useEffect(() => {
     axios({
       method: 'GET',
-      url: `matchup/${league}`
-    }).then((response) => setMatches(response.data));
+      url: `/matchup/${league}`
+    }).then((response) => setMatches(response.data.weeklyMatchups));
   }, [league]);
 
-  const getMatchups = (homeId, userId) => {
-    // TODO:add homeID and userID once we have users in a league
-
+  const getMatchups = (homeId, awayId) => {
+    console.log('(24)', homeId, awayId);
     const getHomePortfolio = axios
       .get(`/stock/portfolio/${homeId}`)
       .then((response) => response.data);
 
     const getAwayPortfolio = axios
-      .get(`/stock/portfolio/${userId}`)
+      .get(`/stock/portfolio/${awayId}`)
       .then((response) => response.data);
 
     return Promise.all([getHomePortfolio, getAwayPortfolio])
@@ -39,18 +39,22 @@ function ScoreBoard() {
     setToggle(false);
   };
 
+  const currentWeek = `week${week}`;
+  const currentWeekMatches = matches[currentWeek];
+  console.log(currentWeekMatches);
+
   return (
     <div>
-      {!toggle ? matches.map((match) => (
+      {!toggle ? currentWeekMatches?.map((match) => (
         <ScoreCard
-          awayScore={match.away.score}
-          awayName={match.away.teamInfo.team_name}
-          awayRecord={match.away.teamInfo.record}
-          awayTeamId={match.away.teamID}
-          homeScore={match.home.score}
-          homeName={match.home.teamInfo.team_name}
-          homeRecord={match.home.teamInfo.record}
-          homeTeamId={match.home.teamID}
+          awayScore={match.Away.score}
+          awayName={match.Away.user.team_name}
+          awayRecord={match.Away.user.record}
+          awayTeamId={match.Away.teamID}
+          homeScore={match.Home.score}
+          homeName={match.Home.user.team_name}
+          homeRecord={match.Home.user.record}
+          homeTeamId={match.Home.teamID}
           getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
         />
       ))

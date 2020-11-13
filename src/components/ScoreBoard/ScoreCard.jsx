@@ -27,21 +27,27 @@ function ScoreCard({
   awayScore,
   awayRecord,
   awayTeamId,
-  homeScore,
+  awayName,
   homeRecord,
   homeTeamId,
+  homeName,
+  homeScore,
   getMatchups
 }) {
   ScoreCard.propTypes = {
     awayScore: PropTypes.number.isRequired,
     awayRecord: PropTypes.string.isRequired,
     awayTeamId: PropTypes.number.isRequired,
+    awayName: PropTypes.string.isRequired,
     homeScore: PropTypes.number.isRequired,
     homeRecord: PropTypes.string.isRequired,
     homeTeamId: PropTypes.number.isRequired,
+    homeName: PropTypes.string.isRequired,
     getMatchups: PropTypes.func.isRequired
   };
   const classes = useStyles();
+
+  console.log('(50) HOMEID', homeTeamId, 'AWAYID', awayTeamId)
   return (
     <Card
       className={classes.root}
@@ -53,7 +59,7 @@ function ScoreCard({
           {awayScore}
         </Typography>
         <Typography variant='h5' component='h2'>
-          Away Team Name
+          {awayName}
         </Typography>
         <Typography className={classes.pos} color='textSecondary'>
           {awayRecord}
@@ -62,7 +68,7 @@ function ScoreCard({
           {homeScore}
         </Typography>
         <Typography variant='h5' component='h2'>
-          Home Team Name
+          {homeName}
         </Typography>
         <Typography className={classes.pos} color='textSecondary'>
           {homeRecord}

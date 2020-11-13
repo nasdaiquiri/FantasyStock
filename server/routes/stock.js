@@ -207,7 +207,7 @@ stockRouter.get('/waivers/:leagueID', (req, res) => {
           res.status(500).send(err);
         });
     });
-    await mapUpdate.length;
+    await mapUpdate;
     await findStocksAgain;
   };
   updateWaivers();
