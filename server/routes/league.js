@@ -115,7 +115,6 @@ leagueRouter.post('/', (req, res) => {
     id_owner,
     settings
   }).then((leagueInfo) => {
-    console.log('HERE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', leagueInfo.dataValues)
     League_user.create({
       id_user: leagueInfo.dataValues.id_owner,
       id_league: leagueInfo.dataValues.id,
@@ -129,11 +128,10 @@ leagueRouter.post('/', (req, res) => {
         balance_start: null
       }
     })
-    .catch((err) => {
-      console.warn(err);
-      res.status(500).send(err);
-    });
-    console.log('thennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
+      .catch((err) => {
+        console.warn(err);
+        res.status(500).send(err);
+      });
     res.send(leagueInfo.dataValues);
   })
     .catch((err) => {

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     ties: {
-      types: DataTypes.INTEGER
+      type: DataTypes.INTEGER
     },
     team_name: {
       type: DataTypes.STRING
