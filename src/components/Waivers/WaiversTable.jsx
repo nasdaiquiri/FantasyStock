@@ -169,6 +169,9 @@ function WaiversTable({
     (row) => row
       .ticker.toLowerCase()
       .indexOf(search.toLowerCase()) !== -1
+      || row
+        .company_name.toLowerCase()
+        .indexOf(search.toLowerCase()) !== -1
   );
   const ControllingRowsPerPage = page * rowsPerPage;
   return (

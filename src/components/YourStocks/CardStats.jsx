@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 function CardStats({ bankBalance, rows }) {
   CardStats.propTypes = {
     bankBalance: PropTypes.number.isRequired,
-    rows: PropTypes.shape().isRequired
+    rows: PropTypes.arrayOf(PropTypes.object).isRequired
   };
   const classes = useStyles();
 
@@ -69,14 +69,13 @@ function CardStats({ bankBalance, rows }) {
               .toFixed(2)}
             (
             {portPercent.toFixed(2)}
-            %
-            )
-            <div>
-              Total Value:
-              {' '}
-              $
-              {totalValue.toFixed(2)}
-            </div>
+            %)
+          </Typography>
+          <Typography>
+            Total Value:
+            {' '}
+            $
+            {totalValue.toFixed(2)}
           </Typography>
         </CardContent>
       </Card>
