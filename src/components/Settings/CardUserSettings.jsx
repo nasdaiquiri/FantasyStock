@@ -26,8 +26,6 @@ function CardUserSettings() {
   const [teamLogo, setTeamLogo] = useState('');
   const [leagueUser, setLeagueUser] = useState('');
 
-  console.log(leagueUser);
-
   useEffect(() => {
     axios.get(`/user/team/${league}/${user?.id}`)
       .then((response) => setLeagueUser(response.data))

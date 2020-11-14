@@ -98,6 +98,7 @@ function CreateNewLeague() {
             <RadioGroup row aria-label='position' name='position' defaultValue='top'>
               {formControlValues.map((formControlValue) => (
                 <FormControlLabel
+                  key={formControlValue}
                   value={formControlValue}
                   control={<Radio color='primary' />}
                   label={formControlValue}

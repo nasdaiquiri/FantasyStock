@@ -28,7 +28,7 @@ function ScoreBoard() {
     });
   }, [league]);
 
-  const getMatchups = (homeId, awayId) => {
+  const getMatchups = async (homeId, awayId) => {
     const getHomePortfolio = axios
       .get(`/stock/portfolio/${homeId}`)
       .then((response) => response.data);
@@ -37,11 +37,16 @@ function ScoreBoard() {
       .get(`/stock/portfolio/${awayId}`)
       .then((response) => response.data);
 
-    return Promise.all([getHomePortfolio, getAwayPortfolio])
+    const awaitGetHomePortfolio = await getHomePortfolio;
+    const awaitGetAwayPortfolio = await getAwayPortfolio;
+
+    const setMatch = await Promise.all([awaitGetHomePortfolio, awaitGetAwayPortfolio])
       .then((response) => response).then((ports) => {
         setMatchPortfolio(ports);
       }).then(() => setToggle(true));
+    await setMatch;
   };
+
   const switchViews = () => {
     setToggle(false);
   };

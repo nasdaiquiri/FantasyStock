@@ -75,6 +75,13 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
   };
 
+  EnhancedTableHead.propTypes = {
+    classes: PropTypes.shape.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired
+  };
+
   return (
     <TableHead>
       <TableRow>
@@ -106,13 +113,6 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.shape.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired
-};
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%'
@@ -142,7 +142,7 @@ function BasicTable({
   rows, user, bankBalance, setBankBalance, updateBank, fetchYourStocks
 }) {
   BasicTable.propTypes = {
-    rows: PropTypes.shape.isRequired,
+    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     user: PropTypes.shape.isRequired,
     bankBalance: PropTypes.number.isRequired,
     setBankBalance: PropTypes.func.isRequired,
