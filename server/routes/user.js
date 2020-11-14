@@ -62,6 +62,20 @@ userRouter.put('/updateUserTeamName', (req, res) => {
       res.status(500).send(err);
     });
 });
+
+// look for team information by league id and user id
+userRouter.get('/team/:leagueID/:userID', (req, res) => {
+  const { leagueID, userID } = req.params;
+  League_user.findOne({
+    where: {
+      id_user: userID,
+      id_league: leagueID
+    }
+  })
+    .then((userInfo) => res.send(userInfo))
+    .catch((err) => console.error(err));
+});
+
 // get a user by user id
 userRouter.get('/user/:userID', (req, res) => {
   const { userID } = req.params;

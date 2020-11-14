@@ -1,5 +1,5 @@
 import { Button, TextField, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/CardUserSettings.css';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -24,28 +24,38 @@ function CardUserSettings() {
   const [username, setUsername] = useState('');
   const [teamName, setTeamName] = useState('');
   const [teamLogo, setTeamLogo] = useState('');
+  const [leagueUser, setLeagueUser] = useState('');
+
+  console.log(leagueUser);
+
+  useEffect(() => {
+    axios.get(`/user/team/${league}/${user?.id}`)
+      .then((response) => setLeagueUser(response.data))
+      .catch((err) => console.warn(err));
+  }, [user?.id, league]);
 
   const submitUser = () => {
-    axios.put(`/user/user/${user?.id}`, { username })
-      .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))))
-      .then(() => axios.get(`/league/league/${league}`)
-        .then((response) => dispatch(setUsersInLeague(response.data))))
+    axios
+      .put(`/user/user/${user?.id}`, { username })
+      .then(() => axios.post('/user', { id: user?.id }))
+      .then((response) => dispatch(setUser(response.data)))
+      .then(() => axios.get(`/league/league/${league}`))
+      .then((response) => dispatch(setUsersInLeague(response.data)))
       .catch((err) => console.warm(err));
     setUsername('');
   };
   const submitTeam = () => {
-    axios.put('/user/updateUserTeamName', { userID: user.id, leagueID: league, teamName })
-      .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))))
+    axios
+      .put('/user/updateUserTeamName', { userID: user.id, leagueID: league, teamName })
+      .then(() => axios.get(`/user/team/${league}/${user?.id}`))
+      .then((response) => setLeagueUser(response.data))
       .catch((err) => console.warn(err));
     setTeamName('');
   };
 
   const submitLogo = () => {
-    axios.put('/user/updateUserTeamLogo', { userID: user.id, leagueID: league, teamLogo })
-      .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))))
+    axios
+      .put('/user/updateUserTeamLogo', { userID: user.id, leagueID: league, teamLogo })
       .catch((err) => console.warn(err));
     setTeamLogo('');
   };
@@ -55,13 +65,15 @@ function CardUserSettings() {
       name: 'Username',
       state: username,
       setState: setUsername,
-      click: submitUser
+      click: submitUser,
+      defaultValue: user?.username
     },
     {
       name: 'Team Name',
       state: teamName,
       setState: setTeamName,
-      click: submitTeam
+      click: submitTeam,
+      defaultValue: leagueUser?.team_name
     },
     {
       name: 'Team Logo',
@@ -79,7 +91,7 @@ function CardUserSettings() {
           className={classes.root}
         >
           {options.map(({
-            name, state, setState, click
+            name, state, setState, click, defaultValue
           }) => (
             <form className='cardUserSettings_form'>
               {`${name}:  `}
@@ -87,6 +99,7 @@ function CardUserSettings() {
                 variant='outlined'
                 type='text'
                 value={state}
+                label={defaultValue}
                 onChange={(e) => setState(e.target.value)}
               />
               <Button

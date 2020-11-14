@@ -15,6 +15,7 @@ function YourStocks() {
   const [bankBalance, setBankBalance] = useState({});
   const user = useSelector(selectUser);
   const league = useSelector(selectLeague);
+  const [leagueUser, setLeagueUser] = useState({});
 
   const dispatch = useDispatch();
 
@@ -33,16 +34,22 @@ function YourStocks() {
       .then((response) => setBankBalance(response.data.bank_balance));
   }, [user?.id]);
 
+  useEffect(() => {
+    axios.get(`/user/team/${league}/${user?.id}`)
+      .then((response) => setLeagueUser(response.data))
+      .catch((err) => console.warn(err));
+  }, [user?.id]);
+
   return (
     <div className='yourStocks'>
       {/* <h1>Your Stocks</h1> */}
       <div className='yourStocks_container'>
         <div className='yourStocks_teamInfo'>
-          <h2>Team Name</h2>
+          <h2>{leagueUser?.team_name}</h2>
           <Avatar
             className='yourStocks_logo'
             alt='logo'
-            src='https://i.redd.it/gz311zrrcwi11.png'
+            src={leagueUser?.team_logo}
           />
         </div>
         <div className='YourStocks_card'>
