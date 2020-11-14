@@ -12,7 +12,8 @@ const {
 const {
   checkSharesAvailable,
   checkMoneyAvailable,
-  updateStocks
+  updateStocks,
+  portfolioValues
 } = require('./helpers');
 
 const stockRouter = Router();
@@ -101,6 +102,7 @@ stockRouter.get('/bank/:userID/:leagueID', (req, res) => {
       console.warn(err);
       res.status(500).send(err);
     });
+  portfolioValues(leagueID, userID);
 });
 
 // get user's portfolio info by user primary key id
@@ -122,7 +124,6 @@ stockRouter.get('/portfolio/:userID', async (req, res) => {
             response.push(detailedInfo);
           });
       });
-      // un-ghetto later
       setTimeout(() => {
         res.send(response);
       }, 50);
@@ -286,7 +287,8 @@ stockRouter.post('/waivers', async (req, res) => {
                   id_stock, id_league, id_user, portfolio: updatedPortfolio
                 };
                 res.send(data);
-              }).then(() => {
+              })
+              .then(() => {
                 Stock_user.destroy({
                   where: {
                     id_stock,

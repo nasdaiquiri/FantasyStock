@@ -59,7 +59,7 @@ function ScoreBoard() {
   const toggleWeek = () => {
     // build a dropdown to look at the different week scores
   };
-  console.log(currentWeekMatches);
+  // console.log(currentWeekMatches);
 
   return (
     <div>
