@@ -41,8 +41,7 @@ function ScoreCard({
 }) {
   const classes = useStyles();
   const balancePercentage = (value, leagueBalance) => (
-    (((value) - leagueBalance) * 0.01) / leagueBalance);
-
+    ((value * 0.01) - leagueBalance) / leagueBalance);
   return (
     <Card
       className={classes.root}
