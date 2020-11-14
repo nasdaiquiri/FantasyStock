@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
@@ -45,7 +46,8 @@ const portfolioValues = async (id_league, id_user) => {
       id_league, id_user
     }
   }).then((leaguePortfolio) => leaguePortfolio
-    .map((portfolio) => portfolio.dataValues));
+    .map((portfolio) => portfolio.dataValues))
+    .catch((err) => console.warn(err));
 
   const awaitPortPrice = await portfolioPrice;
 
@@ -54,7 +56,7 @@ const portfolioValues = async (id_league, id_user) => {
       .then((data) => ({
         price: data.current_price_per_share,
         shares: stock.portfolio.shares
-      })))
+      })).catch((err) => console.warn(err)))
   );
   const awaitStockPrice = await stockPrice;
   const getBank = League_user.findOne({
@@ -96,7 +98,6 @@ const portfolioValues = async (id_league, id_user) => {
   }).then(() => 'Success')
     .catch((err) => console.warn(err));
 };
-portfolioValues(3, '105515930284568348506');
 
 const updateStocks = () => {
   // TODO: reduced stock grab to preserve API

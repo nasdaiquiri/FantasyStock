@@ -12,12 +12,11 @@ const tickerArr = [
 ];
 
 const leagueArray = [];
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 3; i += 1) {
   const holdArray = [];
-  for (let j = 0; j < 50; j++) {
+  for (let j = 0; j < 50; j += 1) {
     const getTicker = Math.floor(Math.random() * 497);
     holdArray.push(tickerArr[getTicker]);
   }
   leagueArray.push(holdArray);
 }
-console.log(leagueArray);

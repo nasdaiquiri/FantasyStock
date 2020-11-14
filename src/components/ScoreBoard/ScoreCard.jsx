@@ -24,36 +24,32 @@ const useStyles = makeStyles({
 });
 
 function ScoreCard({
-  awayScore,
   awayRecord,
   awayTeamId,
   awayName,
-  awayBalance,
+  awayWorth,
   homeRecord,
   homeTeamId,
   homeName,
-  homeScore,
-  homeBalance,
+  homeWorth,
   getMatchups,
   startingBalance
 }) {
   ScoreCard.propTypes = {
-    awayScore: PropTypes.number.isRequired,
     awayRecord: PropTypes.string.isRequired,
     awayTeamId: PropTypes.number.isRequired,
     awayName: PropTypes.string.isRequired,
-    awayBalance: PropTypes.number.isRequired,
-    homeScore: PropTypes.number.isRequired,
+    awayWorth: PropTypes.number.isRequired,
     homeRecord: PropTypes.string.isRequired,
     homeTeamId: PropTypes.number.isRequired,
     homeName: PropTypes.string.isRequired,
-    homeBalance: PropTypes.number.isRequired,
+    homeWorth: PropTypes.number.isRequired,
     getMatchups: PropTypes.func.isRequired,
     startingBalance: PropTypes.number.isRequired
   };
   const classes = useStyles();
-  const balancePercentage = (balance, leagueBalance) => (
-    ((balance * 0.01) - leagueBalance) / leagueBalance);
+  const balancePercentage = (value, leagueBalance) => (
+    (((value) - leagueBalance) * 0.01) / leagueBalance);
   return (
     <Card
       className={classes.root}
@@ -62,9 +58,9 @@ function ScoreCard({
     >
       <CardContent>
         <Typography className={classes.score} variant='body2' component='p'>
-          {(awayBalance * 0.01).toFixed(2)}
+          {(awayWorth * 0.01).toFixed(2)}
           (
-          {balancePercentage(awayBalance, startingBalance).toFixed(2)}
+          {balancePercentage(awayWorth, startingBalance).toFixed(2)}
           %
           )
         </Typography>
@@ -75,9 +71,9 @@ function ScoreCard({
           {awayRecord}
         </Typography>
         <Typography className={classes.score} variant='body2' component='p'>
-          {(homeBalance * 0.01).toFixed(2)}
+          {(homeWorth * 0.01).toFixed(2)}
           (
-          {balancePercentage(homeBalance, startingBalance).toFixed(2)}
+          {balancePercentage(homeWorth, startingBalance).toFixed(2)}
           %
           )
         </Typography>

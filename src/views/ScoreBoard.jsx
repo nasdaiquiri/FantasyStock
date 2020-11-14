@@ -56,10 +56,6 @@ function ScoreBoard() {
       return null;
     });
   const displayWeek = `Week ${week}`;
-  const toggleWeek = () => {
-    // build a dropdown to look at the different week scores
-  };
-  // console.log(currentWeekMatches);
 
   return (
     <div>
@@ -73,13 +69,15 @@ function ScoreBoard() {
           awayRecord={match.Away.user.record}
           awayTeamId={match.Away.teamID}
           awayBalance={match.Away.user.bank_balance}
+          awayWorth={match.Away.user.net_worth}
           homeScore={match.Home.score}
           homeName={match.Home.user.team_name}
           homeRecord={match.Home.user.record}
           homeTeamId={match.Home.teamID}
           homeBalance={match.Home.user.bank_balance}
+          homeWorth={match.Home.user.net_worth}
           getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-          startingBalance={startingLeagueBalance}
+          startingBalance={startingLeagueBalance[0]}
         />
       ))
         : (

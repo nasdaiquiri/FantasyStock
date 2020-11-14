@@ -34,25 +34,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 function CurrentMatchup({ switchViews, homePortfolio, awayPortfolio }) {
-  // CurrentMatchup.propTypes = {
-  //   switchViews: PropTypes.func.isRequired,
-  //   homePortfolio: PropTypes.switch({
-  //     companyName: PropTypes.string,
-  //     ticker: PropTypes.string,
-  //     pps: PropTypes.number,
-  //     cpps: PropTypes.number,
-  //     shares: PropTypes.number,
-  //     userId: PropTypes.string
-  //   }).isRequired,
-  //   awayPortfolio: PropTypes.switch({
-  //     companyName: PropTypes.string,
-  //     ticker: PropTypes.string,
-  //     pps: PropTypes.number,
-  //     cpps: PropTypes.number,
-  //     shares: PropTypes.number,
-  //     userId: PropTypes.string
-  //   }).isRequired
-  // };
+  CurrentMatchup.propTypes = {
+    switchViews: PropTypes.func.isRequired,
+    homePortfolio: PropTypes.switch({
+      companyName: PropTypes.string,
+      ticker: PropTypes.string,
+      pps: PropTypes.number,
+      cpps: PropTypes.number,
+      shares: PropTypes.number,
+      userId: PropTypes.string
+    }).isRequired,
+    awayPortfolio: PropTypes.switch({
+      companyName: PropTypes.string,
+      ticker: PropTypes.string,
+      pps: PropTypes.number,
+      cpps: PropTypes.number,
+      shares: PropTypes.number,
+      userId: PropTypes.string
+    }).isRequired
+  };
   const classes = useStyles();
 
   function FormRow() {
