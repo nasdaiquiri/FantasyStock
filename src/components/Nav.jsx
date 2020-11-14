@@ -49,7 +49,7 @@ function Nav() {
     },
     {
       option: 'Schedule',
-      path: '/'
+      path: '/schedule'
     },
     {
       option: 'Chat',

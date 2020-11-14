@@ -27,12 +27,12 @@ function Settings() {
   }, [league, user, dispatch]);
 
   useEffect(() => {
-    async function fetchLeague() {
+    async function fetchSettings() {
       const response = await axios.get(`/league/settings/${league}`);
       dispatch(setSettings(response.data));
       return response;
     }
-    fetchLeague();
+    fetchSettings();
   }, [league, dispatch]);
 
   return (

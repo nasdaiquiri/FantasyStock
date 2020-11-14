@@ -24,24 +24,32 @@ const useStyles = makeStyles({
 });
 
 function ScoreCard({
-  awayScore,
   awayRecord,
   awayTeamId,
-  homeScore,
+  awayName,
+  awayWorth,
   homeRecord,
   homeTeamId,
-  getMatchups
+  homeName,
+  homeWorth,
+  getMatchups,
+  startingBalance
 }) {
   ScoreCard.propTypes = {
-    awayScore: PropTypes.number.isRequired,
     awayRecord: PropTypes.string.isRequired,
     awayTeamId: PropTypes.number.isRequired,
-    homeScore: PropTypes.number.isRequired,
+    awayName: PropTypes.string.isRequired,
+    awayWorth: PropTypes.number.isRequired,
     homeRecord: PropTypes.string.isRequired,
     homeTeamId: PropTypes.number.isRequired,
-    getMatchups: PropTypes.func.isRequired
+    homeName: PropTypes.string.isRequired,
+    homeWorth: PropTypes.number.isRequired,
+    getMatchups: PropTypes.func.isRequired,
+    startingBalance: PropTypes.number.isRequired
   };
   const classes = useStyles();
+  const balancePercentage = (value, leagueBalance) => (
+    (((value) - leagueBalance) * 0.01) / leagueBalance);
   return (
     <Card
       className={classes.root}
@@ -50,19 +58,27 @@ function ScoreCard({
     >
       <CardContent>
         <Typography className={classes.score} variant='body2' component='p'>
-          {awayScore}
+          {(awayWorth * 0.01).toFixed(2)}
+          (
+          {balancePercentage(awayWorth, startingBalance).toFixed(2)}
+          %
+          )
         </Typography>
         <Typography variant='h5' component='h2'>
-          Away Team Name
+          {awayName}
         </Typography>
         <Typography className={classes.pos} color='textSecondary'>
           {awayRecord}
         </Typography>
         <Typography className={classes.score} variant='body2' component='p'>
-          {homeScore}
+          {(homeWorth * 0.01).toFixed(2)}
+          (
+          {balancePercentage(homeWorth, startingBalance).toFixed(2)}
+          %
+          )
         </Typography>
         <Typography variant='h5' component='h2'>
-          Home Team Name
+          {homeName}
         </Typography>
         <Typography className={classes.pos} color='textSecondary'>
           {homeRecord}

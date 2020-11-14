@@ -20,12 +20,16 @@ function Waivers() {
   const league = useSelector(selectLeague);
 
   useEffect(() => {
-    axios.get(`/stock/waivers/${league}`).then((response) => dispatch(setWaivers(response.data))).then(() => setLoading(false));
+    axios.get(`/stock/waivers/${league}`)
+      .then((response) => dispatch(setWaivers(response.data)))
+      .then(() => setLoading(false))
+      .catch((err) => console.warn(err));
   }, [dispatch, league, user.leagueInfo]);
 
   useEffect(() => {
     axios.get(`/stock/bank/${user.id}/${league}`)
-      .then((response) => setBankBalance(response.data.bank_balance));
+      .then((response) => setBankBalance(response.data.bank_balance))
+      .catch((err) => console.warn(err));
   }, [league, user.id]);
 
   const handleSearch = (e) => {
@@ -52,6 +56,7 @@ function Waivers() {
           onChange={handleSearch}
           size='small'
         />
+        <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
       </div>
       {(loading) ? <LoadSpinner /> : (
         <WaiversTable

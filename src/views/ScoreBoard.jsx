@@ -4,30 +4,37 @@ import axios from 'axios';
 import '../css/ScoreBoard.css';
 import ScoreCard from '../components/ScoreBoard/ScoreCard.jsx';
 import CurrentMatchup from '../components/ScoreBoard/CurrentMatchup.jsx';
-import { selectLeague } from '../features/leagueSlice.js';
+import { selectLeague, selectUserLeagues } from '../features/leagueSlice.js';
 
 function ScoreBoard() {
   const [matches, setMatches] = useState([]);
+  const [week, setWeek] = useState(null);
   const [matchPortfolio, setMatchPortfolio] = useState([]);
   const [toggle, setToggle] = useState(false);
   const league = useSelector(selectLeague);
+  const userLeagues = useSelector(selectUserLeagues);
 
   useEffect(() => {
     axios({
       method: 'GET',
-      url: `matchup/${league}`
-    }).then((response) => setMatches(response.data));
+      url: `/matchup/${league}`
+    }).then((response) => {
+      if (response.data.currentWeek === 0) {
+        setWeek(response.data.currentWeek + 1);
+      } else {
+        setWeek(response.data.currentWeek);
+      }
+      setMatches(response.data.weeklyMatchups);
+    });
   }, [league]);
 
-  const getMatchups = (homeId, userId) => {
-    // TODO:add homeID and userID once we have users in a league
-
+  const getMatchups = (homeId, awayId) => {
     const getHomePortfolio = axios
       .get(`/stock/portfolio/${homeId}`)
       .then((response) => response.data);
 
     const getAwayPortfolio = axios
-      .get(`/stock/portfolio/${userId}`)
+      .get(`/stock/portfolio/${awayId}`)
       .then((response) => response.data);
 
     return Promise.all([getHomePortfolio, getAwayPortfolio])
@@ -39,19 +46,38 @@ function ScoreBoard() {
     setToggle(false);
   };
 
+  const currentWeek = `week${week}`;
+  const currentWeekMatches = matches[currentWeek];
+  const startingLeagueBalance = userLeagues
+    .map((userLeague) => {
+      if (userLeague.id === league) {
+        return Number(userLeague.settings.startingBank);
+      }
+      return null;
+    });
+  const displayWeek = `Week ${week}`;
+
   return (
     <div>
-      {!toggle ? matches.map((match) => (
+      <h1>
+        {displayWeek}
+      </h1>
+      {!toggle ? (currentWeekMatches) && currentWeekMatches.map((match) => (
         <ScoreCard
-          awayScore={match.away.score}
-          awayName={match.away.teamInfo.team_name}
-          awayRecord={match.away.teamInfo.record}
-          awayTeamId={match.away.teamID}
-          homeScore={match.home.score}
-          homeName={match.home.teamInfo.team_name}
-          homeRecord={match.home.teamInfo.record}
-          homeTeamId={match.home.teamID}
+          awayScore={match.Away.score}
+          awayName={match.Away.user.team_name}
+          awayRecord={match.Away.user.record}
+          awayTeamId={match.Away.teamID}
+          awayBalance={match.Away.user.bank_balance}
+          awayWorth={match.Away.user.net_worth}
+          homeScore={match.Home.score}
+          homeName={match.Home.user.team_name}
+          homeRecord={match.Home.user.record}
+          homeTeamId={match.Home.teamID}
+          homeBalance={match.Home.user.bank_balance}
+          homeWorth={match.Home.user.net_worth}
           getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
+          startingBalance={startingLeagueBalance[0]}
         />
       ))
         : (

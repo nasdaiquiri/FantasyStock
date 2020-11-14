@@ -1,0 +1,27 @@
+.schedule {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.schedule_title {
+  padding-bottom: 20px;
+}
+
+.schedule_vs {
+  padding-left: 4%;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  text-align: center;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.schedule_week {
+  padding-bottom: 10px;
+}
+
+.HomeAway_teamName {
+  padding-top: 10px;
+}

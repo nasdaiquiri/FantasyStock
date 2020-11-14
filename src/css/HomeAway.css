@@ -1,0 +1,14 @@
+.homeAway_vs {
+  padding-top: 30px;
+  font-weight: bold;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.homeAway_title {
+  padding-bottom: 10px;
+}
+
+.homeAway_avatar {
+  margin: auto;
+}

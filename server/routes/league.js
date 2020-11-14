@@ -36,10 +36,14 @@ leagueRouter.post('/addUser', (req, res) => {
     id_league: leagueID,
     id_user: userID,
     bank_balance: 1000000,
-    net_worth: 0,
+    net_worth: 1000000,
     wins: 0,
     losses: 0,
-    ties: 0
+    ties: 0,
+    portfolio_history: {
+      week: null,
+      balance_start: null
+    }
   }).then((data) => res.status(200).send(data))
     .catch((err) => {
       res.status(500).send(err);
@@ -119,7 +123,11 @@ leagueRouter.post('/', (req, res) => {
       net_worth: 1000000,
       wins: 0,
       losses: 0,
-      ties: 0
+      ties: 0,
+      portfolio_history: {
+        week: null,
+        balance_start: null
+      }
     });
     res.send(responseLeagueInfo);
   })
@@ -215,7 +223,11 @@ leagueRouter.put('/users', (req, res) => {
             losses: 0,
             ties: 0,
             id_league: leagueID,
-            id_user: userID
+            id_user: userID,
+            portfolio_history: {
+              week: null,
+              balance_start: null
+            }
           })
             .catch((err) => {
               console.warn(err);

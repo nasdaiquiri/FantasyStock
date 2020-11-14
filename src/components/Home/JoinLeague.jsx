@@ -46,6 +46,7 @@ function JoinLeague({ leagues, userLeagues }) {
       });
     setAnchorEl(null);
   };
+
   return (
     <div>
       <Button
@@ -64,7 +65,8 @@ function JoinLeague({ leagues, userLeagues }) {
         onClose={handleClose}
       >
         {leagues && leagues.map((showLeague, ind) => {
-          if (!userLeagueFilter.includes(showLeague.id)) {
+          if (!userLeagueFilter.includes(showLeague.id)
+          && showLeague.settings.schedule.currentWeek === null) {
             return (
               <MenuItem key={showLeague.id_owner} onClick={() => handleClose(showLeague.id)}>
                 <League
