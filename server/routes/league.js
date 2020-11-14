@@ -36,8 +36,10 @@ leagueRouter.post('/addUser', (req, res) => {
     id_league: leagueID,
     id_user: userID,
     bank_balance: 1000000,
-    net_worth: 0,
-    record: '0-0',
+    net_worth: 1000000,
+    wins: 0,
+    losses: 0,
+    ties: 0,
     portfolio_history: {
       week: null,
       balance_start: null
@@ -96,12 +98,13 @@ leagueRouter.post('/', (req, res) => {
   const { league_name, id_owner, numberOfTeams } = req.body;
   const settings = {
     date_end: null, // date / it follows
-    lengthMatch: null, // integer (number of days) (defaulting to 7)
-    numberOfMatches: 8, // integer
+    lengthMatch: 7, // integer (number of days) (defaulting to 7)
+    numberOfMatches: 8,
     numberOfTeams, // integer
     numberOfTeamsPlayoffs: null, // Integer / default 10,000,00 (remember extra )
     date_start: null, // date /defaults: next monday '''''' calculate
-    startingBank: null, // Integer / default 10,000,00 (remember extra )
+    startingBank: 1000000, // *100 for finance
+    net_worth: 1000000,
     schedule: {
       currentWeek: null,
       weeklyMatchups: null
@@ -112,20 +115,24 @@ leagueRouter.post('/', (req, res) => {
     id_owner,
     settings
   }).then((leagueInfo) => {
-    const responseLeagueInfo = { ...leagueInfo.dataValues };
     League_user.create({
-      id_user: responseLeagueInfo.id_owner,
-      id_league: responseLeagueInfo.id,
+      id_user: leagueInfo.dataValues.id_owner,
+      id_league: leagueInfo.dataValues.id,
       bank_balance: 1000000,
-      net_worth: null,
-      record: null,
+      net_worth: 1000000,
+      wins: 0,
+      losses: 0,
+      ties: 0,
       portfolio_history: {
         week: null,
         balance_start: null
       }
-
-    });
-    res.send(responseLeagueInfo);
+    })
+      .catch((err) => {
+        console.warn(err);
+        res.status(500).send(err);
+      });
+    res.send(leagueInfo.dataValues);
   })
     .catch((err) => {
       console.warn(err);
@@ -215,7 +222,9 @@ leagueRouter.put('/users', (req, res) => {
           League_user.create({
             bank_balance: 1000000,
             net_worth: 0,
-            record: '0-0',
+            wins: 0,
+            losses: 0,
+            ties: 0,
             id_league: leagueID,
             id_user: userID,
             portfolio_history: {

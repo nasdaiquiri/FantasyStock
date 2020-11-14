@@ -55,12 +55,16 @@ function CreateNewLeague() {
       league_name: inputLeague,
       id_owner: user?.id,
       numberOfTeams: Number(numberOfTeams)
-    }).then((leagueInfo) => {
-      dispatch(setLeague(leagueInfo?.data.id));
-      dispatch(setLeagueOwner(leagueInfo?.data.id_owner));
     })
+      .then((leagueInfo) => {
+        dispatch(setLeague(leagueInfo?.data.id));
+        dispatch(setLeagueOwner(leagueInfo?.data.id_owner));
+      })
       .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))));
+        .then((response) => dispatch(setUser(response.data))))
+      .catch((err) => {
+        console.warn(err);
+      });
   };
 
   const handleLeagueTitle = (e) => SetInputLeague(e.target.value);

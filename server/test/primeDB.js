@@ -319,7 +319,9 @@ function primeDB() {
         id_user: '5',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '0-2'
+        wins: 0,
+        losses: 0,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -334,7 +336,9 @@ function primeDB() {
         id_user: '6',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '2-0'
+        wins: 2,
+        losses: 0,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -349,7 +353,9 @@ function primeDB() {
         id_user: '7',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -364,7 +370,9 @@ function primeDB() {
         id_user: '8',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '0-2'
+        wins: 0,
+        losses: 2,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -379,7 +387,9 @@ function primeDB() {
         id_user: '1',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '2-0'
+        wins: 2,
+        losses: 0,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -394,7 +404,9 @@ function primeDB() {
         id_user: '2',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -409,7 +421,9 @@ function primeDB() {
         id_user: '3',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -424,7 +438,9 @@ function primeDB() {
         id_user: '4',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -439,7 +455,9 @@ function primeDB() {
         id_user: '9',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -454,7 +472,9 @@ function primeDB() {
         id_user: '10',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -469,7 +489,9 @@ function primeDB() {
         id_user: '5',
         bank_balance: 1000000,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
@@ -484,7 +506,9 @@ function primeDB() {
         id_user: '6',
         bank_balance: 815556,
         net_worth: 0,
-        record: '1-1'
+        wins: 1,
+        losses: 1,
+        ties: 0
       }
     }))
     .then((numberEffected) => {
