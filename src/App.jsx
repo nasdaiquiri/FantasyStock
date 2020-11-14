@@ -12,6 +12,7 @@ import TickerBar from './components/TickerBar.jsx';
 import LeagueInfo from './views/LeagueInfo.jsx';
 import Settings from './views/Settings.jsx';
 import MessageBoard from './views/MessageBoard.jsx';
+import Schedule from './views/Schedule.jsx';
 import { selectUser, setLogIn, setUser } from './features/userSlice.js';
 import { setUserLeagues } from './features/leagueSlice.js';
 
@@ -59,6 +60,7 @@ function App() {
           <Route path='/leagueinfo' component={LeagueInfo} />
           <Route path='/settings' component={Settings} />
           <Route path='/messageboard' component={MessageBoard} />
+          <Route path='/schedule' component={Schedule} />
         </Switch>
       </div>
     </Router>

@@ -6,24 +6,23 @@ import { selectLeague } from '../../features/leagueSlice.js';
 import '../../css/AddMembers.css';
 import AccordionComp from '../AccordionComp.jsx';
 import CardAddMembers from './CardAddMembers.jsx';
+import { selectUsersInLeague } from '../../features/ownerLeagueSlice.js';
 
-function AddMembers({ leagueUsers, myLeague }) {
+function AddMembers({ myLeague }) {
   AddMembers.propTypes = {
-    myLeague: propTypes.shape.isRequired,
-    leagueUsers: propTypes.arrayOf(propTypes.shape({
-      color: propTypes.string.isRequired,
-      fontSize: propTypes.number.isRequired
-    })).isRequired
+    myLeague: propTypes.shape.isRequired
   };
 
+  const usersInLeague = useSelector(selectUsersInLeague);
+
   const [input, setInput] = useState('');
-  const [users, setUsers] = useState(leagueUsers);
+  const [users, setUsers] = useState(usersInLeague);
   const leagueID = useSelector(selectLeague);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    setUsers(leagueUsers);
-  }, [leagueUsers]);
+    setUsers(usersInLeague);
+  }, [usersInLeague]);
 
   const handleChange = (e) => {
     setInput(e.target.value);
