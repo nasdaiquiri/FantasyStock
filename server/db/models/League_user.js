@@ -7,8 +7,14 @@ module.exports = (sequelize, DataTypes) => {
     net_worth: {
       type: DataTypes.INTEGER
     },
-    record: {
-      type: DataTypes.STRING
+    wins: {
+      type: DataTypes.INTEGER
+    },
+    losses: {
+      type: DataTypes.INTEGER
+    },
+    ties: {
+      types: DataTypes.INTEGER
     },
     team_name: {
       type: DataTypes.STRING
