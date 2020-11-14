@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     team_logo: {
       type: DataTypes.STRING
+    },
+    portfolio_history: {
+      type: DataTypes.JSONB
     }
   }, {
     freezeTableName: true

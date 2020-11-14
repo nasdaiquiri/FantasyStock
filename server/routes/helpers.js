@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
@@ -7,7 +8,8 @@ require('dotenv').config();
 
 const {
   Stock_user,
-  League_user
+  League_user,
+  Stock
 } = require('../db/index');
 
 const checkSharesAvailable = (id_stock, id_league) => {
@@ -37,6 +39,66 @@ const checkMoneyAvailable = async (id_league, id_user) => {
     });
   return moneyAvailable;
 };
+
+const portfolioValues = async (id_league, id_user) => {
+  const portfolioPrice = Stock_user.findAll({
+    where: {
+      id_league, id_user
+    }
+  }).then((leaguePortfolio) => leaguePortfolio
+    .map((portfolio) => portfolio.dataValues))
+    .catch((err) => console.warn(err));
+
+  const awaitPortPrice = await portfolioPrice;
+
+  const stockPrice = await Promise.all(
+    awaitPortPrice.map(async (stock) => Stock.findByPk(stock.id_stock)
+      .then((data) => ({
+        price: data.current_price_per_share,
+        shares: stock.portfolio.shares
+      })).catch((err) => console.warn(err)))
+  );
+  const awaitStockPrice = await stockPrice;
+  const getBank = League_user.findOne({
+    where: {
+      id_league, id_user
+    }
+  })
+    .then((user) => user.bank_balance);
+
+  const awaitGetBank = await getBank;
+
+  const portfolioCalcValue = () => {
+    let portfolioValue = 0;
+    awaitStockPrice.forEach((stock) => {
+      portfolioValue
+        += ((stock.price * stock.shares));
+    });
+    return (portfolioValue);
+  };
+  const portfolioCalcPaid = () => {
+    let portfolioPaid = 0;
+    awaitPortPrice.forEach((stock) => {
+      portfolioPaid
+        += ((stock.portfolio.price_per_share_at_purchase * stock.portfolio.shares));
+    });
+    return portfolioPaid;
+  };
+  const portPercent = (((portfolioCalcValue() - portfolioCalcPaid()) / 100));
+  const totalValue = (portfolioCalcValue() + awaitGetBank);
+
+  League_user.update({
+    net_worth: totalValue
+  },
+  {
+    where: {
+      id_user,
+      id_league
+    }
+  }).then(() => 'Success')
+    .catch((err) => console.warn(err));
+};
+
 const updateStocks = () => {
   // TODO: reduced stock grab to preserve API
   // TODO: Fix calls 4-10
@@ -132,5 +194,6 @@ module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
   updateStocks,
-  matchupGenerator
+  matchupGenerator,
+  portfolioValues
 };

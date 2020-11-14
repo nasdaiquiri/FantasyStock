@@ -19,10 +19,6 @@ function YourStocks() {
 
   const dispatch = useDispatch();
 
-  // const updateBank = (userId) => {
-  //   axios.get(`/stock/bank/${userId}`).then((money) => setBankBalance(money.data.bank_balance));
-  // };
-
   useEffect(() => {
     axios.get(`/stock/portfolio/${user.id}`)
       .then((response) => response.data.filter((info) => info.id_league === league))
@@ -42,7 +38,6 @@ function YourStocks() {
 
   return (
     <div className='yourStocks'>
-      {/* <h1>Your Stocks</h1> */}
       <div className='yourStocks_container'>
         <div className='yourStocks_teamInfo'>
           <h2>{leagueUser?.team_name}</h2>
@@ -55,6 +50,7 @@ function YourStocks() {
         <div className='YourStocks_card'>
           <CardStats bankBalance={bankBalance} rows={rows} />
         </div>
+        <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
         <BasicTable
           rows={rows}
           user={user}
