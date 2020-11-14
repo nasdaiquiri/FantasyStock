@@ -61,7 +61,6 @@ function ScoreBoard() {
       return null;
     });
   const displayWeek = `Week ${week}`;
-
   return (
     <div>
       <h1>
@@ -71,18 +70,22 @@ function ScoreBoard() {
         <ScoreCard
           awayScore={match.Away.score}
           awayName={match.Away.user.team_name}
-          awayRecord={match.Away.user.record}
+          awayWins={match.Away.user.wins}
+          awayLosses={match.Away.user.losses}
+          awayTies={match.Away.user.ties}
           awayTeamId={match.Away.teamID}
           awayBalance={match.Away.user.bank_balance}
           awayWorth={match.Away.user.net_worth}
           homeScore={match.Home.score}
           homeName={match.Home.user.team_name}
-          homeRecord={match.Home.user.record}
+          homeWins={match.Home.user.wins}
+          homeLosses={match.Home.user.losses}
+          homeTies={match.Home.user.ties}
           homeTeamId={match.Home.teamID}
           homeBalance={match.Home.user.bank_balance}
           homeWorth={match.Home.user.net_worth}
           getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-          startingBalance={startingLeagueBalance[0]}
+          startingBalance={startingLeagueBalance[1]}
         />
       ))
         : (
