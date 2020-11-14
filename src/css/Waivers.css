@@ -9,3 +9,15 @@
   float: center;
   text-align: center;
 }
+
+.MuiTableCell-root {
+  /* padding: 0 !important; */
+  /* padding-right: 5px !important; */
+  padding-left: 0px !important;
+  padding-bottom: 5px !important;
+  padding-top: 5px !important;
+}
+
+.MuiTableCell-paddingCheckbox {
+  width: 8px !important;
+}
