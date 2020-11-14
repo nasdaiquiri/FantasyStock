@@ -8,7 +8,7 @@ const {
   League_user,
   User
 } = require('../db/index');
-const { matchupGenerator } = require('./helpers');
+const { matchupGenerator, getBankForUserUpdate } = require('./helpers');
 
 // get settings by league Id
 leagueRouter.get('/settings/:leagueID', (req, res) => {
@@ -167,7 +167,7 @@ leagueRouter.put('/', async (req, res) => {
     numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || null,
     // Integer / default 10,000,00 (remember extra )
     date_start: settings.startDate || null, // date /defaults: next monday '''''' calculate
-    startingBank: settings.startingBank || null, // Integer / default 10,000,00 (remember extra )
+    startingBank: (settings.startingBank * 100) || null, // Integer / default 10,000,00 (remember extra )
     schedule: newSchedule
   };
   League.update({ league_name, settings: newSettings, id_owner },
@@ -177,6 +177,29 @@ leagueRouter.put('/', async (req, res) => {
       }
     })
     .then((updated) => res.send(updated))
+    .then(async () => {
+      const bank = await getBankForUserUpdate(id_league)
+      let users = await League_user.findAll({where: {id_league}})
+        .then((array) => {
+          return array.map((user) => {return user.dataValues.id_user})
+        })
+      users.map((user) => {
+        League_user.update({
+          bank_balance: bank,
+          net_worth: bank,
+          wins: 0,
+          losses: 0,
+          ties: 0,
+          portfolio_history: {
+            week: null,
+            balance_start: null
+          }}, {
+          where: {
+            id_user: user
+          }
+        })
+      })
+    })
     .catch((err) => {
       console.warn(err);
       res.status(500).send(err);
@@ -187,8 +210,10 @@ leagueRouter.put('/', async (req, res) => {
 // Add an array of users to a league (deletes any users
 // already in league that are not included in the sent array)
 // TODO: add matchupgenerator in the put for /users and only update then (both)
-leagueRouter.put('/users', (req, res) => {
+leagueRouter.put('/users', async (req, res) => {
   const { userIDs, leagueID } = req.body;
+  // need bank balance
+  const bank = await getBankForUserUpdate(leagueID)
   League_user.findAll({
     where: {
       id_league: leagueID
@@ -218,10 +243,10 @@ leagueRouter.put('/users', (req, res) => {
       // eslint-disable-next-line array-callback-return
       userIDs.map((userID) => {
         if (!existingIDs.includes(userID)) {
-          // TODO: Networth to balance plus shares so start at ten?
+          // TODO: UPDATE SCHEDULE HERE
           League_user.create({
-            bank_balance: 1000000,
-            net_worth: 0,
+            bank_balance: bank,
+            net_worth: bank,
             wins: 0,
             losses: 0,
             ties: 0,
