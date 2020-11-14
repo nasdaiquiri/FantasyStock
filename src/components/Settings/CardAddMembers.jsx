@@ -57,7 +57,7 @@ function CardAddMembers({
           color='primary'
           type='submit'
           onClick={addMembers}
-          disabled={!input || settings?.numberOfTeams === users.length}
+          disabled={!input || Number(settings?.numberOfTeams) === users.length}
         >
           add
         </Button>
