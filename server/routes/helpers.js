@@ -9,7 +9,8 @@ require('dotenv').config();
 const {
   Stock_user,
   League_user,
-  Stock
+  Stock,
+  League
 } = require('../db/index');
 
 const checkSharesAvailable = (id_stock, id_league) => {
@@ -190,10 +191,17 @@ const matchupGenerator = (userIDs, numWeeks) => {
   return schedule;
 };
 
+const getBankForUserUpdate = (id) => League.findByPk(id)
+  .then((league) => league.dataValues.settings.startingBank)
+  .catch((err) => {
+    console.warn(err);
+  });
+
 module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
   updateStocks,
   matchupGenerator,
-  portfolioValues
+  portfolioValues,
+  getBankForUserUpdate
 };
