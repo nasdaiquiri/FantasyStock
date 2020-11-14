@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+/* eslint-disable array-callback-return */
 const { Router } = require('express');
 
 const leagueRouter = Router();
@@ -167,7 +168,8 @@ leagueRouter.put('/', async (req, res) => {
     numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || null,
     // Integer / default 10,000,00 (remember extra )
     date_start: settings.startDate || null, // date /defaults: next monday '''''' calculate
-    startingBank: (settings.startingBank * 100) || null, // Integer / default 10,000,00 (remember extra )
+    startingBank: (settings.startingBank * 100) || null,
+    // Integer / default 10,000,00 (remember extra )
     schedule: newSchedule
   };
   League.update({ league_name, settings: newSettings, id_owner },
@@ -178,11 +180,9 @@ leagueRouter.put('/', async (req, res) => {
     })
     .then((updated) => res.send(updated))
     .then(async () => {
-      const bank = await getBankForUserUpdate(id_league)
-      let users = await League_user.findAll({where: {id_league}})
-        .then((array) => {
-          return array.map((user) => {return user.dataValues.id_user})
-        })
+      const bank = await getBankForUserUpdate(id_league);
+      const users = await League_user.findAll({ where: { id_league } })
+        .then((array) => array.map((user) => user.dataValues.id_user));
       users.map((user) => {
         League_user.update({
           bank_balance: bank,
@@ -193,12 +193,13 @@ leagueRouter.put('/', async (req, res) => {
           portfolio_history: {
             week: null,
             balance_start: null
-          }}, {
+          }
+        }, {
           where: {
             id_user: user
           }
-        })
-      })
+        });
+      });
     })
     .catch((err) => {
       console.warn(err);
@@ -213,7 +214,7 @@ leagueRouter.put('/', async (req, res) => {
 leagueRouter.put('/users', async (req, res) => {
   const { userIDs, leagueID } = req.body;
   // need bank balance
-  const bank = await getBankForUserUpdate(leagueID)
+  const bank = await getBankForUserUpdate(leagueID);
   League_user.findAll({
     where: {
       id_league: leagueID

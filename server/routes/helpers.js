@@ -191,15 +191,11 @@ const matchupGenerator = (userIDs, numWeeks) => {
   return schedule;
 };
 
-const getBankForUserUpdate = (id) => {
-  return League.findByPk(id)
-    .then((league) => league.dataValues.settings.startingBank)
-      .catch((err) => {
-      console.warn(err);
-      res.status(500).send(err);
-      });
-}
-
+const getBankForUserUpdate = (id) => League.findByPk(id)
+  .then((league) => league.dataValues.settings.startingBank)
+  .catch((err) => {
+    console.warn(err);
+  });
 
 module.exports = {
   checkSharesAvailable,
