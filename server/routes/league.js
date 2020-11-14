@@ -115,10 +115,10 @@ leagueRouter.post('/', (req, res) => {
     id_owner,
     settings
   }).then((leagueInfo) => {
-    const responseLeagueInfo = { ...leagueInfo.dataValues };
+    console.log('HERE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', leagueInfo.dataValues)
     League_user.create({
-      id_user: responseLeagueInfo.id_owner,
-      id_league: responseLeagueInfo.id,
+      id_user: leagueInfo.dataValues.id_owner,
+      id_league: leagueInfo.dataValues.id,
       bank_balance: 1000000,
       net_worth: 1000000,
       wins: 0,
@@ -128,8 +128,13 @@ leagueRouter.post('/', (req, res) => {
         week: null,
         balance_start: null
       }
+    })
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
     });
-    res.send(responseLeagueInfo);
+    console.log('thennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
+    res.send(leagueInfo.dataValues);
   })
     .catch((err) => {
       console.warn(err);
