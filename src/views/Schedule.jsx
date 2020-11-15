@@ -29,8 +29,8 @@ function Schedule() {
     (weeks.length === 0)
       ? (
         <div className='schedule'>
-          <Link key='home' className='nav_redirect' to='/'>
-            <h1>
+          <Link key='home' to='/'>
+            <h1 className='leagueInfo_selectLeague'>
               {'A schedule hasn\'t been set at the moment or pick a league'}
               {' '}
             </h1>
