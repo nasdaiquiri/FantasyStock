@@ -196,7 +196,7 @@ leagueRouter.put('/', async (req, res) => {
           }
         }, {
           where: {
-            id_user: user
+            id_user: user, id_league
           }
         });
       });
