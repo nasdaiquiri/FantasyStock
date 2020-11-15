@@ -74,8 +74,7 @@ function MatchupCard({ userLeague, user }) {
             {`Bank Balance: $ ${bankBalanceTwoDecimal}`}
           </Typography>
           <Typography
-            className={classes.pos}
-            color='textSecondary'
+            variang='body2'
           >
             <p className='matchupCard_team'>Team</p>
             <div className='matchupCard_box'>
@@ -89,7 +88,6 @@ function MatchupCard({ userLeague, user }) {
             </div>
 
           </Typography>
-
         </CardContent>
       </Card>
     </Link>
