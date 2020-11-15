@@ -39,3 +39,9 @@
   padding-bottom: 5px !important;
   padding-top: 5px !important;
 }
+
+.yourStocks_waiversLink {
+  float: right;
+  color: green;
+  font-size: 18px;
+}

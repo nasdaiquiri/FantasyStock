@@ -1,0 +1,21 @@
+
+.cardLeagueMembers {
+  padding-top: 2%;
+  padding-bottom: 2%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  float:left;
+  list-style:none;
+}
+
+.cardLeagueMembers_avatar {
+  flex: 0 !important
+}
+
+.cardLeagueMembers_team {
+  flex: 1;
+  font-weight: bold;
+}
+
+

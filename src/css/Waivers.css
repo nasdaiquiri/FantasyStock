@@ -21,3 +21,8 @@
 .MuiTableCell-paddingCheckbox {
   width: 8px !important;
 }
+
+.myWaivers_yourStocksLink {
+  color: green;
+  font-size: 18px;
+}
