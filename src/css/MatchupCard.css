@@ -1,3 +1,30 @@
 .matchupCard_button {
   justify-content: center !important;
 }
+
+.matchupCard_team {
+  padding-top: 10px;
+}
+
+
+.matchupCard_box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.matchupCard_teamName {
+  padding-right: 20px;
+}
+
+
+/* <p className='matchupCard_team'>Team</p>
+<div className='matchupCard_box'>
+  <h3 className='matchupCard_teamName'>{userLeagueInfo?.team_name}</h3>
+  <Avatar
+    className='matchupCard_avatar'
+    src={`${userLeagueInfo?.team_logo}`}
+    sizes='medium'
+    alt='team logo'
+  />
+</div> */

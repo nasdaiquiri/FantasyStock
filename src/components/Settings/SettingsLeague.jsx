@@ -8,6 +8,7 @@ import CardSettingsL from './CardSettingsL.jsx';
 import AccordionComp from '../AccordionComp.jsx';
 import { selectSettings, setSettings, setUsersInLeague } from '../../features/ownerLeagueSlice.js';
 import { selectLeague } from '../../features/leagueSlice.js';
+import { selectUser, setUser } from '../../features/userSlice.js';
 
 function SettingsLeague({ myLeague, setMyLeague }) {
   SettingsLeague.propTypes = {
@@ -25,6 +26,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const league = useSelector(selectLeague);
   const [leagueForm, setLeagueForm] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     setLeagueForm({ ...settings });
@@ -42,10 +44,12 @@ function SettingsLeague({ myLeague, setMyLeague }) {
         id_league: myLeague?.id,
         id_owner: myLeague?.id_owner,
         league_name: myLeague?.league_name,
-        settings: leagueForm
+        settings: { ...leagueForm, startingBank: leagueForm.startingBank * 100 }
       })
-      .then(() => axios.get(`/league/settings/${league}`)
-        .then((response) => dispatch(setSettings(response.data))))
+      .then(() => axios.get(`/league/settings/${league}`))
+      .then((response) => dispatch(setSettings(response.data)))
+      .then(() => axios.get(`user/userleagues/${user?.id}`))
+      .then((response) => dispatch(setUser(response.data)))
       .catch((err) => console.warn(err));
 
     setSubmitted(true);
@@ -95,7 +99,6 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       type: 'number',
       name: 'numberTeamsPlayoffs',
       value: settings?.numberOfTeamsPlayoffs
-
     },
     {
       description: 'starting bank',
