@@ -7,8 +7,12 @@ import {
   DialogTitle,
   TableCell,
   TableRow,
-  TextField
+  TextField,
+  FormControl,
+  Select,
+  InputLabel
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -16,6 +20,13 @@ import PropTypes from 'prop-types';
 import { setWaivers } from '../../features/waiversSlice.js';
 import { setYourStock } from '../../features/yourStockSlice.js';
 import { selectLeague } from '../../features/leagueSlice.js';
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  }
+}));
 
 function StocksList({
   row, user, index, bankBalance, setBankBalance
@@ -40,6 +51,11 @@ function StocksList({
   const [open, setOpen] = useState(false);
   const [myStocks, setMyStocks] = useState({});
   const [sharesInput, setSharesInput] = useState(0);
+  const [action, setAction] = useState('Buy');
+  const classes = useStyles();
+  const handleChange = (event) => {
+    setAction(event.target.value);
+  };
 
   const league = useSelector(selectLeague);
 
@@ -50,7 +66,7 @@ function StocksList({
       id_user: user.id,
       portfolio: {
         price_per_share_at_purchase: row.current_price_per_share,
-        shares: Number(sharesInput)
+        shares: (action === 'Buy') ? -(-sharesInput) : -sharesInput
       }
     }).then(() => axios.get(`/stock/waivers/${league}`)
       .then((waivers) => dispatch(setWaivers(waivers.data))))
@@ -75,10 +91,34 @@ function StocksList({
   const handleSharesSubmit = ((e) => {
     setSharesInput(e.target.value);
   });
-  const sharesCount = ((shares, shareInput) => (shares - (-shareInput)));
+  const sharesCount = ((shares, shareInput) => {
+    if (action === 'Buy') {
+      return (shares - (-shareInput));
+    }
+    return (shares + (-shareInput));
+  });
 
-  const calcBankBalance = ((bankBalance * 0.01)
-  - ((row.current_price_per_share * 0.01) * sharesInput));
+  const calcBankBalance = (cpps) => {
+    if (action === 'Buy') {
+      return (bankBalance
+      - (cpps * sharesInput)) * 0.01;
+    }
+    return (bankBalance
+      + (cpps * sharesInput)) * 0.01;
+  };
+
+  const disableSubmit = (shares) => {
+    if (sharesInput <= 0) {
+      return 'disabled';
+    }
+    if (action === 'Buy' && (sharesCount(shares, sharesInput) > 100 || calcBankBalance(row.current_price_per_share).toFixed(2) < 0)) {
+      return 'disabled';
+    }
+    if (action === 'Sell' && (sharesCount(shares, sharesInput) < 0 || calcBankBalance().toFixed(2) > 0)) {
+      return 'disabled';
+    }
+    return '';
+  };
 
   return (
     <>
@@ -105,7 +145,7 @@ function StocksList({
           <strong>Bank Balance: </strong>
           $
           {
-            calcBankBalance.toFixed(2)
+            calcBankBalance(row.current_price_per_share).toFixed(2)
           }
           <DialogContentText>
             <br />
@@ -128,13 +168,29 @@ function StocksList({
               {((0.01 * row.current_price_per_share) * sharesInput).toFixed(2)}
             </p>
           </div>
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel htmlFor='outlined-age-native-simple'>{action}</InputLabel>
+            <Select
+              native
+              value={action}
+              onChange={handleChange}
+              label={action}
+              inputProps={{
+                name: 'buy/sell',
+                id: 'outlined-age-native-simple'
+              }}
+            >
+              <option value='Buy'>Buy</option>
+              <option value='Sell'>Sell</option>
+            </Select>
+          </FormControl>
           <TextField
             autoFocus
             margin='dense'
-            id='name'
-            label='buy/sell shares'
+            id='outlined-number'
+            label={action}
             type='number'
-            fullWidth
+            variant='outlined'
             onChange={(e) => handleSharesSubmit(e, sharesCount(row.shares, sharesInput), row.id)}
           />
         </DialogContent>
@@ -143,7 +199,7 @@ function StocksList({
             Cancel
           </Button>
           <Button
-            disabled={(calcBankBalance.toFixed(2) > 0) && (row.shares - (-sharesInput) >= 0) && (row.shares - (-sharesInput) <= 100) ? '' : 'disabled'}
+            disabled={disableSubmit(row.shares, sharesInput)}
             onClick={() => onSubmit(sharesCount(row.shares, sharesInput), row.id)}
             color='primary'
             value={row.id}

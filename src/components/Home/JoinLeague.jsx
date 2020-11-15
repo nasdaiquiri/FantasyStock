@@ -51,7 +51,6 @@ function JoinLeague({ leagues, userLeagues }) {
     <div>
       <Button
         variant='outlined'
-        color='primary'
         className={classes.buttonPadding}
         onClick={handleClick}
       >
