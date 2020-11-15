@@ -3,6 +3,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
+/* eslint-disable no-restricted-syntax */
 const axios = require('axios');
 require('dotenv').config();
 
@@ -161,7 +162,7 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
     currentWeek: 0,
     weeklyMatchups: {}
   };
-  // TODO: Home vs away fairness & noparam reassign
+  // TODO: Home vs away fairness
   for (let i = 1; i <= numOfWeeks; i++) {
     const week = `week${i}`;
     const weeklyGames = [];
@@ -176,7 +177,6 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
           score: 0
         }
       };
-      // infinite loop on 5/3
       weeklyGames.push(gameTemplate);
     }
     firstHalfOfIDs = arraySlider(firstHalfOfIDs);
@@ -197,38 +197,35 @@ const getBankForUserUpdate = (id) => League.findByPk(id)
     console.warn(err);
   });
 
-  // to update the settings I need the old settings, the newSettings, and the league ID 
-  // use on put for members or put for league. not on first make of league though
 const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
-  // grab old settings
   const oldSettings = await League.findByPk(idLeague)
     .then((league) => {
-      const { settings } = league.dataValues
-      const newSettings = {
-    date_end: settings.endDate || null,
-    lengthMatch: settings.lengthMatches || 7,
-    numberOfMatches: settings.numberMatches || 8,
-    numberOfTeams: settings.numberTeams || 8,
-    numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || 4,
-    date_start: settings.startDate || null,
-    startingBank: (settings.startingBank) || 1000000,
-    schedule: settings.schedule || null
-  };
-      return newSettings
+      const { settings } = league.dataValues;
+      const new1Settings = {
+        date_end: settings.endDate || null,
+        lengthMatch: settings.lengthMatches || 7,
+        numberOfMatches: settings.numberMatches || 8,
+        numberOfTeams: settings.numberTeams || 8,
+        numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || 4,
+        date_start: settings.startDate || null,
+        startingBank: (settings.startingBank) || 1000000,
+        schedule: settings.schedule || null
+      };
+      return new1Settings;
     })
     .catch((err) => {
       console.warn(err);
     });
-  const finalSettings = {...oldSettings}
+  const finalSettings = { ...oldSettings };
   if (newSettings != null) {
-    for (let key in newSettings) {
-      if(newSettings[key] != null) {
-        finalSettings[key] = newSettings[key]
-        if(key === "startingBank") {
+    for (const key in newSettings) {
+      if (newSettings[key] != null) {
+        finalSettings[key] = newSettings[key];
+        if (key === 'startingBank') {
           finalSettings[key] = newSettings[key];
         }
-        if(key === "net_worth") {
-          finalSettings[key] = newSettings["startingBank"];
+        if (key === 'net_worth') {
+          finalSettings[key] = newSettings.startingBank;
         }
       }
     }
@@ -240,35 +237,14 @@ const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
   })
     .then((array) => {
       const answer = [];
-      array.map((userA) => {
-        answer.push(userA.dataValues.id_user)
-      })
-      console.log('answer', answer)
-      return answer
-    })
-  const userIDs = idUsers || oldUserIDs
-  const newSchedule = matchupGenerator(userIDs, finalSettings.numberOfMatches)
+      array.map((userA) => answer.push(userA.dataValues.id_user));
+      return answer;
+    });
+  const userIDs = idUsers || oldUserIDs;
+  const newSchedule = matchupGenerator(userIDs, finalSettings.numberOfMatches);
   finalSettings.schedule = newSchedule;
-  return finalSettings
-}
-//user test
-// settingsUpdater(2, 4, null, [6, 1, 2, 3, 4, 5])
-//settings test
-// const settings = {
-//   date_end: null,
-//   lengthMatch: null,
-//   numberOfMatches: 2,
-//   numberOfTeams: 6,
-//   numberOfTeamsPlayoffs: null,
-//   date_start: null, 
-//   startingBank: 555,
-//   net_worth: 1000000,
-//   schedule: {
-//     currentWeek: null,
-//     weeklyMatchups: null
-//   }
-// };
-// settingsUpdater(2, 4, settings)
+  return finalSettings;
+};
 module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
