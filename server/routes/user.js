@@ -17,11 +17,11 @@ userRouter.put('/updateUsername', (req, res) => {
   User.update({
     username: newUsername
   },
-    {
-      where: {
-        id: userID
-      }
-    })
+  {
+    where: {
+      id: userID
+    }
+  })
     .then((response) => res.send(response))
     .catch((err) => {
       console.warn(err);
@@ -33,12 +33,12 @@ userRouter.put('/updateUserTeamLogo', (req, res) => {
   League_user.update({
     team_logo: teamLogo
   },
-    {
-      where: {
-        id_user: userID,
-        id_league: leagueID
-      }
-    })
+  {
+    where: {
+      id_user: userID,
+      id_league: leagueID
+    }
+  })
     .then((response) => res.send(response))
     .catch((err) => {
       console.warn(err);
@@ -50,12 +50,12 @@ userRouter.put('/updateUserTeamName', (req, res) => {
   League_user.update({
     team_name: teamName
   },
-    {
-      where: {
-        id_user: userID,
-        id_league: leagueID
-      }
-    })
+  {
+    where: {
+      id_user: userID,
+      id_league: leagueID
+    }
+  })
     .then((response) => res.send(response))
     .catch((err) => {
       console.warn(err);
@@ -94,11 +94,11 @@ userRouter.put('/user/:userID', (req, res) => {
   User.update({
     username
   },
-    {
-      where: {
-        id: userID
-      }
-    })
+  {
+    where: {
+      id: userID
+    }
+  })
     .then((newUsername) => {
       res.status(201).send(newUsername);
     })
@@ -223,11 +223,11 @@ userRouter.put('/', (req, res) => {
   User.update({
     full_name, username, avatar
   },
-    {
-      where: {
-        id
-      }
-    })
+  {
+    where: {
+      id
+    }
+  })
     .then((newUser) => {
       res.status(201).send(newUser);
     })

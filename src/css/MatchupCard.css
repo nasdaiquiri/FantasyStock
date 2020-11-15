@@ -15,16 +15,5 @@
 
 .matchupCard_teamName {
   padding-right: 20px;
+  color: black;
 }
-
-
-/* <p className='matchupCard_team'>Team</p>
-<div className='matchupCard_box'>
-  <h3 className='matchupCard_teamName'>{userLeagueInfo?.team_name}</h3>
-  <Avatar
-    className='matchupCard_avatar'
-    src={`${userLeagueInfo?.team_logo}`}
-    sizes='medium'
-    alt='team logo'
-  />
-</div> */
