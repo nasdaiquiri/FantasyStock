@@ -60,7 +60,7 @@ const headCells = [
     id: 'price_per_share_at_purchase', numeric: true, disablePadding: false, label: 'Avg. PPS'
   },
   {
-    id: 'shares', numeric: true, disablePadding: false, label: 'Shares'
+    id: 'shares', numeric: true, disablePadding: false, label: 'Shr. '
   },
   {
     id: 'current_price_per_share', numeric: true, disablePadding: false, label: 'Current Price'
@@ -122,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2)
   },
   table: {
-    width: '45%',
+    width: '100%',
     margin: 'auto'
   },
   visuallyHidden: {

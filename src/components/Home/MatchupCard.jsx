@@ -11,7 +11,7 @@ import { setLeague, setLeagueOwner } from '../../features/leagueSlice.js';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    borderRadius: '25px',
+    // borderRadius: '25px',
     marginBottom: '10px',
     margin: '10px',
     textAlign: 'center'

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import WaiversTable from '../components/Waivers/WaiversTable.jsx';
 import LoadSpinner from '../components/Waivers/LoadSpinner.jsx';
 import '../css/Waivers.css';
@@ -36,38 +37,52 @@ function Waivers() {
     setSearch(e.target.value);
   };
   return (
-    <div className='waivers'>
-      <div className='waivers_bank-balance'>
-        <h2>Bank Balance</h2>
-        <h3 className='waivers_bank-amount'>
-          $
-          {(bankBalance * 0.01).toFixed(2)}
-        </h3>
-      </div>
+    (league === null)
+      ? (
+        <div className='schedule'>
+          <Link key='home' className='nav_redirect' to='/'>
+            <h1>
+              First Select a League
+            </h1>
+          </Link>
+        </div>
+      ) : (
+        <div className='waivers'>
+          <div className='waivers_bank-balance'>
+            <h2>Bank Balance</h2>
+            <h3 className='waivers_bank-amount'>
+              $
+              {(bankBalance * 0.01).toFixed(2)}
+            </h3>
+          </div>
 
-      <div className='waivers_search'>
-        <TextField
-          style={{ backgroundColor: 'white' }}
-          freesolo='true'
-          type='search'
-          label='Search Stock'
-          margin='normal'
-          variant='outlined'
-          onChange={handleSearch}
-          size='small'
-        />
-        <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
-      </div>
-      {(loading) ? <LoadSpinner /> : (
-        <WaiversTable
-          rows={rows}
-          search={search}
-          user={user}
-          bankBalance={bankBalance}
-          setBankBalance={setBankBalance}
-        />
-      )}
-    </div>
+          <div className='waivers_search'>
+            <TextField
+              style={{ backgroundColor: 'white' }}
+              freesolo='true'
+              type='search'
+              label='Search Stock'
+              margin='normal'
+              variant='outlined'
+              onChange={handleSearch}
+              size='small'
+            />
+            <Link key='yourstocks' to='/yourstocks'>
+              <p className='myWaivers_yourStocksLink'>Go to Your Stocks</p>
+            </Link>
+            <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
+          </div>
+          {(loading) ? <LoadSpinner /> : (
+            <WaiversTable
+              rows={rows}
+              search={search}
+              user={user}
+              bankBalance={bankBalance}
+              setBankBalance={setBankBalance}
+            />
+          )}
+        </div>
+      )
   );
 }
 
