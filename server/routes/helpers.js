@@ -197,11 +197,84 @@ const getBankForUserUpdate = (id) => League.findByPk(id)
     console.warn(err);
   });
 
+  // to update the settings I need the old settings, the newSettings, and the league ID 
+  // use on put for members or put for league. not on first make of league though
+const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
+  // grab old settings
+  const oldSettings = await League.findByPk(idLeague)
+    .then((league) => {
+      const { settings } = league.dataValues
+      const newSettings = {
+    date_end: settings.endDate || null,
+    lengthMatch: settings.lengthMatches || 7,
+    numberOfMatches: settings.numberMatches || 8,
+    numberOfTeams: settings.numberTeams || 8,
+    numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || 4,
+    date_start: settings.startDate || null,
+    startingBank: (settings.startingBank) || 1000000,
+    schedule: settings.schedule || null
+  };
+      return newSettings
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+  const finalSettings = {...oldSettings}
+  if (newSettings != null) {
+    for (let key in newSettings) {
+      if(newSettings[key] != null) {
+        finalSettings[key] = newSettings[key]
+        if(key === "startingBank") {
+          finalSettings[key] = newSettings[key];
+        }
+        if(key === "net_worth") {
+          finalSettings[key] = newSettings["startingBank"];
+        }
+      }
+    }
+  }
+  const oldUserIDs = await League_user.findAll({
+    where: {
+      id_league: idLeague
+    }
+  })
+    .then((array) => {
+      const answer = [];
+      array.map((userA) => {
+        answer.push(userA.dataValues.id_user)
+      })
+      console.log('answer', answer)
+      return answer
+    })
+  const userIDs = idUsers || oldUserIDs
+  const newSchedule = matchupGenerator(userIDs, finalSettings.numberOfMatches)
+  finalSettings.schedule = newSchedule;
+  return finalSettings
+}
+//user test
+// settingsUpdater(2, 4, null, [6, 1, 2, 3, 4, 5])
+//settings test
+// const settings = {
+//   date_end: null,
+//   lengthMatch: null,
+//   numberOfMatches: 2,
+//   numberOfTeams: 6,
+//   numberOfTeamsPlayoffs: null,
+//   date_start: null, 
+//   startingBank: 555,
+//   net_worth: 1000000,
+//   schedule: {
+//     currentWeek: null,
+//     weeklyMatchups: null
+//   }
+// };
+// settingsUpdater(2, 4, settings)
 module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
   updateStocks,
   matchupGenerator,
   portfolioValues,
-  getBankForUserUpdate
+  getBankForUserUpdate,
+  settingsUpdater
 };
