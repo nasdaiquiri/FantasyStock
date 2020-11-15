@@ -40,7 +40,6 @@ function HomeAway({ games }) {
                 {Home.user.team_name}
               </p>
             </div>
-
           </div>
         ))
       }

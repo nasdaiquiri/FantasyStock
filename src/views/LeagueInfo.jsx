@@ -36,11 +36,14 @@ function LeagueInfo() {
           <Card>
             <CardContent>
               <div className='leagueInfo_info'>
-                <h1 className='leagueInfo_title'>League Info</h1>
-                <h4>League Name: </h4>
-                <p>{leagueInfo.league_name}</p>
-                <h4>League Owner: </h4>
-                <p>{owner?.username}</p>
+                <p>
+                  League Name
+                </p>
+                <h3 className='leagueInfo_header'>{leagueInfo.league_name}</h3>
+                <p className='leagueInfo_leagueOwner_title'>
+                  League Owner
+                </p>
+                <h5 className='leagueInfo_header'>{owner?.username}</h5>
               </div>
               <AccordionComp Component={Component} title='League Members' />
             </CardContent>

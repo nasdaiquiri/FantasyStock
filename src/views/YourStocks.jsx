@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Avatar } from '@material-ui/core/';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import BasicTable from '../components/YourStocks/StocksTable.jsx';
 import '../css/YourStocks.css';
 import CardStats from '../components/YourStocks/CardStats.jsx';
@@ -37,29 +38,43 @@ function YourStocks() {
   }, [user?.id]);
 
   return (
-    <div className='yourStocks'>
-      <div className='yourStocks_container'>
-        <div className='yourStocks_teamInfo'>
-          <h2>{leagueUser?.team_name}</h2>
-          <Avatar
-            className='yourStocks_logo'
-            alt='logo'
-            src={leagueUser?.team_logo}
-          />
+    (league === null)
+      ? (
+        <div className='schedule'>
+          <Link key='home' className='nav_redirect' to='/'>
+            <h1>
+              First Select a League
+            </h1>
+          </Link>
         </div>
-        <div className='YourStocks_card'>
-          <CardStats bankBalance={bankBalance} rows={rows} />
+      ) : (
+        <div className='yourStocks'>
+          <div className='yourStocks_container'>
+            <div className='yourStocks_teamInfo'>
+              <h2>{leagueUser?.team_name}</h2>
+              <Avatar
+                className='yourStocks_logo'
+                alt='logo'
+                src={leagueUser?.team_logo}
+              />
+            </div>
+            <div className='YourStocks_card'>
+              <Link key='waivers' className='nav_link' to='/waivers'>
+                <p className='yourStocks_waiversLink'>Go to Waivers</p>
+              </Link>
+              <CardStats bankBalance={bankBalance} rows={rows} />
+            </div>
+            <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
+            <BasicTable
+              rows={rows}
+              user={user}
+              bankBalance={bankBalance}
+              setBankBalance={setBankBalance}
+              className='yourStocks_table'
+            />
+          </div>
         </div>
-        <a href='https://iexcloud.io' rel='noreferrer' target='_blank'>Data provided by IEX Cloud</a>
-        <BasicTable
-          rows={rows}
-          user={user}
-          bankBalance={bankBalance}
-          setBankBalance={setBankBalance}
-          className='yourStocks_table'
-        />
-      </div>
-    </div>
+      )
   );
 }
 
