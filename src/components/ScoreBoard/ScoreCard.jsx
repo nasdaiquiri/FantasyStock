@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   root: {
@@ -41,7 +40,7 @@ function ScoreCard({
 }) {
   const classes = useStyles();
   const balancePercentage = (value, leagueBalance) => (
-    ((value * 0.01) - leagueBalance) / leagueBalance);
+    (((value - leagueBalance) * 0.01) / leagueBalance));
   return (
     <Card
       className={classes.root}

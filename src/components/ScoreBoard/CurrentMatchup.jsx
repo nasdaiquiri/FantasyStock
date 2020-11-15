@@ -72,7 +72,6 @@ function CurrentMatchup({ switchViews, homePortfolio, awayPortfolio }) {
       <div className={classes.button}>
         <Button
           variant='contained'
-          color='primary'
           onClick={switchViews}
           size='small'
         >

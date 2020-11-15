@@ -47,6 +47,9 @@ function LeagueInfo() {
               </div>
               <AccordionComp Component={Component} title='League Members' />
             </CardContent>
+            <CardContent>
+              
+            </CardContent>
           </Card>
 
         )

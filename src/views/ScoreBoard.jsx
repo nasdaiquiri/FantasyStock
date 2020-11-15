@@ -1,18 +1,38 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import '../css/ScoreBoard.css';
+import Button from '@material-ui/core/Button';
 import ScoreCard from '../components/ScoreBoard/ScoreCard.jsx';
 import CurrentMatchup from '../components/ScoreBoard/CurrentMatchup.jsx';
+import Standings from '../components/ScoreBoard/Standings.jsx';
 import { selectLeague, selectUserLeagues } from '../features/leagueSlice.js';
+
+const useStyles = makeStyles(() => ({
+  button: {
+    float: 'right',
+    margin: '7px'
+  },
+  standings: {
+    paddingTop: '25px'
+  },
+  currentMatch: {
+    paddingTop: '25px'
+  }
+}));
 
 function ScoreBoard() {
   const [matches, setMatches] = useState([]);
   const [week, setWeek] = useState(null);
   const [matchPortfolio, setMatchPortfolio] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [showStandings, setShowStandings] = useState(false);
+  const [leagueInfoStandings, setLeagueInfoStandings] = useState([]);
   const league = useSelector(selectLeague);
   const userLeagues = useSelector(selectUserLeagues);
+  const classes = useStyles();
 
   useEffect(() => {
     axios({
@@ -27,6 +47,16 @@ function ScoreBoard() {
       setMatches(response.data.weeklyMatchups);
     });
   }, [league]);
+
+  useEffect(() => {
+    axios.get(`/league/oneleague/${league}`)
+      .then((leagueInfo) => setLeagueInfoStandings((leagueInfo.data.users)));
+  }, [league]);
+  const leagueInfoSort = leagueInfoStandings
+    .sort((a, b) => ((a.league_user.wins - a.league_user.losses)
+      / (a.league_user.wins + a.league_user.losses + a.league_user.ties))
+      - ((b.league_user.wins - b.league_user.losses)
+      / (b.league_user.wins + b.league_user.losses + b.league_user.ties)));
 
   const getMatchups = async (homeId, awayId) => {
     const getHomePortfolio = axios
@@ -61,12 +91,23 @@ function ScoreBoard() {
       return null;
     });
   const displayWeek = `Week ${week}`;
+
+  const getStandings = () => setShowStandings(!showStandings);
+
   return (
     <div>
+      <Button
+        size='small'
+        variant='contained'
+        className={classes.button}
+        onClick={getStandings}
+      >
+        {!showStandings ? 'Standings' : 'Matchups'}
+      </Button>
       <h1>
         {displayWeek}
       </h1>
-      {!toggle ? (currentWeekMatches) && currentWeekMatches.map((match) => (
+      {!showStandings ? !toggle ? (currentWeekMatches) && currentWeekMatches.map((match) => (
         <ScoreCard
           awayScore={match.Away.score}
           awayName={match.Away.user.team_name}
@@ -85,16 +126,22 @@ function ScoreBoard() {
           homeBalance={match.Home.user.bank_balance}
           homeWorth={match.Home.user.net_worth}
           getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-          startingBalance={startingLeagueBalance[1]}
+          startingBalance={startingLeagueBalance[0]}
         />
       ))
         : (
-          <div>
+          <div className={classes.currentMatch}>
             <CurrentMatchup
               switchViews={switchViews}
               homePortfolio={matchPortfolio[0]}
               awayPortfolio={matchPortfolio[1]}
             />
+          </div>
+        )
+        : (
+          <div className={classes.standings}>
+            <Standings leagues={leagueInfoSort} />
+            {' '}
           </div>
         )}
     </div>
