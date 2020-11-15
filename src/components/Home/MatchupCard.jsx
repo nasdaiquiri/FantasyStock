@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,10 @@ import propTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch } from 'react-redux';
+import { Avatar } from '@material-ui/core';
+import axios from 'axios';
 import { setLeague, setLeagueOwner } from '../../features/leagueSlice.js';
+import '../../css/MatchupCard.css';
 
 const useStyles = makeStyles({
   root: {
@@ -34,11 +37,17 @@ function MatchupCard({ userLeague, user }) {
 
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [userLeagueInfo, setUserLeagueInfo] = useState({});
 
   const clickLeagueUpdate = () => {
     dispatch(setLeague(userLeague.id));
     dispatch(setLeagueOwner(userLeague.id_owner));
   };
+
+  useEffect(() => {
+    axios.get(`/user/team/${userLeague?.id}/${user?.id}`)
+      .then((response) => setUserLeagueInfo(response.data));
+  }, [user.id, userLeague.id]);
 
   const bankBalanceTwoDecimal = (userLeague.league_user.bank_balance * 0.01).toFixed(2);
   return (
@@ -68,7 +77,17 @@ function MatchupCard({ userLeague, user }) {
             className={classes.pos}
             color='textSecondary'
           >
-            {` Username: ${user.username}   Record ${userLeague.league_user.record}`}
+            <p className='matchupCard_team'>Team</p>
+            <div className='matchupCard_box'>
+              <h3 className='matchupCard_teamName'>{userLeagueInfo?.team_name}</h3>
+              <Avatar
+                className='matchupCard_avatar'
+                src={`${userLeagueInfo?.team_logo}`}
+                sizes='medium'
+                alt='team logo'
+              />
+            </div>
+
           </Typography>
 
         </CardContent>

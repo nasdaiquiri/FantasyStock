@@ -41,8 +41,8 @@ function YourStocks() {
     (league === null)
       ? (
         <div className='schedule'>
-          <Link key='home' className='nav_redirect' to='/'>
-            <h1>
+          <Link key='home' to='/'>
+            <h1 className='leagueInfo_selectLeague'>
               First Select a League
             </h1>
           </Link>

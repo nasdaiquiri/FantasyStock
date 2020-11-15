@@ -188,6 +188,33 @@ userRouter.post('/', (req, res) => {
       res.status(500).send(err);
     });
 });
+
+userRouter.get('/userleagues/:userID', (req, res) => {
+  const { userID } = req.params;
+
+  User.findOne({
+    where: {
+      id: userID
+    }
+  })
+    .then((userInfo) => {
+      const responseUserInfo = { ...userInfo.dataValues };
+      League_user.findAll({
+        where: {
+          id_user: userID
+        }
+      })
+        .then((leagueInfo) => {
+          responseUserInfo.leagueInfo = leagueInfo;
+          res.send(responseUserInfo);
+        });
+    })
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
+});
+
 // don't use yet. Not done
 userRouter.put('/', (req, res) => {
   const {

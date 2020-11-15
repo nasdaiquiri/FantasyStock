@@ -122,9 +122,9 @@ const updateStocks = () => {
   const functionWithPromise = (array) => {
     const config = {
       method: 'get',
-      url: 'https://sandbox.iexapis.com/stable/stock/market/batch',
+      url: 'https://cloud.iexapis.com/stable/stock/market/batch',
       params: {
-        token: 'Tpk_72165f58d5784aea8831c6f9a9e6006a',
+        token: 'pk_4bbc64245441470eb7fee8d6ea8ac8de',
         types: 'quote',
         symbols: array.join(',')
       }
@@ -208,7 +208,7 @@ const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
         numberOfTeams: settings.numberTeams || 8,
         numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || 4,
         date_start: settings.startDate || null,
-        startingBank: (settings.startingBank) || 1000000,
+        startingBank: settings.startingBank * 100,
         schedule: settings.schedule || null
       };
       return new1Settings;
@@ -222,10 +222,10 @@ const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
       if (newSettings[key] != null) {
         finalSettings[key] = newSettings[key];
         if (key === 'startingBank') {
-          finalSettings[key] = newSettings[key];
+          finalSettings[key] = newSettings[key] * 100;
         }
         if (key === 'net_worth') {
-          finalSettings[key] = newSettings.startingBank;
+          finalSettings[key] = newSettings.startingBank * 100;
         }
       }
     }

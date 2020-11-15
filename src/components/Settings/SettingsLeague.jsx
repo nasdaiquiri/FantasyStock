@@ -8,6 +8,7 @@ import CardSettingsL from './CardSettingsL.jsx';
 import AccordionComp from '../AccordionComp.jsx';
 import { selectSettings, setSettings, setUsersInLeague } from '../../features/ownerLeagueSlice.js';
 import { selectLeague } from '../../features/leagueSlice.js';
+import { selectUser, setUser } from '../../features/userSlice.js';
 
 function SettingsLeague({ myLeague, setMyLeague }) {
   SettingsLeague.propTypes = {
@@ -25,6 +26,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const league = useSelector(selectLeague);
   const [leagueForm, setLeagueForm] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     setLeagueForm({ ...settings });
@@ -42,10 +44,12 @@ function SettingsLeague({ myLeague, setMyLeague }) {
         id_league: myLeague?.id,
         id_owner: myLeague?.id_owner,
         league_name: myLeague?.league_name,
-        settings: leagueForm
+        settings: { ...leagueForm, numberTeams: Number(leagueForm.numberTeams) }
       })
-      .then(() => axios.get(`/league/settings/${league}`)
-        .then((response) => dispatch(setSettings(response.data))))
+      .then(() => axios.get(`/league/settings/${league}`))
+      .then((response) => dispatch(setSettings(response.data)))
+      .then(() => axios.get(`user/userleagues/${user?.id}`))
+      .then((response) => dispatch(setUser(response.data)))
       .catch((err) => console.warn(err));
 
     setSubmitted(true);
@@ -62,47 +66,37 @@ function SettingsLeague({ myLeague, setMyLeague }) {
     {
       description: 'number of teams',
       type: 'number',
-      name: 'numberTeams',
-      value: leagueForm?.numberOfTeams
+      name: 'numberTeams'
     },
     {
       description: 'number of days',
       type: 'number',
-      name: 'lengthMatches',
-      value: leagueForm?.lengthMatch
+      name: 'lengthMatches'
     },
     {
       description: 'number of weeks',
       type: 'number',
-      name: 'numberMatches',
-      value: leagueForm?.numberOfTeams
+      name: 'numberMatches'
     },
     {
       description: 'start date',
       type: 'date',
-      name: 'startDate',
-      value: leagueForm?.date_start
+      name: 'startDate'
     },
     {
       description: 'end date',
       type: 'date',
-      name: 'endDate',
-      value: leagueForm?.date_end
-
+      name: 'endDate'
     },
     {
       description: 'number of playoff teams',
       type: 'number',
-      name: 'numberTeamsPlayoffs',
-      value: settings?.numberOfTeamsPlayoffs
-
+      name: 'numberTeamsPlayoffs'
     },
     {
       description: 'starting bank',
       type: 'number',
-      name: 'startingBank',
-      value: settings?.startingBank
-
+      name: 'startingBank'
     }
   ];
 
