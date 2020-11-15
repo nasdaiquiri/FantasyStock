@@ -75,7 +75,7 @@ function CreateNewLeague() {
 
   return (
     <div>
-      <Button variant='outlined' color='primary' onClick={handleClickOpen} className={classes.buttonPadding}>
+      <Button variant='outlined' onClick={handleClickOpen} className={classes.buttonPadding}>
         Create League
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
