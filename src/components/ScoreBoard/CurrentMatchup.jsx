@@ -8,7 +8,7 @@ import HomePortfolio from './HomePortfolio.jsx';
 
 const useStyles = makeStyles(() => ({
   root: {
-    padding: 5
+    padding: 3
   },
   vertical: {
     display: 'flex',
@@ -16,11 +16,11 @@ const useStyles = makeStyles(() => ({
   },
   away: {
     float: 'left',
-    padding: 5
+    padding: 1
   },
   home: {
     float: 'right',
-    padding: 5
+    padding: 1
   },
   header: {
     textAlign: 'center'
@@ -28,7 +28,8 @@ const useStyles = makeStyles(() => ({
   button: {
     justifyContent: 'center',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   }
 }));
 
@@ -74,6 +75,7 @@ function CurrentMatchup({ switchViews, homePortfolio, awayPortfolio }) {
           variant='contained'
           onClick={switchViews}
           size='small'
+          className={classes.button}
         >
           Scoreboard
         </Button>
