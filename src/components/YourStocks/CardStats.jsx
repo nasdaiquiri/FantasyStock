@@ -9,8 +9,8 @@ import '../../css/CardStats.css';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    textAlign: 'center',
-    borderRadius: '25px'
+    textAlign: 'center'
+    // borderRadius: '25px'
   },
   bullet: {
     display: 'inline-block',

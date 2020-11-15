@@ -54,3 +54,12 @@ padding-left: 100px;
 .nav_options:hover {
   transform: scale(1.1);
 }
+
+.nav_folio {
+  color:green !important
+}
+
+.nav_redirect {
+  color: green;
+  text-decoration: none;
+}

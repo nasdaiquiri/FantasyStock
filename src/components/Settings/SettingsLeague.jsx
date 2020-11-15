@@ -72,7 +72,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       value: leagueForm?.lengthMatch
     },
     {
-      description: 'number of matches',
+      description: 'number of weeks',
       type: 'number',
       name: 'numberMatches',
       value: leagueForm?.numberOfTeams

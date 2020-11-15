@@ -20,8 +20,8 @@ import { setLeague, setLeagueOwner } from '../../features/leagueSlice.js';
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    textAlign: 'left',
-    borderRadius: '25px'
+    textAlign: 'left'
+    // borderRadius: '25px'
   },
   bullet: {
     display: 'inline-block',
