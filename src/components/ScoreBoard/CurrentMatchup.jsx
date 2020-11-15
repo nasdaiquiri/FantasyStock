@@ -8,7 +8,7 @@ import HomePortfolio from './HomePortfolio.jsx';
 
 const useStyles = makeStyles(() => ({
   root: {
-    padding: 10
+    padding: 5
   },
   vertical: {
     display: 'flex',
