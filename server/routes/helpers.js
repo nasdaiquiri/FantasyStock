@@ -3,6 +3,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
+/* eslint-disable no-restricted-syntax */
 const axios = require('axios');
 require('dotenv').config();
 
@@ -161,7 +162,7 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
     currentWeek: 0,
     weeklyMatchups: {}
   };
-  // TODO: Home vs away fairness & noparam reassign
+  // TODO: Home vs away fairness
   for (let i = 1; i <= numOfWeeks; i++) {
     const week = `week${i}`;
     const weeklyGames = [];
@@ -176,7 +177,6 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
           score: 0
         }
       };
-      // infinite loop on 5/3
       weeklyGames.push(gameTemplate);
     }
     firstHalfOfIDs = arraySlider(firstHalfOfIDs);
@@ -197,11 +197,60 @@ const getBankForUserUpdate = (id) => League.findByPk(id)
     console.warn(err);
   });
 
+const settingsUpdater = async (idOwner, idLeague, newSettings, idUsers) => {
+  const oldSettings = await League.findByPk(idLeague)
+    .then((league) => {
+      const { settings } = league.dataValues;
+      const new1Settings = {
+        date_end: settings.endDate || null,
+        lengthMatch: settings.lengthMatches || 7,
+        numberOfMatches: settings.numberMatches || 8,
+        numberOfTeams: settings.numberTeams || 8,
+        numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || 4,
+        date_start: settings.startDate || null,
+        startingBank: (settings.startingBank) || 1000000,
+        schedule: settings.schedule || null
+      };
+      return new1Settings;
+    })
+    .catch((err) => {
+      console.warn(err);
+    });
+  const finalSettings = { ...oldSettings };
+  if (newSettings != null) {
+    for (const key in newSettings) {
+      if (newSettings[key] != null) {
+        finalSettings[key] = newSettings[key];
+        if (key === 'startingBank') {
+          finalSettings[key] = newSettings[key];
+        }
+        if (key === 'net_worth') {
+          finalSettings[key] = newSettings.startingBank;
+        }
+      }
+    }
+  }
+  const oldUserIDs = await League_user.findAll({
+    where: {
+      id_league: idLeague
+    }
+  })
+    .then((array) => {
+      const answer = [];
+      array.map((userA) => answer.push(userA.dataValues.id_user));
+      return answer;
+    });
+  const userIDs = idUsers || oldUserIDs;
+  const newSchedule = matchupGenerator(userIDs, finalSettings.numberOfMatches);
+  finalSettings.schedule = newSchedule;
+  return finalSettings;
+};
 module.exports = {
   checkSharesAvailable,
   checkMoneyAvailable,
   updateStocks,
   matchupGenerator,
   portfolioValues,
-  getBankForUserUpdate
+  getBankForUserUpdate,
+  settingsUpdater
 };
