@@ -28,12 +28,12 @@ function Nav() {
       path: '/'
     },
     {
-      option: 'Your Stocks',
-      path: '/yourstocks'
-    },
-    {
       option: 'League Info',
       path: '/leagueinfo'
+    },
+    {
+      option: 'Your Stocks',
+      path: '/yourstocks'
     },
     {
       option: 'Waivers',
@@ -42,10 +42,6 @@ function Nav() {
     {
       option: 'Scoreboard',
       path: '/scoreboard'
-    },
-    {
-      option: 'Standings',
-      path: '/'
     },
     {
       option: 'Schedule',
@@ -86,11 +82,14 @@ function Nav() {
                 <a className='a' href='/auth/logout'>Log out </a>
               )}
           </Button>
-
-          <Button color='inherit'>Folio</Button>
-          <Button color='inherit'>
-            <img className='nav_logo' src={logo} alt='logo' />
-          </Button>
+          <Link key='home' className='nav_folio' to='/'>
+            <Button color='inherit'>Folio</Button>
+          </Link>
+          <Link key='home' className='nav_link' to='/'>
+            <Button color='inherit'>
+              <img className='nav_logo' src={logo} alt='logo' />
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
 
