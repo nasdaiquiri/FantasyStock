@@ -9,7 +9,7 @@ const {
   League_user,
   User
 } = require('../db/index');
-const { matchupGenerator, getBankForUserUpdate } = require('./helpers');
+const { getBankForUserUpdate, settingsUpdater } = require('./helpers');
 
 // get settings by league Id
 leagueRouter.get('/settings/:leagueID', (req, res) => {
@@ -98,13 +98,13 @@ leagueRouter.get('/', (req, res) => {
 leagueRouter.post('/', (req, res) => {
   const { league_name, id_owner, numberOfTeams } = req.body;
   const settings = {
-    date_end: null, // date / it follows
-    lengthMatch: 7, // integer (number of days) (defaulting to 7)
+    date_end: null,
+    lengthMatch: 7,
     numberOfMatches: 8,
-    numberOfTeams, // integer
-    numberOfTeamsPlayoffs: null, // Integer / default 10,000,00 (remember extra )
-    date_start: null, // date /defaults: next monday '''''' calculate
-    startingBank: 1000000, // *100 for finance
+    numberOfTeams,
+    numberOfTeamsPlayoffs: null,
+    date_start: null,
+    startingBank: 1000000,
     net_worth: 1000000,
     schedule: {
       currentWeek: null,
@@ -146,7 +146,11 @@ leagueRouter.put('/', async (req, res) => {
   const {
     id_league, league_name, id_owner, settings
   } = req.body;
-  // get the userIDs
+  const newSettings = await settingsUpdater(id_owner, id_league, settings)
+    .catch((err) => {
+      console.warn(err);
+      res.status(500).send(err);
+    });
   const usersData = await League_user.findAll({
     where: {
       id_league
@@ -159,19 +163,6 @@ leagueRouter.put('/', async (req, res) => {
     });
   const userIDs = [];
   usersData.map((userData) => userIDs.push(userData.dataValues.id_user));
-  const newSchedule = matchupGenerator(userIDs, settings.numberMatches);
-  const newSettings = {
-    date_end: settings.endDate || null, // date / it follows
-    lengthMatch: settings.lengthMatches || null, // integer (number of days) (defaulting to 7)
-    numberOfMatches: settings.numberMatches || 8, // integer
-    numberOfTeams: settings.numberTeams || null, // integer
-    numberOfTeamsPlayoffs: settings.numberTeamsPlayoffs || null,
-    // Integer / default 10,000,00 (remember extra )
-    date_start: settings.startDate || null, // date /defaults: next monday '''''' calculate
-    startingBank: (settings.startingBank * 100) || null,
-    // Integer / default 10,000,00 (remember extra )
-    schedule: newSchedule
-  };
   League.update({ league_name, settings: newSettings, id_owner },
     {
       where: {
@@ -208,12 +199,8 @@ leagueRouter.put('/', async (req, res) => {
 });
 // TODO: Indiviual user joins a league
 
-// Add an array of users to a league (deletes any users
-// already in league that are not included in the sent array)
-// TODO: add matchupgenerator in the put for /users and only update then (both)
 leagueRouter.put('/users', async (req, res) => {
   const { userIDs, leagueID } = req.body;
-  // need bank balance
   const bank = await getBankForUserUpdate(leagueID);
   League_user.findAll({
     where: {
@@ -244,7 +231,6 @@ leagueRouter.put('/users', async (req, res) => {
       // eslint-disable-next-line array-callback-return
       userIDs.map((userID) => {
         if (!existingIDs.includes(userID)) {
-          // TODO: UPDATE SCHEDULE HERE
           League_user.create({
             bank_balance: bank,
             net_worth: bank,
@@ -266,22 +252,31 @@ leagueRouter.put('/users', async (req, res) => {
       });
       res.send(userIDs);
     })
+    .then(() => {
+      League.findByPk(leagueID)
+        .then(async (league) => {
+          const newSettings = await settingsUpdater(
+            league.dataValues.id_owner, leagueID, null, userIDs
+          );
+          League.update({
+            settings: newSettings
+          },
+          {
+            where: {
+              id: league.dataValues.id
+            }
+          });
+        });
+    })
     .catch((err) => {
       console.warn(err);
       res.status(500).send(err);
     });
-  // won't log the adds and deletes atm
 });
-// put league route settings required
-// put for users added to league
-// where do i do schedule?
-// on league post? Shuffle team number
-// apply to standard
 
 // find league by id and user
 leagueRouter.get('/:leagueID/:userID', (req, res) => {
   const { leagueID, userID } = req.params;
-
   League.findOne({
     where: {
       id: leagueID,
@@ -307,6 +302,3 @@ leagueRouter.get('/:leagueID/:userID', (req, res) => {
 module.exports = {
   leagueRouter
 };
-
-// todo: delete league
-// todo: add user to league
