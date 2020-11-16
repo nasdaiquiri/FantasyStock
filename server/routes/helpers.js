@@ -9,7 +9,6 @@ require('dotenv').config();
 
 const { IEX_API_KEY } = process.env;
 
-
 const {
   Stock_user,
   League_user,
