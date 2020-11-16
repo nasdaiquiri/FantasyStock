@@ -7,6 +7,8 @@
 const axios = require('axios');
 require('dotenv').config();
 
+const { IEX_API_KEY } = process.env;
+
 const {
   Stock_user,
   League_user,
@@ -124,7 +126,7 @@ const updateStocks = () => {
       method: 'get',
       url: 'https://cloud.iexapis.com/stable/stock/market/batch',
       params: {
-        token: 'Tpk_72165f58d5784aea8831c6f9a9e6006a',
+        token: IEX_API_KEY,
         types: 'quote',
         symbols: array.join(',')
       }
