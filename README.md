@@ -4,6 +4,7 @@ Folio is a fantasy stock-trading application. Designed to be played with friends
 
 ## Tech Stack:
   React Redux PostgreSQL Express Node Passport Axios Mocha Travis Husky
+  ![Tech Stack](images/techstackimage.png)
 
 # Installation & Setup
 
@@ -85,6 +86,7 @@ Access the program through localhost:port in a web brouser.
 
 ## Deployment
 
+We recommend deploying through AWS.
 # Schema
 ![schema](images/schema.png)
 
