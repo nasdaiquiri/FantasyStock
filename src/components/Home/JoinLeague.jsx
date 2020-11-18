@@ -13,7 +13,9 @@ import { setUserLeagues } from '../../features/leagueSlice.js';
 
 const useStyles = makeStyles({
   buttonPadding: {
-    marginTop: 25
+    marginTop: 25,
+    borderColor: 'green',
+    color: 'green'
   }
 });
 

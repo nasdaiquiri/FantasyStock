@@ -29,7 +29,9 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     display: 'flex',
     alignItems: 'center',
-    padding: 10
+    padding: 10,
+    borderColor: 'green',
+    color: 'green'
   }
 }));
 
@@ -72,7 +74,7 @@ function CurrentMatchup({ switchViews, homePortfolio, awayPortfolio }) {
       <h1 className={classes.header}>Current Matchup</h1>
       <div className={classes.button}>
         <Button
-          variant='contained'
+          variant='outlined'
           onClick={switchViews}
           size='small'
           className={classes.button}

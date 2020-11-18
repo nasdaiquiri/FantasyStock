@@ -13,7 +13,9 @@ import { selectLeague, selectUserLeagues } from '../features/leagueSlice.js';
 const useStyles = makeStyles(() => ({
   button: {
     float: 'right',
-    margin: '7px'
+    margin: '7px',
+    borderColor: 'green',
+    color: 'green'
   },
   standings: {
     paddingTop: '25px'
@@ -110,7 +112,7 @@ function ScoreBoard() {
     <div>
       <Button
         size='small'
-        variant='contained'
+        variant='outlined'
         className={classes.button}
         onClick={getStandings}
       >
