@@ -138,13 +138,12 @@ function Standings({ leagues }) {
   };
 
   const standingsTable = leagues.map((league) => {
-    // eslint-disable-next-line camelcase
-    const { league_user } = league;
+    const { league_user: leagueUser } = league;
     const stockReturn = {
       username: league.username,
-      wins: league_user.wins,
-      losses: league_user.losses,
-      ties: league_user.ties
+      wins: leagueUser.wins,
+      losses: leagueUser.losses,
+      ties: leagueUser.ties
     };
     return stockReturn;
   });

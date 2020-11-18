@@ -44,20 +44,26 @@ function WaiversList({
   const league = useSelector(selectLeague);
 
   const onSubmit = () => {
-    axios.post('/stock/waivers', {
-      id_stock: row.id,
-      id_league: league,
-      id_user: user.id,
-      portfolio: {
-        price_per_share_at_purchase: row.current_price_per_share,
-        shares: Number(sharesInput)
-      }
-    }).then(() => axios.get(`/stock/waivers/${league}`)
-      .then((waivers) => dispatch(setWaivers(waivers.data))))
-      .then(() => axios.get(`/stock/portfolio/${user.id}`)
+    axios
+      .post('/stock/waivers', {
+        id_stock: row.id,
+        id_league: league,
+        id_user: user.id,
+        portfolio: {
+          price_per_share_at_purchase: row.current_price_per_share,
+          shares: Number(sharesInput)
+        }
+      })
+      .then(() => axios
+        .get(`/stock/waivers/${league}`)
+        .then((waivers) => dispatch(setWaivers(waivers.data))))
+      .then(() => axios
+        .get(`/stock/portfolio/${user.id}`)
         .then((stocks) => dispatch(setYourStock(stocks.data))))
-      .then(() => axios.get(`/stock/bank/${user.id}/${league}`)
-        .then((response) => setBankBalance(response.data.bank_balance)));
+      .then(() => axios
+        .get(`/stock/bank/${user.id}/${league}`)
+        .then((response) => setBankBalance(response.data.bank_balance)))
+      .catch((err) => console.warn(err));
 
     setOpen(false);
     setSharesInput(0);
@@ -76,8 +82,7 @@ function WaiversList({
   const handleSharesSubmit = (e) => {
     setSharesInput(e.target.value);
   };
-  const calcBankBalance = ((bankBalance * 0.01)
-  - ((row.current_price_per_share * 0.01) * sharesInput));
+  const calcBankBalance = bankBalance * 0.01 - row.current_price_per_share * 0.01 * sharesInput;
 
   return (
     <>
@@ -100,7 +105,11 @@ function WaiversList({
         </TableCell>
         <TableCell align='right'>{row.sharesRemaining}</TableCell>
       </TableRow>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'
+      >
         <DialogTitle id='form-dialog-title'>
           {waiver.company_name}
           (
@@ -111,9 +120,7 @@ function WaiversList({
           <div>
             <h1>Bank Balance:</h1>
             $
-            {
-            calcBankBalance.toFixed(2)
-          }
+            {calcBankBalance.toFixed(2)}
           </div>
           <div className='waiversList_dialogBox'>
             <div className='waiversList_dialogBox'>
@@ -129,7 +136,7 @@ function WaiversList({
             <div>
               <h1>Total:</h1>
               $
-              {((0.01 * row.current_price_per_share) * sharesInput).toFixed(2)}
+              {(0.01 * row.current_price_per_share * sharesInput).toFixed(2)}
             </div>
           </div>
           <TextField
@@ -146,7 +153,13 @@ function WaiversList({
             Cancel
           </Button>
           <Button
-            disabled={(calcBankBalance.toFixed(2) > 0) && (row.sharesRemaining - sharesInput <= row.sharesRemaining) && row.sharesRemaining - sharesInput >= 0 ? '' : 'disabled'}
+            disabled={
+              calcBankBalance.toFixed(2) > 0
+              && row.sharesRemaining - sharesInput <= row.sharesRemaining
+              && row.sharesRemaining - sharesInput >= 0
+                ? ''
+                : 'disabled'
+            }
             onClick={onSubmit}
             color='primary'
           >

@@ -8,12 +8,14 @@ export const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
-      state.user = action.payload;
+      let { user } = state;
+      user = action.payload;
+      return { ...state, user };
     },
     setLogIn: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
-      state.logIn = action.payload;
+      let { logIn } = state;
+      logIn = action.payload;
+      return { ...state, logIn };
     }
   }
 });

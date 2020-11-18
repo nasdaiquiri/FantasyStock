@@ -14,7 +14,6 @@ import '../../css/MatchupCard.css';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    // borderRadius: '25px',
     marginBottom: '10px',
     margin: '10px',
     textAlign: 'center'
@@ -46,7 +45,8 @@ function MatchupCard({ userLeague, user }) {
 
   useEffect(() => {
     axios.get(`/user/team/${userLeague?.id}/${user?.id}`)
-      .then((response) => setUserLeagueInfo(response.data));
+      .then((response) => setUserLeagueInfo(response.data))
+      .catch((err) => console.warn(err));
   }, [user.id, userLeague.id]);
 
   const bankBalanceTwoDecimal = (userLeague.league_user.bank_balance * 0.01).toFixed(2);

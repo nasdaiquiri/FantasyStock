@@ -7,8 +7,9 @@ export const yourStockSlice = createSlice({
   },
   reducers: {
     setYourStock: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
-      state.yourstock = action.payload;
+      let { yourstock } = state;
+      yourstock = action.payload;
+      return { ...state, yourstock };
     }
   }
 });

@@ -43,7 +43,8 @@ function JoinLeague({ leagues, userLeagues }) {
         if (response.data[0]) {
           dispatch(setUserLeagues(response.data[0].leagues));
         }
-      });
+      })
+      .catch((err) => console.warn(err));
     setAnchorEl(null);
   };
 

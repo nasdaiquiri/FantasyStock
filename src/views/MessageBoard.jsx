@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import {
-  FormControl, IconButton, Input
-} from '@material-ui/core';
+import { FormControl, IconButton, Input } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 import FlipMove from 'react-flip-move';
 import Pusher from 'pusher-js';
@@ -19,8 +17,10 @@ function MessageBoard() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    axios.get(`/messages/${league}`)
-      .then((groupMessages) => setMessages(groupMessages.data));
+    axios
+      .get(`/messages/${league}`)
+      .then((groupMessages) => setMessages(groupMessages.data))
+      .catch((err) => console.warn(err));
   }, [league]);
 
   useEffect(() => {
@@ -53,9 +53,7 @@ function MessageBoard() {
   return (
     <div className='messageBoard'>
       <div>
-        <h3 className='messageBoard_title'>
-          {`Hello, ${user?.username}`}
-        </h3>
+        <h3 className='messageBoard_title'>{`Hello, ${user?.username}`}</h3>
       </div>
       <div className='messageBoard_messagesLayer'>
         <div className='container'>

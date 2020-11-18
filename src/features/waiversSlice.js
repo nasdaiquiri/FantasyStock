@@ -7,8 +7,9 @@ export const waiversSlice = createSlice({
   },
   reducers: {
     setWaivers: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
-      state.waivers = action.payload;
+      let { waivers } = state;
+      waivers = action.payload;
+      return { ...state, waivers };
     }
   }
 });
