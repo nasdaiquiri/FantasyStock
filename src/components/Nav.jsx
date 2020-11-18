@@ -83,10 +83,8 @@ function Nav() {
               )}
           </Button>
           <Link key='home' className='nav_folio' to='/'>
-            <Button color='inherit'>Folio</Button>
-          </Link>
-          <Link key='home' className='nav_link' to='/'>
             <Button color='inherit'>
+              Folio
               <img className='nav_logo' src={logo} alt='logo' />
             </Button>
           </Link>
