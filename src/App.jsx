@@ -13,12 +13,14 @@ import LeagueInfo from './views/LeagueInfo.jsx';
 import Settings from './views/Settings.jsx';
 import MessageBoard from './views/MessageBoard.jsx';
 import Schedule from './views/Schedule.jsx';
-import { selectUser, setLogIn, setUser } from './features/userSlice.js';
+import {
+  selectLogIn, selectUser, setLogIn, setUser
+} from './features/userSlice.js';
 import { setUserLeagues } from './features/leagueSlice.js';
 
 function App() {
   const dispatch = useDispatch();
-  const logIn = true;
+  const logIn = useSelector(selectLogIn);
   const user = useSelector(selectUser);
 
   useEffect(() => {
