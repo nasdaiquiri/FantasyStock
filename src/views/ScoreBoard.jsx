@@ -119,32 +119,33 @@ function ScoreBoard() {
       >
         {!showStandings ? 'Standings' : 'Matchups'}
       </Button>
-      <h1>
-        {displayWeek}
-      </h1>
-      {!showStandings ? !toggle ? (currentWeekMatches) && currentWeekMatches.map((match) => (
-        <ScoreCard
-          awayScore={match.Away.score}
-          awayName={match.Away.user.team_name}
-          awayWins={match.Away.user.wins}
-          awayLosses={match.Away.user.losses}
-          awayTies={match.Away.user.ties}
-          awayTeamId={match.Away.teamID}
-          awayBalance={match.Away.user.bank_balance}
-          awayWorth={match.Away.user.net_worth}
-          homeScore={match.Home.score}
-          homeName={match.Home.user.team_name}
-          homeWins={match.Home.user.wins}
-          homeLosses={match.Home.user.losses}
-          homeTies={match.Home.user.ties}
-          homeTeamId={match.Home.teamID}
-          homeBalance={match.Home.user.bank_balance}
-          homeWorth={match.Home.user.net_worth}
-          getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-          startingBalance={startingLeagueBalance[0]}
-        />
-      ))
-        : (
+      <h1>{displayWeek}</h1>
+      {!showStandings ? (
+        !toggle ? (
+          currentWeekMatches
+          && currentWeekMatches.map((match) => (
+            <ScoreCard
+              awayScore={match.Away.score}
+              awayName={match.Away.user.team_name}
+              awayWins={match.Away.user.wins}
+              awayLosses={match.Away.user.losses}
+              awayTies={match.Away.user.ties}
+              awayTeamId={match.Away.teamID}
+              awayBalance={match.Away.user.bank_balance}
+              awayWorth={match.Away.user.net_worth}
+              homeScore={match.Home.score}
+              homeName={match.Home.user.team_name}
+              homeWins={match.Home.user.wins}
+              homeLosses={match.Home.user.losses}
+              homeTies={match.Home.user.ties}
+              homeTeamId={match.Home.teamID}
+              homeBalance={match.Home.user.bank_balance}
+              homeWorth={match.Home.user.net_worth}
+              getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
+              startingBalance={startingLeagueBalance[1]}
+            />
+          ))
+        ) : (
           <div className={classes.currentMatch}>
             <CurrentMatchup
               switchViews={switchViews}
