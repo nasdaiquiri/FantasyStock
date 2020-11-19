@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { selectSettings } from '../../features/ownerLeagueSlice.js';
+import '../../css/CardAddMembers.css';
 
 const useStyles = makeStyles({
   root: {
@@ -15,6 +16,10 @@ const useStyles = makeStyles({
   button: {
     borderColor: 'green',
     color: 'green'
+  },
+  delete: {
+    textAlign: 'right',
+    right: '0px'
   }
 });
 
@@ -39,16 +44,18 @@ function CardAddMembers({
   const settings = useSelector(selectSettings);
 
   return (
-    <Typography align='center' className={classes.root}>
-      <p>
-        {`Up to
+    <Typography className={classes.root}>
+      <div className='cardAddMembers_header'>
+        <p>
+          {`Up to
         ${settings?.numberOfTeams} players`}
-      </p>
-      <p>
-        {`Members:
+        </p>
+        <p>
+          {`Members:
         ${users.length}`}
-      </p>
-      <p>even numbers only</p>
+        </p>
+        <p>even numbers only</p>
+      </div>
       <form className='addMembers_form'>
         <TextField
           variant='outlined'
@@ -74,14 +81,16 @@ function CardAddMembers({
               {user.username}
               <p className='addMember_fullName'>{user.full_name}</p>
             </li>
-            <IconButton
-              className='addMembers_deleteButton'
-              variant='contained'
-              type='button'
-              onClick={() => deleteSelection(user.id)}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <div>
+              <IconButton
+              // className='addMembers_deleteButton'
+                variant='contained'
+                type='button'
+                onClick={() => deleteSelection(user.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
           </div>
         ))}
       </ol>
