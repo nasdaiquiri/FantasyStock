@@ -22,6 +22,7 @@
   align-items: center;
   padding-top: 5px;
   padding-bottom: 20px;
+  justify-content: space-between;
 }
 
 .addMembers_deleteButton {
