@@ -7,7 +7,7 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const { IEX_API_KEY } = process.env;
+const { IEX_API_KEY, IEX_API_SANDBOX } = process.env;
 
 const {
   Stock_user,
@@ -124,9 +124,9 @@ const updateStocks = () => {
   const functionWithPromise = (array) => {
     const config = {
       method: 'get',
-      url: 'https://cloud.iexapis.com/stable/stock/market/batch',
+      url: 'https://sandbox.iexapis.com/stable/stock/market/batch',
       params: {
-        token: IEX_API_KEY,
+        token: IEX_API_SANDBOX,
         types: 'quote',
         symbols: array.join(',')
       }
