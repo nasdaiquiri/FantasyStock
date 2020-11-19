@@ -142,7 +142,7 @@ function ScoreBoard() {
               homeBalance={match.Home.user.bank_balance}
               homeWorth={match.Home.user.net_worth}
               getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-              startingBalance={startingLeagueBalance[1]}
+              startingBalance={startingLeagueBalance[0]}
             />
           ))
         ) : (
