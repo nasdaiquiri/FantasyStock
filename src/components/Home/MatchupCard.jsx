@@ -44,41 +44,39 @@ function MatchupCard({ userLeague, user }) {
   };
 
   useEffect(() => {
-    axios.get(`/user/team/${userLeague?.id}/${user?.id}`)
+    axios
+      .get(`/user/team/${userLeague?.id}/${user?.id}`)
       .then((response) => setUserLeagueInfo(response.data))
       .catch((err) => console.warn(err));
   }, [user.id, userLeague.id]);
 
-  const bankBalanceTwoDecimal = (userLeague.league_user.bank_balance * 0.01).toFixed(2);
+  const bankBalanceTwoDecimal = (
+    userLeague.league_user.bank_balance * 0.01
+  ).toFixed(2);
   return (
-    <Link
-      key='leagueinfo'
-      to='/yourstocks'
-    >
+    <Link key='leagueinfo' to='/yourstocks'>
       <Card
         className={classes.root}
         variant='outlined'
         onClick={clickLeagueUpdate}
       >
         <CardContent>
-          <Typography
-            className={classes.title}
-            variant='h6'
-            component='h2'
-          >
+          <Typography className={classes.title} variant='h6' component='h2'>
             {userLeague?.league_name}
           </Typography>
-          <Typography
-            variant='body2'
-          >
+          <Typography variant='body2'>
             {`Bank Balance: $ ${bankBalanceTwoDecimal}`}
           </Typography>
-          <Typography
-            variang='body2'
-          >
+          <Typography variang='body2'>
             <p className='matchupCard_team'>Team</p>
             <div className='matchupCard_box'>
-              <h3 className='matchupCard_teamName'>{userLeagueInfo?.team_name}</h3>
+              <h3 className='matchupCard_teamName'>
+                {userLeagueInfo?.team_name === null ? (
+                  <p className='cardLeagueMember_noTeam'>no team name</p>
+                ) : (
+                  userLeagueInfo?.team_name
+                )}
+              </h3>
               <Avatar
                 className='matchupCard_avatar'
                 src={`${userLeagueInfo?.team_logo}`}
@@ -86,7 +84,6 @@ function MatchupCard({ userLeague, user }) {
                 alt='team logo'
               />
             </div>
-
           </Typography>
         </CardContent>
       </Card>

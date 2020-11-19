@@ -1,4 +1,4 @@
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React from 'react';
 import '../../css/cardLeagueMembers.css';
@@ -9,7 +9,7 @@ function CardLeagueMembers({ leagueInfo }) {
   };
 
   return (
-    <Typography>
+    <div className='cardLeagueMembers_container'>
       {leagueInfo?.users?.map((user) => (
         <ul className='cardLeagueMembers'>
           <li className='cardLeagueMembers_li'>
@@ -19,12 +19,20 @@ function CardLeagueMembers({ leagueInfo }) {
               sizes='small'
               alt='team logo'
             />
-            <p className='cardLeagueMembers_team'>{user.league_user.team_name}</p>
-            <p>{user?.username}</p>
+            <div className='cardLeagueMembers_info'>
+              <p className='cardLeagueMembers_team'>
+                {user.league_user.team_name === null ? (
+                  <p className='cardLeagueMember_noTeam'>no team name</p>
+                ) : (
+                  user.league_user.team_name
+                )}
+              </p>
+              <p className='cardLeagueMembers_username'>{user?.username}</p>
+            </div>
           </li>
         </ul>
       ))}
-    </Typography>
+    </div>
   );
 }
 
