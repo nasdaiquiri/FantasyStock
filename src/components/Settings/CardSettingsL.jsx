@@ -8,7 +8,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
-    paddingLeft: '50px'
+    paddingLeft: '30px'
+  },
+  button: {
+    marginTop: '10px',
+    borderColor: 'green',
+    color: 'green'
   }
 });
 
@@ -57,9 +62,8 @@ function CardSettingsL({
           </>
         ))}
         <Button
-          className='settingsLeague_formButton'
-          variant='contained'
-          color='primary'
+          className={classes.button}
+          variant='outlined'
           type='submit'
         >
           Submit

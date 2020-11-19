@@ -21,7 +21,6 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
     textAlign: 'left'
-    // borderRadius: '25px'
   },
   bullet: {
     display: 'inline-block',
@@ -35,7 +34,12 @@ const useStyles = makeStyles({
     marginBottom: 12
   },
   buttonPadding: {
-    marginTop: 25
+    marginTop: 25,
+    borderColor: 'green',
+    color: 'green'
+  },
+  create: {
+    color: 'green'
   }
 });
 
@@ -114,7 +118,10 @@ function CreateNewLeague() {
             Cancel
           </Button>
           <Link key='settings' to='/settings'>
-            <Button onClick={onSubmit} color='primary'>
+            <Button
+              className={classes.create}
+              onClick={onSubmit}
+            >
               Create
             </Button>
           </Link>

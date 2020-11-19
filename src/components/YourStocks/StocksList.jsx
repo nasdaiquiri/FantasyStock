@@ -60,20 +60,26 @@ function StocksList({
   const league = useSelector(selectLeague);
 
   const onSubmit = async () => {
-    axios.post('/stock/waivers', {
-      id_stock: row.id,
-      id_league: league,
-      id_user: user.id,
-      portfolio: {
-        price_per_share_at_purchase: row.current_price_per_share,
-        shares: (action === 'Buy') ? -(-sharesInput) : -sharesInput
-      }
-    }).then(() => axios.get(`/stock/waivers/${league}`)
-      .then((waivers) => dispatch(setWaivers(waivers.data))))
-      .then(() => axios.get(`/stock/portfolio/${user.id}`)
+    axios
+      .post('/stock/waivers', {
+        id_stock: row.id,
+        id_league: league,
+        id_user: user.id,
+        portfolio: {
+          price_per_share_at_purchase: row.current_price_per_share,
+          shares: action === 'Buy' ? -(-sharesInput) : -sharesInput
+        }
+      })
+      .then(() => axios
+        .get(`/stock/waivers/${league}`)
+        .then((waivers) => dispatch(setWaivers(waivers.data))))
+      .then(() => axios
+        .get(`/stock/portfolio/${user.id}`)
         .then((stocks) => dispatch(setYourStock(stocks.data))))
-      .then(() => axios.get(`/stock/bank/${user.id}/${league}`)
-        .then((response) => setBankBalance(response.data.bank_balance)));
+      .then(() => axios
+        .get(`/stock/bank/${user.id}/${league}`)
+        .then((response) => setBankBalance(response.data.bank_balance)))
+      .catch((err) => console.warn(err));
     setOpen(false);
     setTimeout(() => setSharesInput(''), 1000);
   };
@@ -88,33 +94,38 @@ function StocksList({
     setTimeout(() => setSharesInput(''), 1000);
   };
 
-  const handleSharesSubmit = ((e) => {
+  const handleSharesSubmit = (e) => {
     setSharesInput(e.target.value);
-  });
-  const sharesCount = ((shares, shareInput) => {
+  };
+  const sharesCount = (shares, shareInput) => {
     if (action === 'Buy') {
-      return (shares - (-shareInput));
+      return shares - -shareInput;
     }
-    return (shares + (-shareInput));
-  });
+    return shares + -shareInput;
+  };
 
   const calcBankBalance = (cpps) => {
     if (action === 'Buy') {
-      return (bankBalance
-      - (cpps * sharesInput)) * 0.01;
+      return (bankBalance - cpps * sharesInput) * 0.01;
     }
-    return (bankBalance
-      + (cpps * sharesInput)) * 0.01;
+    return (bankBalance + cpps * sharesInput) * 0.01;
   };
 
   const disableSubmit = (shares) => {
     if (sharesInput <= 0) {
       return 'disabled';
     }
-    if (action === 'Buy' && (sharesCount(shares, sharesInput) > 100 || calcBankBalance(row.current_price_per_share).toFixed(2) < 0)) {
+    if (
+      action === 'Buy'
+      && (sharesCount(shares, sharesInput) > 100
+        || calcBankBalance(row.current_price_per_share).toFixed(2) < 0)
+    ) {
       return 'disabled';
     }
-    if (action === 'Sell' && (sharesCount(shares, sharesInput) < 0 || calcBankBalance().toFixed(2) > 0)) {
+    if (
+      action === 'Sell'
+      && (sharesCount(shares, sharesInput) < 0 || calcBankBalance().toFixed(2) > 0)
+    ) {
       return 'disabled';
     }
     return '';
@@ -135,18 +146,26 @@ function StocksList({
           {row.ticker}
         </TableCell>
         <TableCell align='right'>{row.company_name}</TableCell>
-        <TableCell align='right'>{(0.01 * row.price_per_share_at_purchase).toFixed(2)}</TableCell>
+        <TableCell align='right'>
+          {(0.01 * row.price_per_share_at_purchase).toFixed(2)}
+        </TableCell>
         <TableCell align='right'>{row.shares}</TableCell>
-        <TableCell align='right'>{(row.current_price_per_share * 0.01).toFixed(2)}</TableCell>
+        <TableCell align='right'>
+          {(row.current_price_per_share * 0.01).toFixed(2)}
+        </TableCell>
       </TableRow>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'><strong>{myStocks.company_name}</strong></DialogTitle>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'
+      >
+        <DialogTitle id='form-dialog-title'>
+          <strong>{myStocks.company_name}</strong>
+        </DialogTitle>
         <DialogContent>
           <strong>Bank Balance: </strong>
           $
-          {
-            calcBankBalance(row.current_price_per_share).toFixed(2)
-          }
+          {calcBankBalance(row.current_price_per_share).toFixed(2)}
           <DialogContentText>
             <br />
             {row.ticker}
@@ -165,11 +184,13 @@ function StocksList({
             <p>
               <strong>Total: </strong>
               $
-              {((0.01 * row.current_price_per_share) * sharesInput).toFixed(2)}
+              {(0.01 * row.current_price_per_share * sharesInput).toFixed(2)}
             </p>
           </div>
           <FormControl variant='outlined' className={classes.formControl}>
-            <InputLabel htmlFor='outlined-age-native-simple'>{action}</InputLabel>
+            <InputLabel htmlFor='outlined-age-native-simple'>
+              {action}
+            </InputLabel>
             <Select
               native
               value={action}
@@ -191,7 +212,11 @@ function StocksList({
             label={action}
             type='number'
             variant='outlined'
-            onChange={(e) => handleSharesSubmit(e, sharesCount(row.shares, sharesInput), row.id)}
+            onChange={(e) => handleSharesSubmit(
+              e,
+              sharesCount(row.shares, sharesInput),
+              row.id
+            )}
           />
         </DialogContent>
         <DialogActions>

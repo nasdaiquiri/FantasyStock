@@ -37,32 +37,32 @@ function App() {
 
   useEffect(() => {
     async function fetchUserLeagueInfo() {
-      axios.get(`/league/${user?.id}`)
+      axios
+        .get(`/league/${user?.id}`)
         .then((response) => {
           if (response.data[0]) {
             dispatch(setUserLeagues(response.data[0].leagues));
           }
-        });
+        })
+        .catch((err) => console.warn(err));
     }
     fetchUserLeagueInfo();
   }, [user, dispatch]);
 
   return (
     <Router>
-      <div className='app'>
-        <Nav logIn={logIn} />
-        <TickerBar logIn={logIn} />
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/scoreboard' component={ScoreBoard} />
-          <Route path='/yourstocks' component={YourStocks} />
-          <Route path='/waivers' component={Waivers} />
-          <Route path='/leagueinfo' component={LeagueInfo} />
-          <Route path='/settings' component={Settings} />
-          <Route path='/messageboard' component={MessageBoard} />
-          <Route path='/schedule' component={Schedule} />
-        </Switch>
-      </div>
+      <Nav logIn={logIn} />
+      <TickerBar logIn={logIn} />
+      <Switch>
+        <Route path='/' exact component={Home} />
+        <Route path='/scoreboard' component={ScoreBoard} />
+        <Route path='/yourstocks' component={YourStocks} />
+        <Route path='/waivers' component={Waivers} />
+        <Route path='/leagueinfo' component={LeagueInfo} />
+        <Route path='/settings' component={Settings} />
+        <Route path='/messageboard' component={MessageBoard} />
+        <Route path='/schedule' component={Schedule} />
+      </Switch>
     </Router>
   );
 }

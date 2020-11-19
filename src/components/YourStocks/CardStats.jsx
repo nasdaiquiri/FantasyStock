@@ -10,7 +10,6 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
     textAlign: 'center'
-    // borderRadius: '25px'
   },
   bullet: {
     display: 'inline-block',
@@ -36,45 +35,41 @@ function CardStats({ bankBalance, rows }) {
     let portfolioValue = 0;
     rows.forEach((stock) => {
       portfolioValue
-        += ((stock.stock.current_price_per_share * stock.portfolio.shares) * 0.01);
+        += stock.stock.current_price_per_share * stock.portfolio.shares * 0.01;
     });
-    return (portfolioValue);
+    return portfolioValue;
   };
 
   const portfolioCalcPaid = () => {
     let portfolioPaid = 0;
     rows.forEach((stock) => {
       portfolioPaid
-        += ((stock.portfolio.price_per_share_at_purchase * stock.portfolio.shares) * 0.01);
+        += stock.portfolio.price_per_share_at_purchase
+        * stock.portfolio.shares
+        * 0.01;
     });
     return portfolioPaid;
   };
-  const portPercent = (((portfolioCalcValue() - portfolioCalcPaid()) / 100));
-  const totalValue = (portfolioCalcValue() + (bankBalance * 0.01));
+  const portPercent = (portfolioCalcValue() - portfolioCalcPaid()) / 100;
+  const totalValue = portfolioCalcValue() + bankBalance * 0.01;
 
   return (
     <div className='cardStats'>
       <Card className={classes.root} variant='outlined'>
         <CardContent>
           <Typography variant='h5' component='h2'>
-            Bank Balance:
-            $
+            Bank Balance: $
             {(bankBalance * 0.01).toFixed(2)}
           </Typography>
           <Typography className={classes.pos} color='textSecondary'>
-            Portfolio Value:
-            {' '}
-            $
-            {portfolioCalcValue()
-              .toFixed(2)}
+            Portfolio Value: $
+            {portfolioCalcValue().toFixed(2)}
             (
             {portPercent.toFixed(2)}
             %)
           </Typography>
           <Typography>
-            Total Value:
-            {' '}
-            $
+            Total Value: $
             {totalValue.toFixed(2)}
           </Typography>
         </CardContent>

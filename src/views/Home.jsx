@@ -20,64 +20,48 @@ function Home() {
   const userLeagues = useSelector(selectUserLeagues);
 
   useEffect(() => {
-    axios.get('/league').then((response) => setLeagues(response.data));
+    axios
+      .get('/league')
+      .then((response) => setLeagues(response.data))
+      .catch((err) => console.warn(err));
   }, []);
 
-  return (
-    (!logIn)
-      ? (
-        <div className='home_logInContainer'>
-          <a
-            href='/auth/google'
-            className='home_pleaseLogIn'
-          >
-            Please Log In
-          </a>
-          <img className='home_logo' src={logo} alt='logo' />
-        </div>
-      )
-      : (
-        <div>
-          <Grid
-            className='home_MatchupCard'
-            container
-            justify='center'
-          >
-            <Carousel autoPlay={false} animation='slide' fullHeightHover={false}>
-              {
-                userLeagues?.map((userLeague) => (
-                  <MatchupCard
-                    user={user}
-                    userLeague={userLeague}
-                    key={userLeague.id}
-                  />
-                ))
-              }
-            </Carousel>
-          </Grid>
-          <div>
-            <Grid
-              container
-              justify='center'
-            >
-              <div style={{ padding: '5px' }}>
-                <CreateNewLeague />
-              </div>
-              <div style={{ padding: '5px' }}>
-                <JoinLeague leagues={leagues} userLeagues={userLeagues} />
-              </div>
-            </Grid>
+  return !logIn ? (
+    <div className='home_logInContainer'>
+      <a href='/auth/google' className='home_pleaseLogIn'>
+        Please Log In
+      </a>
+      <img className='home_logo' src={logo} alt='logo' />
+    </div>
+  ) : (
+    <div>
+      <Grid className='home_MatchupCard' container justify='center'>
+        <Carousel autoPlay={false} animation='slide' fullHeightHover={false}>
+          {userLeagues?.map((userLeague) => (
+            <MatchupCard
+              user={user}
+              userLeague={userLeague}
+              key={userLeague.id}
+            />
+          ))}
+        </Carousel>
+      </Grid>
+      <div>
+        <Grid container justify='center'>
+          <div style={{ padding: '5px' }}>
+            <CreateNewLeague />
           </div>
-          <div>
-            <Grid
-              container
-              justify='center'
-            >
-              <Stocknews />
-            </Grid>
+          <div style={{ padding: '5px' }}>
+            <JoinLeague leagues={leagues} userLeagues={userLeagues} />
           </div>
-        </div>
-      )
+        </Grid>
+      </div>
+      <div>
+        <Grid container justify='center'>
+          <Stocknews />
+        </Grid>
+      </div>
+    </div>
   );
 }
 

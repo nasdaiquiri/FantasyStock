@@ -11,6 +11,10 @@ import { selectSettings } from '../../features/ownerLeagueSlice.js';
 const useStyles = makeStyles({
   root: {
     paddingLeft: '20px'
+  },
+  button: {
+    borderColor: 'green',
+    color: 'green'
   }
 });
 
@@ -53,8 +57,8 @@ function CardAddMembers({
           onChange={handleChange}
         />
         <Button
-          variant='contained'
-          color='primary'
+          className={classes.button}
+          variant='outlined'
           type='submit'
           onClick={addMembers}
           disabled={!input || Number(settings?.numberOfTeams) === users.length}
@@ -86,8 +90,8 @@ function CardAddMembers({
         && (
           <div className='addMembers_addMembersButton'>
             <Button
-              variant='contained'
-              color='primary'
+              className={classes.button}
+              variant='outlined'
               type='submit'
               onClick={addMembersToLeague}
               disabled={users.length % 2}

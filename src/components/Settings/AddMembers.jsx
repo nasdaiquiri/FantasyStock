@@ -30,8 +30,10 @@ function AddMembers({ myLeague }) {
 
   const addMembers = (e) => {
     e.preventDefault();
-    axios.get(`/user/${input}`)
-      .then((user) => setUsers([...users, user.data]));
+    axios
+      .get(`/user/${input}`)
+      .then((user) => setUsers([...users, user.data]))
+      .catch((err) => console.warn(err));
     setInput('');
   };
 

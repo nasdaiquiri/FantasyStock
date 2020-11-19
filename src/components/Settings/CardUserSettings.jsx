@@ -11,6 +11,11 @@ import { selectLeague } from '../../features/leagueSlice.js';
 const useStyles = makeStyles({
   root: {
     paddingLeft: '10px'
+  },
+  button: {
+    borderColor: 'green',
+    color: 'green'
+
   }
 });
 
@@ -101,8 +106,8 @@ function CardUserSettings() {
                 onChange={(e) => setState(e.target.value)}
               />
               <Button
-                variant='contained'
-                color='primary'
+                className={classes.button}
+                variant='outlined'
                 type='submit'
                 onClick={click}
                 disabled={!state}
@@ -126,8 +131,8 @@ function CardUserSettings() {
               onChange={(e) => setUsername(e.target.value)}
             />
             <Button
-              variant='contained'
-              color='primary'
+              className={classes.button}
+              variant='outlined'
               type='submit'
               onClick={submitUser}
               disabled={!username}

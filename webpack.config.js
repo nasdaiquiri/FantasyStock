@@ -7,7 +7,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: './index.html'
 });
 module.exports = {
-  entry: ['@babel/polyfill', './src/index.js'],
+  entry: ['@babel/polyfill', './src/index.jsx'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
