@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable array-callback-return */
 const { Router } = require('express');
 
 const leagueRouter = Router();
@@ -11,10 +9,8 @@ const {
 } = require('../db/index');
 const { getBankForUserUpdate, settingsUpdater } = require('./helpers');
 
-// get settings by league Id
 leagueRouter.get('/settings/:leagueID', (req, res) => {
   const { leagueID } = req.params;
-
   League.findOne(
     {
       where: {
@@ -29,8 +25,6 @@ leagueRouter.get('/settings/:leagueID', (req, res) => {
     });
 });
 
-// add user to League UserIDs is an array
-// todo: fix header error (post still works)
 leagueRouter.post('/addUser', (req, res) => {
   const { userID, leagueID } = req.body;
   League_user.create({
@@ -52,7 +46,6 @@ leagueRouter.post('/addUser', (req, res) => {
   return 'success';
 });
 
-// find all users in the league by league id
 leagueRouter.get('/league/:leagueID', (req, res) => {
   const { leagueID } = req.params;
 
@@ -60,8 +53,6 @@ leagueRouter.get('/league/:leagueID', (req, res) => {
     where: { id: leagueID }, include: [{ model: User }]
   }).then((response) => res.send(response[0].dataValues.users));
 });
-
-// find one league by id with all information plus users
 
 leagueRouter.get('/oneleague/:leagueID', (req, res) => {
   const { leagueID } = req.params;
@@ -81,10 +72,8 @@ leagueRouter.get('/oneleague/:leagueID', (req, res) => {
     });
 });
 
-// get User and League data with User id
 leagueRouter.get('/:userID', (req, res) => {
   const { userID } = req.params;
-
   User.findAll({
     where: { id: userID }, include: [{ model: League }]
   }).then((response) => res.send(response));
@@ -94,7 +83,6 @@ leagueRouter.get('/', (req, res) => {
   League.findAll().then((response) => res.send(response)).catch((err) => res.send(err));
 });
 
-// create a league route
 leagueRouter.post('/', (req, res) => {
   const { league_name, id_owner, numberOfTeams } = req.body;
   const settings = {
@@ -141,7 +129,6 @@ leagueRouter.post('/', (req, res) => {
     });
 });
 
-// TODO: settings lock after week 1 starts
 leagueRouter.put('/', async (req, res) => {
   const {
     id_league, league_name, id_owner, settings
@@ -197,7 +184,6 @@ leagueRouter.put('/', async (req, res) => {
       res.status(500).send(err);
     });
 });
-// TODO: Indiviual user joins a league
 
 leagueRouter.put('/users', async (req, res) => {
   const { userIDs, leagueID } = req.body;
@@ -209,11 +195,9 @@ leagueRouter.put('/users', async (req, res) => {
   })
     .then((joins) => {
       const existingIDs = [];
-      // eslint-disable-next-line array-callback-return
       joins.map((join) => {
         existingIDs.push(join.dataValues.id_user);
       });
-      // eslint-disable-next-line array-callback-return
       existingIDs.map((existingID) => {
         if (!userIDs.includes(existingID)) {
           League_user.destroy({
@@ -228,7 +212,6 @@ leagueRouter.put('/users', async (req, res) => {
             });
         }
       });
-      // eslint-disable-next-line array-callback-return
       userIDs.map((userID) => {
         if (!existingIDs.includes(userID)) {
           League_user.create({
@@ -274,7 +257,6 @@ leagueRouter.put('/users', async (req, res) => {
     });
 });
 
-// find league by id and user
 leagueRouter.get('/:leagueID/:userID', (req, res) => {
   const { leagueID, userID } = req.params;
   League.findOne({

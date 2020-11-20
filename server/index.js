@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -61,7 +59,7 @@ app.get('/*', (req, res) => {
 const connection = async () => {
   try {
     await models.sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    console.info('Connection has been established successfully.');
   } catch (error) {
     console.warn('Unable to connect to the database:', error);
   }
@@ -69,7 +67,7 @@ const connection = async () => {
 const syncModels = async () => {
   try {
     await models.sequelize.sync();
-    console.log('Models have been synced successfully.');
+    console.info('Models have been synced successfully.');
   } catch (error) {
     console.warn('Unable to sync models:', error);
   }
@@ -78,5 +76,5 @@ const syncModels = async () => {
 connection();
 syncModels();
 app.listen(PORT, () => {
-  console.log(`🌌Server has started on port: 🚀${PORT}`);
+  console.info(`🌌Server has started on port: 🚀${PORT}`);
 });

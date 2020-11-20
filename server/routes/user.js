@@ -1,7 +1,4 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable camelcase */
-/* eslint-disable no-console */
-// const axios = require('axios');
+// server/routes/user.js: remove comment on line 244,
 const { Router } = require('express');
 const { Op } = require('sequelize');
 
@@ -63,7 +60,6 @@ userRouter.put('/updateUserTeamName', (req, res) => {
     });
 });
 
-// look for team information by league id and user id
 userRouter.get('/team/:leagueID/:userID', (req, res) => {
   const { leagueID, userID } = req.params;
   League_user.findOne({
@@ -76,7 +72,6 @@ userRouter.get('/team/:leagueID/:userID', (req, res) => {
     .catch((err) => console.error(err));
 });
 
-// get a user by user id
 userRouter.get('/user/:userID', (req, res) => {
   const { userID } = req.params;
   User.findOne({
@@ -108,14 +103,12 @@ userRouter.put('/user/:userID', (req, res) => {
     });
 });
 
-// get all users
 userRouter.get('/', (req, res) => {
   User.findAll()
     .then((userInfo) => res.send(userInfo))
     .catch((err) => console.warn(err));
 });
 
-// get user by username
 userRouter.get('/:username', (req, res) => {
   const { username } = req.params;
 
@@ -130,35 +123,6 @@ userRouter.get('/:username', (req, res) => {
     .catch((err) => res.status(500).send(err));
 });
 
-// // get user's Info by user google id
-// userRouter.get('/:userID', (req, res) => {
-//   const { userID } = req.params;
-//   User.findAll({
-//     where: {
-//       id: userID
-//     }
-//   })
-//     .then((userInfo) => {
-//       // tack on leagues?
-//       // const exist = true;
-//       const responseUserInfo = { ...userInfo[0].dataValues };
-//       League_user.findAll({
-//         where: {
-//           id_user: userID
-//         }
-//       })
-//         .then((leagueInfo) => {
-//           responseUserInfo.leagueInfo = leagueInfo;
-//           res.send(responseUserInfo);
-//         });
-//     })
-//     .catch((err) => {
-//       console.warn(err);
-//       res.status(500).send(err);
-//     });
-// });
-
-// user route.
 userRouter.post('/', (req, res) => {
   const {
     id, username, full_name, avatar
@@ -191,7 +155,6 @@ userRouter.post('/', (req, res) => {
 
 userRouter.get('/userleagues/:userID', (req, res) => {
   const { userID } = req.params;
-
   User.findOne({
     where: {
       id: userID
@@ -215,7 +178,6 @@ userRouter.get('/userleagues/:userID', (req, res) => {
     });
 });
 
-// don't use yet. Not done
 userRouter.put('/', (req, res) => {
   const {
     id, username, full_name, avatar
@@ -237,11 +199,9 @@ userRouter.put('/', (req, res) => {
     });
 });
 
-// get all users in a league by userID
 userRouter.get('/league/user/:userID', (req, res) => {
   const { userID } = req.params;
   const leagueIDs = [];
-  // const leagueInfo = [];
   League_user.findAll({
     where: {
       id_user: userID

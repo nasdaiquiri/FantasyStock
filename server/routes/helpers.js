@@ -1,13 +1,8 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable camelcase */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-restricted-syntax */
 const axios = require('axios');
 require('dotenv').config();
 
-const { IEX_API_KEY, IEX_API_SANDBOX } = process.env;
+// IEX_API_KEY or IEX_API_SANDBOX
+const { IEX_API_SANDBOX } = process.env;
 
 const {
   Stock_user,
@@ -29,7 +24,8 @@ const checkSharesAvailable = (id_stock, id_league) => {
         return '';
       });
       return sharesAvailable;
-    });
+    })
+    .catch((err) => console.warn(err));
 };
 const checkMoneyAvailable = async (id_league, id_user) => {
   let moneyAvailable;
@@ -40,7 +36,8 @@ const checkMoneyAvailable = async (id_league, id_user) => {
   })
     .then((joint) => {
       moneyAvailable = joint[0].dataValues.bank_balance;
-    });
+    })
+    .catch((err) => console.warn(err));
   return moneyAvailable;
 };
 
@@ -68,7 +65,8 @@ const portfolioValues = async (id_league, id_user) => {
       id_league, id_user
     }
   })
-    .then((user) => user.bank_balance);
+    .then((user) => user.bank_balance)
+    .catch((err) => console.warn(err));
 
   const awaitGetBank = await getBank;
 
@@ -120,7 +118,6 @@ const updateStocks = () => {
     // ['UNP', 'UNH', 'UPS', 'URI', 'UTX', 'UHS', 'UNM', 'URBN', 'VFC', 'VLO', 'VAR', 'VTR', 'VRSN', 'VZ', 'VRTX', 'VIAB', 'V', 'VNO', 'VMC', 'WMT', 'WBA', 'DIS', 'WM', 'WAT', 'ANTM', 'WFC', 'WDC', 'WU', 'WY', 'WHR', 'WFM', 'WMB', 'WEC', 'WYN', 'WYNN', 'XEL', 'XRX', 'XLNX', 'XL', 'XYL', 'YHOO', 'YUM', 'ZBH', 'ZION', 'ZTS', 'AVB', 'AVY']
   ];
 
-  // eslint-disable-next-line array-callback-return
   const functionWithPromise = (array) => {
     const config = {
       method: 'get',
@@ -137,7 +134,7 @@ const updateStocks = () => {
       .catch((error) => (error));
   };
   const getData = () => Promise.all(tickerArr.map((item) => functionWithPromise(item)));
-  return getData().then((data) => data);
+  return getData().then((data) => data).catch((err) => console.warn(err));
 };
 
 // Adapted Fisher-Yates Shuffler
@@ -164,7 +161,6 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
     currentWeek: 0,
     weeklyMatchups: {}
   };
-  // TODO: Home vs away fairness
   for (let i = 1; i <= numOfWeeks; i++) {
     const week = `week${i}`;
     const weeklyGames = [];
@@ -186,7 +182,6 @@ const matchScheduler = (numOfWeeks, randomOrderIDs) => {
   }
   return schedule;
 };
-// TODO: numPlayoffs
 const matchupGenerator = (userIDs, numWeeks) => {
   const randomOrderUserIDs = shuffleArray(userIDs);
   const schedule = matchScheduler(numWeeks, randomOrderUserIDs);

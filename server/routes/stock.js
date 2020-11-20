@@ -1,6 +1,4 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable camelcase */
-/* eslint-disable no-console */
+// server/routes/stock.js: fix promises being used as callback hell, remove eslint-disable
 const { Router } = require('express');
 const { Op } = require('sequelize');
 
@@ -18,7 +16,6 @@ const {
 
 const stockRouter = Router();
 
-// get all stock info
 stockRouter.get('/', (req, res) => {
   updateStocks()
     .then((updatedStocks) => updatedStocks)
@@ -33,7 +30,6 @@ stockRouter.get('/', (req, res) => {
         if (!stockInfo.quote == null) {
           updatedStock.ticker = stockInfo.quote.symbol;
           updatedStock.current_price_per_share = Math.round(stockInfo.quote.latestPrice * 100);
-          //   // Todo: moment for date_updated
           Stock.update({
             current_price_per_share: updatedStock.current_price_per_share
           },
@@ -85,8 +81,6 @@ stockRouter.get('/stock/:stockID', (req, res) => {
     });
 });
 
-// get league_user by user id
-
 stockRouter.get('/bank/:userID/:leagueID', (req, res) => {
   const { userID, leagueID } = req.params;
   League_user.findOne({
@@ -105,8 +99,6 @@ stockRouter.get('/bank/:userID/:leagueID', (req, res) => {
   portfolioValues(leagueID, userID);
 });
 
-// get user's portfolio info by user primary key id
-// add stock info to each portfolio instance
 stockRouter.get('/portfolio/:userID', async (req, res) => {
   const { userID } = req.params;
   await Stock_user.findAll({
@@ -134,15 +126,6 @@ stockRouter.get('/portfolio/:userID', async (req, res) => {
     });
 });
 
-// get all stocks in a league for waiver
-// need to do axios subroutine to update stock folder
-// need to grab all stocks
-
-// axios call to update stock info
-// query stock to get the top 500
-// query Portfolio to get the correct share information
-// query League to get the number of Shares/stock for the league
-// calculate the shares available
 stockRouter.get('/waivers/:leagueID', (req, res) => {
   const { leagueID } = req.params;
   const waivers = [];
@@ -211,8 +194,6 @@ stockRouter.get('/waivers/:leagueID', (req, res) => {
   updateWaivers();
 });
 
-// need to add block from negative shares
-// also make sure it caps at 100 stocks? think it is tho.
 stockRouter.post('/waivers', async (req, res) => {
   const {
     id_stock, id_league, id_user, portfolio
@@ -230,7 +211,6 @@ stockRouter.post('/waivers', async (req, res) => {
   if (sharesAvailable < shares) {
     res.send('not enough shares available');
   }
-  // TODO: add history aspect
   Stock_user.findAll({
     where: {
       id_stock, id_league, id_user
@@ -259,7 +239,6 @@ stockRouter.post('/waivers', async (req, res) => {
           });
       } else {
         const currentShares = entry[0].dataValues.portfolio.shares;
-        // TODO: round this
         const updatedPriceperShare = ((shares * price_per_share_at_purchase)
           + (currentShares * entry[0].dataValues.portfolio.price_per_share_at_purchase))
           / (currentShares + shares);

@@ -1,8 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-param-reassign */
 const { Router } = require('express');
 
 const matchupRouter = Router();
@@ -33,7 +28,7 @@ matchupRouter.get('/:leagueID', async (req, res) => {
     }
   )
     .then((leagueInfo) => {
-      const schedule = leagueInfo.dataValues.settings.schedule;
+      const { schedule } = leagueInfo.dataValues.settings.schedule;
       const arrayMatchups = Object.values(schedule.weeklyMatchups);
       arrayMatchups.map((week) => {
         const thing = week.map((side) => {
