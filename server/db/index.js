@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
@@ -15,7 +14,6 @@ const sequelize = new Sequelize(database, user, password, {
   logging: false
 });
 
-// const HistoryModel = require('./models/History');
 const LeagueModel = require('./models/League');
 const MessageModel = require('./models/Message');
 const Stock_userModel = require('./models/Stock_user');
@@ -23,7 +21,6 @@ const StockModel = require('./models/Stock');
 const UserModel = require('./models/User');
 const League_userModel = require('./models/League_user');
 
-// const History = HistoryModel(sequelize, Sequelize);
 const League = LeagueModel(sequelize, Sequelize);
 const Message = MessageModel(sequelize, Sequelize);
 const Stock_user = Stock_userModel(sequelize, Sequelize);
@@ -32,7 +29,6 @@ const User = UserModel(sequelize, Sequelize);
 const League_user = League_userModel(sequelize, Sequelize);
 
 const models = {
-  // History,
   League,
   Message,
   Stock_user,

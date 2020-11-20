@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 require('dotenv').config();
 const { Router } = require('express');
 const Pusher = require('pusher');
@@ -17,7 +16,11 @@ const pusher = new Pusher({
 messageRouter.get('/:leagueID', (req, res) => {
   const { leagueID } = req.params;
   Message.findAll({ where: { id_league: leagueID } })
-    .then((messages) => res.send(messages));
+    .then((messages) => res.send(messages))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
 });
 
 messageRouter.post('/', (req, res) => {
@@ -38,7 +41,10 @@ messageRouter.post('/', (req, res) => {
       });
       res.send('message sent');
     })
-    .catch((error) => console.warn(error));
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
 });
 
 module.exports = { messageRouter };
