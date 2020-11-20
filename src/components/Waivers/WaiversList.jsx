@@ -59,7 +59,8 @@ function WaiversList({
         .then((waivers) => dispatch(setWaivers(waivers.data))))
       .then(() => axios
         .get(`/stock/portfolio/${user.id}`)
-        .then((stocks) => dispatch(setYourStock(stocks.data))))
+        .then((stocks) => stocks.data.filter((info) => info.id_league === league))
+        .then((response) => dispatch(setYourStock(response))))
       .then(() => axios
         .get(`/stock/bank/${user.id}/${league}`)
         .then((response) => setBankBalance(response.data.bank_balance)))

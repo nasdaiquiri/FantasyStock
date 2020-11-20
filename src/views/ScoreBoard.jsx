@@ -98,12 +98,13 @@ function ScoreBoard() {
 
   const currentWeek = `week${week}`;
   const currentWeekMatches = matches[currentWeek];
-  const startingLeagueBalance = userLeagues.map((userLeague) => {
-    if (userLeague.id === league) {
-      return Number(userLeague.settings.startingBank);
-    }
-    return null;
-  });
+  const startingLeagueBalance = userLeagues
+    .reduce((userBank, userLeague) => {
+      if (userLeague.id === league) {
+        userBank.push(userLeague.settings.startingBank);
+      }
+      return userBank;
+    }, []);
   const displayWeek = `Week ${week}`;
 
   const getStandings = () => setShowStandings(!showStandings);
@@ -141,7 +142,7 @@ function ScoreBoard() {
               homeBalance={match.Home.user.bank_balance}
               homeWorth={match.Home.user.net_worth}
               getMatchups={(homeID, awayID) => getMatchups(homeID, awayID)}
-              startingBalance={startingLeagueBalance[1]}
+              startingBalance={startingLeagueBalance[0]}
             />
           ))
         ) : (
