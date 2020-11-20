@@ -1,6 +1,4 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable camelcase */
-/* eslint-disable no-console */
+// server/routes/stock.js: fix promises being used as callback hell, remove eslint-disable
 const { Router } = require('express');
 const { Op } = require('sequelize');
 
