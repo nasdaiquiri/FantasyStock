@@ -32,6 +32,9 @@ function Home() {
         Please Log In
       </a>
       <img className='home_logo' src={logo} alt='logo' />
+      <div>
+        "I need it to fuel my addiction to the stock market. Foliostocks.com got me hooked[!]" - Jon
+      </div>
     </div>
   ) : (
     <div>
