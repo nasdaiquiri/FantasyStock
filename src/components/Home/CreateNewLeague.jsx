@@ -55,17 +55,21 @@ function CreateNewLeague() {
   const dispatch = useDispatch();
 
   const onSubmit = () => {
-    axios.post('/league', {
-      league_name: inputLeague,
-      id_owner: user?.id,
-      numberOfTeams: Number(numberOfTeams)
-    })
+    axios
+      .post('/league', {
+        league_name: inputLeague,
+        id_owner: user?.id,
+        numberTeams: Number(numberOfTeams)
+      })
       .then((leagueInfo) => {
         dispatch(setLeague(leagueInfo?.data.id));
         dispatch(setLeagueOwner(leagueInfo?.data.id_owner));
       })
-      .then(() => axios.post('/user', { id: user?.id })
-        .then((response) => dispatch(setUser(response.data))))
+      .then(() =>
+        axios
+          .post('/user', { id: user?.id })
+          .then((response) => dispatch(setUser(response.data)))
+      )
       .catch((err) => {
         console.warn(err);
       });
@@ -79,10 +83,18 @@ function CreateNewLeague() {
 
   return (
     <div>
-      <Button variant='outlined' onClick={handleClickOpen} className={classes.buttonPadding}>
+      <Button
+        variant='outlined'
+        onClick={handleClickOpen}
+        className={classes.buttonPadding}
+      >
         Create League
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'
+      >
         <DialogTitle id='form-dialog-title'>Create a League</DialogTitle>
         <DialogContent>
           <TextField
@@ -99,7 +111,12 @@ function CreateNewLeague() {
         <DialogContent>
           <FormControl component='fieldset'>
             <FormLabel component='legend'>Number of Teams</FormLabel>
-            <RadioGroup row aria-label='position' name='position' defaultValue='top'>
+            <RadioGroup
+              row
+              aria-label='position'
+              name='position'
+              defaultValue='top'
+            >
               {formControlValues.map((formControlValue) => (
                 <FormControlLabel
                   key={formControlValue}
@@ -107,7 +124,7 @@ function CreateNewLeague() {
                   control={<Radio color='primary' />}
                   label={formControlValue}
                   labelPlacement='top'
-                  onChange={((e) => setNumberOfTeams((e.target.value)))}
+                  onChange={(e) => setNumberOfTeams(e.target.value)}
                 />
               ))}
             </RadioGroup>
@@ -118,10 +135,7 @@ function CreateNewLeague() {
             Cancel
           </Button>
           <Link key='settings' to='/settings'>
-            <Button
-              className={classes.create}
-              onClick={onSubmit}
-            >
+            <Button className={classes.create} onClick={onSubmit}>
               Create
             </Button>
           </Link>

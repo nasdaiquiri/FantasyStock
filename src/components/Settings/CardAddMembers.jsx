@@ -1,6 +1,4 @@
-import {
-  Button, IconButton, TextField, Typography
-} from '@material-ui/core';
+import { Button, IconButton, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import propTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -24,7 +22,9 @@ const useStyles = makeStyles({
 });
 
 function CardAddMembers({
-  handleChange, addMembers, deleteSelection,
+  handleChange,
+  addMembers,
+  deleteSelection,
   addMembersToLeague,
   submitted,
   users,
@@ -48,7 +48,7 @@ function CardAddMembers({
       <div className='cardAddMembers_header'>
         <p>
           {`Up to
-        ${settings?.numberOfTeams} players`}
+        ${settings?.numberTeams} players`}
         </p>
         <p>
           {`Members:
@@ -68,7 +68,7 @@ function CardAddMembers({
           variant='outlined'
           type='submit'
           onClick={addMembers}
-          disabled={!input || Number(settings?.numberOfTeams) === users.length}
+          disabled={!input || Number(settings?.numberTeams) === users.length}
         >
           add
         </Button>
@@ -83,7 +83,7 @@ function CardAddMembers({
             </li>
             <div>
               <IconButton
-              // className='addMembers_deleteButton'
+                // className='addMembers_deleteButton'
                 variant='contained'
                 type='button'
                 onClick={() => deleteSelection(user.id)}
@@ -94,22 +94,19 @@ function CardAddMembers({
           </div>
         ))}
       </ol>
-      {
-        users.length > 0
-        && (
-          <div className='addMembers_addMembersButton'>
-            <Button
-              className={classes.button}
-              variant='outlined'
-              type='submit'
-              onClick={addMembersToLeague}
-              disabled={users.length % 2}
-            >
-              Update Members in League
-            </Button>
-          </div>
-        )
-      }
+      {users.length > 0 && (
+        <div className='addMembers_addMembersButton'>
+          <Button
+            className={classes.button}
+            variant='outlined'
+            type='submit'
+            onClick={addMembersToLeague}
+            disabled={users.length % 2}
+          >
+            Update Members in League
+          </Button>
+        </div>
+      )}
       {submitted && <p className='addMembers_saved'>Saved</p>}
     </Typography>
   );
