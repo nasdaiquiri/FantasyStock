@@ -28,20 +28,23 @@ matchupRouter.get('/:leagueID', async (req, res) => {
     }
   )
     .then((leagueInfo) => {
-      const { schedule } = leagueInfo.dataValues.settings.schedule;
-      const arrayMatchups = Object.values(schedule.weeklyMatchups);
-      arrayMatchups.map((week) => {
-        const thing = week.map((side) => {
-          const arraySides = Object.values(side);
-          arraySides.map((indSide) => {
-            const id = indSide.teamID;
+      const { schedule } = leagueInfo.dataValues.settings;
+      Object.keys(schedule.weeklyMatchups).map((week) => {
+        const thing = Object.keys(schedule.weeklyMatchups[week]).map((side) => {
+          Object.keys(schedule.weeklyMatchups[week][side]).map((indSide) => {
+            if (indSide === 'winner') {
+              return;
+            }
+            if (indSide === 'finalScore') {
+              return;
+            }
+            const id = schedule.weeklyMatchups[week][side][indSide].teamID;
             users.map((user) => {
               if (user.id_user === id) {
-                indSide.user = user;
+                schedule.weeklyMatchups[week][side][indSide].user = user;
               }
               return user;
             });
-            return indSide;
           });
           return side;
         });

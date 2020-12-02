@@ -18,7 +18,7 @@ function primeDB() {
   League.findOrCreate({
     where: {
       league_name: 'The League',
-      id_owner: '6',
+      id_owner: '4',
       settings: {
         schedule: {
           currentWeek: 1,
@@ -68,7 +68,7 @@ function primeDB() {
                   score: 35
                 },
                 away: {
-                  teamID: 4,
+                  teamID: '4',
                   score: 199
                 },
                 winner: null,
@@ -139,7 +139,7 @@ function primeDB() {
                     score: 35
                   },
                   away: {
-                    teamID: 4,
+                    teamID: '4',
                     score: 199
                   },
                   winner: null,
@@ -165,7 +165,7 @@ function primeDB() {
                     score: 35
                   },
                   away: {
-                    teamID: 3,
+                    teamID: '3',
                     score: 199
                   },
                   winner: null,
@@ -316,7 +316,7 @@ function primeDB() {
     .then(() => League_user.findOrCreate({
       where: {
         id_league: 1,
-        id_user: '5',
+        id_user: '4',
         bank_balance: 1000000,
         net_worth: 0,
         wins: 0,
@@ -333,7 +333,7 @@ function primeDB() {
     .then(() => League_user.findOrCreate({
       where: {
         id_league: 1,
-        id_user: '6',
+        id_user: '1',
         bank_balance: 1000000,
         net_worth: 0,
         wins: 2,
@@ -350,7 +350,7 @@ function primeDB() {
     .then(() => League_user.findOrCreate({
       where: {
         id_league: 1,
-        id_user: '7',
+        id_user: '2',
         bank_balance: 1000000,
         net_worth: 0,
         wins: 1,
@@ -367,7 +367,7 @@ function primeDB() {
     .then(() => League_user.findOrCreate({
       where: {
         id_league: 1,
-        id_user: '8',
+        id_user: '3',
         bank_balance: 1000000,
         net_worth: 0,
         wins: 0,
