@@ -6,7 +6,11 @@ import AddMembers from './AddMembers.jsx';
 import '../../css/SettingsLeague.css';
 import CardSettingsL from './CardSettingsL.jsx';
 import AccordionComp from '../AccordionComp.jsx';
-import { selectSettings, setSettings, setUsersInLeague } from '../../features/ownerLeagueSlice.js';
+import {
+  selectSettings,
+  setSettings,
+  setUsersInLeague
+} from '../../features/ownerLeagueSlice.js';
 import { selectLeague } from '../../features/leagueSlice.js';
 import { selectUser, setUser } from '../../features/userSlice.js';
 
@@ -39,12 +43,16 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    axios.put('/league',
-      {
+    axios
+      .put('/league', {
         id_league: myLeague?.id,
         id_owner: myLeague?.id_owner,
         league_name: myLeague?.league_name,
-        settings: { ...leagueForm, numberTeams: Number(leagueForm.numberTeams) }
+        settings: {
+          ...leagueForm,
+          numberOfMatches: Number(leagueForm.numberMatches),
+          numberTeams: Number(leagueForm.numberTeams)
+        }
       })
       .then(() => axios.get(`/league/settings/${league}`))
       .then((response) => dispatch(setSettings(response.data)))
@@ -57,7 +65,8 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   };
 
   useEffect(() => {
-    axios.get(`/league/league/${myLeague.id}`)
+    axios
+      .get(`/league/league/${myLeague.id}`)
       .then((response) => dispatch(setUsersInLeague(response.data)))
       .catch((err) => console.warn(err));
   }, [myLeague.id, dispatch]);
@@ -69,11 +78,6 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       name: 'numberTeams'
     },
     {
-      description: 'number of days',
-      type: 'number',
-      name: 'lengthMatches'
-    },
-    {
       description: 'number of weeks',
       type: 'number',
       name: 'numberMatches'
@@ -82,16 +86,6 @@ function SettingsLeague({ myLeague, setMyLeague }) {
       description: 'start date',
       type: 'date',
       name: 'startDate'
-    },
-    {
-      description: 'end date',
-      type: 'date',
-      name: 'endDate'
-    },
-    {
-      description: 'number of playoff teams',
-      type: 'number',
-      name: 'numberTeamsPlayoffs'
     },
     {
       description: 'starting bank',
@@ -116,9 +110,7 @@ function SettingsLeague({ myLeague, setMyLeague }) {
     <div className='settingsLeague'>
       <AccordionComp Component={Component} title='League Settings' />
       <div className='settingsLeague_addMembers'>
-        <AddMembers
-          myLeague={myLeague}
-        />
+        <AddMembers myLeague={myLeague} />
       </div>
     </div>
   );
