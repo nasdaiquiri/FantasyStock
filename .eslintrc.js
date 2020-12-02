@@ -24,6 +24,7 @@ module.exports = {
     'no-plusplus': 0,
     'no-restricted-syntax': 0,
     'max-len': 0,
-    'no-unused-vars': 0
+    'no-unused-vars': 0,
+    'react/no-unescaped-entities': 0
   }
 };
