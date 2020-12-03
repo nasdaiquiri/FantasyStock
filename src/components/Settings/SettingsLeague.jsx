@@ -33,8 +33,6 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const user = useSelector(selectUser);
   const [oldSettings, setOldSettings] = useState({});
 
-  console.log(oldSettings);
-
   useEffect(() => {
     setLeagueForm({ ...settings });
   }, [settings]);
