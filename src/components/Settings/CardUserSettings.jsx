@@ -10,12 +10,11 @@ import { selectLeague } from '../../features/leagueSlice.js';
 
 const useStyles = makeStyles({
   root: {
-    paddingLeft: '10px'
+    paddingLeft: '0px'
   },
   button: {
     borderColor: 'green',
     color: 'green'
-
   }
 });
 
@@ -32,7 +31,8 @@ function CardUserSettings() {
   const [leagueUser, setLeagueUser] = useState('');
 
   useEffect(() => {
-    axios.get(`/user/team/${league}/${user?.id}`)
+    axios
+      .get(`/user/team/${league}/${user?.id}`)
       .then((response) => setLeagueUser(response.data))
       .catch((err) => console.warn(err));
   }, [user?.id, league]);
@@ -49,7 +49,11 @@ function CardUserSettings() {
   };
   const submitTeam = () => {
     axios
-      .put('/user/updateUserTeamName', { userID: user.id, leagueID: league, teamName })
+      .put('/user/updateUserTeamName', {
+        userID: user.id,
+        leagueID: league,
+        teamName
+      })
       .then(() => axios.get(`/user/team/${league}/${user?.id}`))
       .then((response) => setLeagueUser(response.data))
       .catch((err) => console.warn(err));
@@ -58,7 +62,11 @@ function CardUserSettings() {
 
   const submitLogo = () => {
     axios
-      .put('/user/updateUserTeamLogo', { userID: user.id, leagueID: league, teamLogo })
+      .put('/user/updateUserTeamLogo', {
+        userID: user.id,
+        leagueID: league,
+        teamLogo
+      })
       .catch((err) => console.warn(err));
     setTeamLogo('');
   };
@@ -86,62 +94,51 @@ function CardUserSettings() {
     }
   ];
 
-  return (
-    league !== null
-      ? (
-        <Typography
-          align='center'
-          className={classes.root}
+  return league !== null ? (
+    <Typography align='center' className={classes.root}>
+      {options.map(({ name, state, setState, click, defaultValue }) => (
+        <form className='cardUserSettings_form'>
+          {`${name}:  `}
+          <TextField
+            variant='outlined'
+            placeholder={defaultValue}
+            type='text'
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          />
+          <Button
+            className={classes.button}
+            variant='outlined'
+            type='submit'
+            onClick={click}
+            disabled={!state}
+          >
+            add
+          </Button>
+        </form>
+      ))}
+    </Typography>
+  ) : (
+    <Typography align='center' className={classes.root}>
+      <form className='cardUserSettings_form'>
+        {'Username:  '}
+        <TextField
+          variant='outlined'
+          type='text'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Button
+          className={classes.button}
+          variant='outlined'
+          type='submit'
+          onClick={submitUser}
+          disabled={!username}
         >
-          {options.map(({
-            name, state, setState, click, defaultValue
-          }) => (
-            <form className='cardUserSettings_form'>
-              {`${name}:  `}
-              <TextField
-                variant='outlined'
-                type='text'
-                value={state}
-                label={defaultValue}
-                onChange={(e) => setState(e.target.value)}
-              />
-              <Button
-                className={classes.button}
-                variant='outlined'
-                type='submit'
-                onClick={click}
-                disabled={!state}
-              >
-                add
-              </Button>
-            </form>
-          ))}
-        </Typography>
-      ) : (
-        <Typography
-          align='center'
-          className={classes.root}
-        >
-          <form className='cardUserSettings_form'>
-            {'Username:  '}
-            <TextField
-              variant='outlined'
-              type='text'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <Button
-              className={classes.button}
-              variant='outlined'
-              type='submit'
-              onClick={submitUser}
-              disabled={!username}
-            >
-              add
-            </Button>
-          </form>
-        </Typography>
-      )
+          add
+        </Button>
+      </form>
+    </Typography>
   );
 }
 
