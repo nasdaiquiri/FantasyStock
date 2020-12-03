@@ -1,6 +1,4 @@
-import {
-  Button, TextField, Typography
-} from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import propTypes from 'prop-types';
 import '../../css/CardSettingsL.css';
@@ -8,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
-    paddingLeft: '30px'
+    paddingLeft: '48px'
   },
   button: {
     marginTop: '10px',
@@ -45,15 +43,14 @@ function CardSettingsL({
         className='settingsLeague_form'
         onSubmit={handleFormSubmit}
       >
-        {inputsForm?.map(({
-          description, type, name, value
-        }) => (
+        {inputsForm?.map(({ description, type, name, oldValue }) => (
           <>
             <p>{description}</p>
-            <div key={value}>
+            <div>
               <TextField
                 id='outlined-basic'
                 variant='outlined'
+                placeholder={oldValue}
                 onChange={handleChange}
                 type={type}
                 name={name}
@@ -61,11 +58,7 @@ function CardSettingsL({
             </div>
           </>
         ))}
-        <Button
-          className={classes.button}
-          variant='outlined'
-          type='submit'
-        >
+        <Button className={classes.button} variant='outlined' type='submit'>
           Submit
         </Button>
       </form>

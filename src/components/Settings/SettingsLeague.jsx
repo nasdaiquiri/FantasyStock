@@ -31,10 +31,17 @@ function SettingsLeague({ myLeague, setMyLeague }) {
   const [leagueForm, setLeagueForm] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const user = useSelector(selectUser);
+  const [oldSettings, setOldSettings] = useState({});
 
   useEffect(() => {
     setLeagueForm({ ...settings });
   }, [settings]);
+
+  useEffect(() => {
+    axios
+      .get(`/league/settings/${league}`)
+      .then(({ data }) => setOldSettings(data));
+  }, [league]);
 
   const handleChange = (e) => {
     setLeagueForm({ ...leagueForm, [e.target.name]: e.target.value });
@@ -50,8 +57,18 @@ function SettingsLeague({ myLeague, setMyLeague }) {
         league_name: myLeague?.league_name,
         settings: {
           ...leagueForm,
-          numberOfMatches: Number(leagueForm.numberMatches),
-          numberTeams: Number(leagueForm.numberTeams)
+          startingBank:
+            leagueForm.startingBank === ''
+              ? Number(oldSettings.startingBank)
+              : Number(leagueForm.startingBank),
+          numberOfMatches:
+            leagueForm.numberMatches === ''
+              ? Number(oldSettings.numberMatches)
+              : Number(leagueForm.numberMatches),
+          numberTeams:
+            leagueForm.numberTeams === ''
+              ? Number(oldSettings.numberTeams)
+              : Number(leagueForm.numberTeams)
         }
       })
       .then(() => axios.get(`/league/settings/${league}`))
@@ -75,12 +92,14 @@ function SettingsLeague({ myLeague, setMyLeague }) {
     {
       description: 'number of teams',
       type: 'number',
-      name: 'numberTeams'
+      name: 'numberTeams',
+      oldValue: oldSettings?.numberTeams
     },
     {
       description: 'number of weeks',
       type: 'number',
-      name: 'numberMatches'
+      name: 'numberMatches',
+      oldValue: oldSettings?.numberMatches
     },
     {
       description: 'start date',
@@ -90,7 +109,8 @@ function SettingsLeague({ myLeague, setMyLeague }) {
     {
       description: 'starting bank',
       type: 'number',
-      name: 'startingBank'
+      name: 'startingBank',
+      oldValue: oldSettings?.startingBank * 0.01
     }
   ];
 
